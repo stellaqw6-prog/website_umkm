@@ -161,7 +161,7 @@ export function AdminAnalytics() {
                       tickLine={false}
                       tickFormatter={(v) => `${v / 1000000}jt`}
                     />
-                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                   <Tooltip formatter={(value) => formatCurrency(Number(value ?? 0))} />
                     <Area type="monotone" dataKey="revenue" stroke="#2563eb" strokeWidth={2} fill="url(#revColor)" />
                   </AreaChart>
                 </ResponsiveContainer>
