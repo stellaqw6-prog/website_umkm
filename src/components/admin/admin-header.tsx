@@ -1,0 +1,66 @@
+"use client";
+
+import { useState } from "react";
+import { Bell, Search, LogOut } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useSession } from "@/hooks/use-session";
+import { AnimatePresence, motion } from "framer-motion";
+
+export function AdminHeader() {
+  const { user, logout } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const displayName = user?.name ?? "Admin";
+
+  return (
+    <header className="sticky top-0 z-30 h-16 bg-white/80 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between px-4 md:px-6">
+      {/* Search */}
+      <div className="flex-1 max-w-md">
+        <div className="relative">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Input
+            placeholder="Cari produk, pesanan, pelanggan..."
+            className="pl-9 h-9 text-sm bg-gray-50 border-gray-200"
+          />
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-2">
+        <button className="relative p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-all">
+          <Bell size={18} />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500" />
+        </button>
+
+        <div
+          className="relative"
+          onMouseEnter={() => setMenuOpen(true)}
+          onMouseLeave={() => setMenuOpen(false)}
+        >
+          <button className="flex items-center gap-2 p-2 rounded-xl text-gray-700 hover:bg-gray-100 transition-all">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
+              {displayName.charAt(0)}
+            </div>
+            <span className="text-sm font-medium hidden md:block">{displayName}</span>
+          </button>
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                className="absolute top-full right-0 mt-1 w-44 bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 py-2 z-50"
+              >
+                <button
+                  onClick={logout}
+                  className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <LogOut size={15} /> Keluar
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </header>
+  );
+}
