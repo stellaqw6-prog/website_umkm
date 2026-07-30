@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useScroll } from "@/hooks/use-scroll";
 import { useMobile } from "@/hooks/use-mobile";
@@ -52,6 +52,11 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [wishlistCount] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <>
@@ -138,7 +143,7 @@ export function Header() {
               className="p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all"
               aria-label="Toggle theme"
             >
-              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              {mounted ? (theme === "dark" ? <Sun size={20} /> : <Moon size={20} />) : <Moon size={20} className="opacity-0" />}
             </button>
 
             {/* Wishlist */}
