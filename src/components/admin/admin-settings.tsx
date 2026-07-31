@@ -1,40 +1,90 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Save, Globe, Mail, Phone, MapPin, Image } from "lucide-react";
+import { Save, Globe, Mail, Phone, MapPin, ImageIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState } from "react";
 import toast from "react-hot-toast";
 
-export function AdminSettings() {
-  const [settings, setSettings] = useState({
-    siteName: "UMKM Store",
-    siteDescription: "Platform UMKM terpercaya Indonesia",
-    email: "info@umkmstore.id",
-    phone: "+62 812-3456-7890",
-    address: "Jl. Merdeka No. 123, Jakarta",
-    whatsapp: "6281234567890",
-    facebook: "https://facebook.com/umkmstore",
-    instagram: "https://instagram.com/umkmstore",
-    tiktok: "https://tiktok.com/@umkmstore",
-  });
+interface Settings {
+  siteName: string;
+  siteDescription: string | null;
+  logo: string | null;
+  primaryColor: string;
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  whatsapp: string | null;
+  facebook: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  youtube: string | null;
+  twitter: string | null;
+}
 
-  const handleSave = () => {
-    toast.success("Pengaturan berhasil disimpan!");
+const emptySettings: Settings = {
+  siteName: "", siteDescription: "", logo: "", primaryColor: "#2563eb",
+  phone: "", email: "", address: "", whatsapp: "",
+  facebook: "", instagram: "", tiktok: "", youtube: "", twitter: "",
+};
+
+export function AdminSettings() {
+  const [settings, setSettings] = useState<Settings>(emptySettings);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/admin/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.settings) setSettings({ ...emptySettings, ...data.settings });
+      })
+      .catch(() => toast.error("Gagal memuat pengaturan"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error ?? "Gagal menyimpan pengaturan");
+        return;
+      }
+      setSettings({ ...emptySettings, ...data.settings });
+      toast.success("Pengaturan berhasil disimpan!");
+    } catch {
+      toast.error("Tidak bisa terhubung ke server");
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-24 text-gray-400">
+        <Loader2 className="animate-spin" size={32} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-3xl">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Pengaturan</h1>
-          <p className="text-gray-500 text-sm mt-1">Konfigurasi website dan bisnis Anda</p>
+          <p className="text-gray-500 text-sm mt-1">Konfigurasi website dan bisnis Anda — perubahan langsung tampil di website publik</p>
         </div>
-        <Button variant="premium" onClick={handleSave}>
-          <Save size={18} className="mr-2" /> Simpan
+        <Button variant="premium" onClick={handleSave} disabled={saving}>
+          {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={18} className="mr-2" />} Simpan
         </Button>
       </motion.div>
 
@@ -51,21 +101,21 @@ export function AdminSettings() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-            <Textarea value={settings.siteDescription} onChange={(e) => setSettings({ ...settings, siteDescription: e.target.value })} />
+            <Textarea value={settings.siteDescription ?? ""} onChange={(e) => setSettings({ ...settings, siteDescription: e.target.value })} />
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"><Mail size={14} /> Email</label>
-              <Input value={settings.email} onChange={(e) => setSettings({ ...settings, email: e.target.value })} />
+              <Input type="email" value={settings.email ?? ""} onChange={(e) => setSettings({ ...settings, email: e.target.value })} placeholder="info@tokokamu.id" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"><Phone size={14} /> Telepon</label>
-              <Input value={settings.phone} onChange={(e) => setSettings({ ...settings, phone: e.target.value })} />
+              <Input value={settings.phone ?? ""} onChange={(e) => setSettings({ ...settings, phone: e.target.value })} placeholder="+62 812-3456-7890" />
             </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"><MapPin size={14} /> Alamat</label>
-            <Textarea value={settings.address} onChange={(e) => setSettings({ ...settings, address: e.target.value })} rows={2} />
+            <Textarea value={settings.address ?? ""} onChange={(e) => setSettings({ ...settings, address: e.target.value })} rows={2} />
           </div>
         </CardContent>
       </Card>
@@ -73,26 +123,34 @@ export function AdminSettings() {
       {/* Social Media */}
       <Card>
         <CardHeader>
-          <CardTitle>Media Sosial</CardTitle>
-          <CardDescription>Tautan media sosial bisnis Anda</CardDescription>
+          <CardTitle>Media Sosial & WhatsApp</CardTitle>
+          <CardDescription>Tautan media sosial dan nomor WhatsApp bisnis Anda</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
-              <Input value={settings.whatsapp} onChange={(e) => setSettings({ ...settings, whatsapp: e.target.value })} placeholder="6281234567890" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nomor WhatsApp</label>
+              <Input value={settings.whatsapp ?? ""} onChange={(e) => setSettings({ ...settings, whatsapp: e.target.value })} placeholder="6281234567890 (tanpa +/spasi/strip)" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Facebook</label>
-              <Input value={settings.facebook} onChange={(e) => setSettings({ ...settings, facebook: e.target.value })} />
+              <Input value={settings.facebook ?? ""} onChange={(e) => setSettings({ ...settings, facebook: e.target.value })} placeholder="https://facebook.com/tokokamu" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Instagram</label>
-              <Input value={settings.instagram} onChange={(e) => setSettings({ ...settings, instagram: e.target.value })} />
+              <Input value={settings.instagram ?? ""} onChange={(e) => setSettings({ ...settings, instagram: e.target.value })} placeholder="https://instagram.com/tokokamu" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">TikTok</label>
-              <Input value={settings.tiktok} onChange={(e) => setSettings({ ...settings, tiktok: e.target.value })} />
+              <Input value={settings.tiktok ?? ""} onChange={(e) => setSettings({ ...settings, tiktok: e.target.value })} placeholder="https://tiktok.com/@tokokamu" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">YouTube</label>
+              <Input value={settings.youtube ?? ""} onChange={(e) => setSettings({ ...settings, youtube: e.target.value })} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Twitter / X</label>
+              <Input value={settings.twitter ?? ""} onChange={(e) => setSettings({ ...settings, twitter: e.target.value })} />
             </div>
           </div>
         </CardContent>
@@ -101,27 +159,34 @@ export function AdminSettings() {
       {/* Branding */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Image size={20} className="text-blue-600" /> Branding</CardTitle>
-          <CardDescription>Logo, favicon, dan warna website</CardDescription>
+          <CardTitle className="flex items-center gap-2"><ImageIcon size={20} className="text-blue-600" /> Branding</CardTitle>
+          <CardDescription>Logo dan warna utama website</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Logo</label>
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-blue-500 transition-colors cursor-pointer">
-              <Image size={32} className="mx-auto text-gray-300 mb-2" />
-              <p className="text-sm text-gray-500">Klik untuk upload logo</p>
-              <p className="text-xs text-gray-400">PNG, JPG (max 2MB)</p>
-            </div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">URL Logo</label>
+            <Input value={settings.logo ?? ""} onChange={(e) => setSettings({ ...settings, logo: e.target.value })} placeholder="https://... (link gambar logo)" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Warna Utama</label>
             <div className="flex items-center gap-3">
-              <input type="color" defaultValue="#2563eb" className="w-10 h-10 rounded-lg border-0 cursor-pointer" />
-              <Input value="#2563eb" readOnly className="w-32" />
+              <input
+                type="color"
+                value={settings.primaryColor}
+                onChange={(e) => setSettings({ ...settings, primaryColor: e.target.value })}
+                className="w-10 h-10 rounded-lg border-0 cursor-pointer"
+              />
+              <Input value={settings.primaryColor} onChange={(e) => setSettings({ ...settings, primaryColor: e.target.value })} className="w-32" />
             </div>
           </div>
         </CardContent>
       </Card>
+
+      <div className="flex justify-end">
+        <Button variant="premium" onClick={handleSave} disabled={saving}>
+          {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={18} className="mr-2" />} Simpan Pengaturan
+        </Button>
+      </div>
     </div>
   );
 }

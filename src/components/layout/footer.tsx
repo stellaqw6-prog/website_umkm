@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import {
   Mail,
   Phone,
@@ -15,8 +16,21 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import toast from "react-hot-toast";
+
+interface SiteSettings {
+  siteName: string;
+  siteDescription: string | null;
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  whatsapp: string | null;
+  facebook: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  youtube: string | null;
+  twitter: string | null;
+}
 
 const footerLinks = {
   produk: [
@@ -48,13 +62,51 @@ const footerLinks = {
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [subscribing, setSubscribing] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => setSettings(data.settings ?? null))
+      .catch(() => {});
+  }, []);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    toast.success("Terima kasih telah berlangganan! 🎉");
-    setEmail("");
+    setSubscribing(true);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error ?? "Gagal berlangganan");
+        return;
+      }
+      toast.success("Terima kasih telah berlangganan! 🎉");
+      setEmail("");
+    } catch {
+      toast.error("Tidak bisa terhubung ke server");
+    } finally {
+      setSubscribing(false);
+    }
   };
+
+  const siteName = settings?.siteName ?? "UMKM Store";
+  const [firstWord, ...restWords] = siteName.split(" ");
+  const restWord = restWords.join(" ");
+
+  const socials = [
+    { icon: MessageCircle, href: settings?.instagram, color: "hover:bg-pink-50 hover:text-pink-600", label: "Instagram" },
+    { icon: Globe, href: settings?.facebook, color: "hover:bg-blue-50 hover:text-blue-600", label: "Facebook" },
+    { icon: Video, href: settings?.youtube, color: "hover:bg-red-50 hover:text-red-600", label: "Youtube" },
+    { icon: AtSign, href: settings?.twitter, color: "hover:bg-sky-50 hover:text-sky-600", label: "Twitter" },
+    { icon: Music, href: settings?.tiktok, color: "hover:bg-gray-100 hover:text-gray-900", label: "TikTok" },
+  ].filter((s) => s.href);
 
   return (
     <footer className="bg-gray-50 border-t border-gray-100">
@@ -75,9 +127,10 @@ export function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1"
+                required
               />
-              <Button type="submit" variant="premium">
-                Subscribe
+              <Button type="submit" variant="premium" disabled={subscribing}>
+                {subscribing ? "..." : "Subscribe"}
               </Button>
             </form>
           </div>
@@ -91,36 +144,38 @@ export function Footer() {
           <div className="col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-extrabold shadow-lg shadow-blue-500/25">
-                U
+                {firstWord.charAt(0)}
               </div>
               <span className="text-xl font-bold">
-                <span className="text-gray-900">UMKM</span>
-                <span className="text-blue-600">Store</span>
+                <span className="text-gray-900">{firstWord}</span>
+                {restWord && <span className="text-blue-600">{restWord}</span>}
               </span>
             </Link>
             <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-sm">
-              Platform UMKM terpercaya yang menyediakan produk-produk berkualitas dari pengusaha lokal Indonesia. 
-              #BanggaBuatanIndonesia
+              {settings?.siteDescription ?? "Platform UMKM terpercaya yang menyediakan produk-produk berkualitas dari pengusaha lokal Indonesia."}
             </p>
-            <div className="flex items-center gap-2">
-              {[
-                { icon: MessageCircle, href: "#", color: "hover:bg-pink-50 hover:text-pink-600", label: "Instagram" },
-                { icon: Globe, href: "#", color: "hover:bg-blue-50 hover:text-blue-600", label: "Facebook" },
-                { icon: Video, href: "#", color: "hover:bg-red-50 hover:text-red-600", label: "Youtube" },
-                { icon: AtSign, href: "#", color: "hover:bg-sky-50 hover:text-sky-600", label: "Twitter" },
-                { icon: Music, href: "#", color: "hover:bg-gray-100 hover:text-gray-900", label: "TikTok" },
-              ].map((social, i) => (
-                <a
-                  key={i}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`p-2 rounded-xl text-gray-400 transition-all ${social.color}`}
-                >
-                  <social.icon size={18} />
-                </a>
-              ))}
-            </div>
+            {(settings?.phone || settings?.email || settings?.address) && (
+              <div className="space-y-1.5 mb-4 text-sm text-gray-500">
+                {settings?.phone && <p className="flex items-center gap-2"><Phone size={13} /> {settings.phone}</p>}
+                {settings?.email && <p className="flex items-center gap-2"><Mail size={13} /> {settings.email}</p>}
+                {settings?.address && <p className="flex items-center gap-2"><MapPin size={13} /> {settings.address}</p>}
+              </div>
+            )}
+            {socials.length > 0 && (
+              <div className="flex items-center gap-2">
+                {socials.map((social, i) => (
+                  <a
+                    key={i}
+                    href={social.href!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`p-2 rounded-xl text-gray-400 transition-all ${social.color}`}
+                  >
+                    <social.icon size={18} />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Links */}
@@ -152,7 +207,7 @@ export function Footer() {
       <div className="border-t border-gray-200">
         <div className="container mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-400 flex items-center gap-1">
-            © {new Date().getFullYear()} UMKM Store. Made with <Heart size={14} className="text-red-500 fill-red-500" /> in Indonesia.
+            © {new Date().getFullYear()} {siteName}. Made with <Heart size={14} className="text-red-500 fill-red-500" /> in Indonesia.
           </p>
           <div className="flex items-center gap-4 text-sm text-gray-400">
             <Link href="/kebijakan-privasi" className="hover:text-blue-600 transition-colors">

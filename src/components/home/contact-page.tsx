@@ -5,12 +5,27 @@ import { Mail, Phone, MapPin, Clock, MessageCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
+interface SiteSettings {
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  whatsapp: string | null;
+}
 
 export function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => setSettings(data.settings ?? null))
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,9 +72,9 @@ export function ContactPage() {
             {/* Contact Info */}
             <div className="space-y-6">
               {[
-                { icon: Phone, label: "Telepon", value: "+62 812-3456-7890", href: "tel:+6281234567890" },
-                { icon: Mail, label: "Email", value: "info@umkmstore.id", href: "mailto:info@umkmstore.id" },
-                { icon: MapPin, label: "Alamat", value: "Jl. Merdeka No. 123, Jakarta, Indonesia", href: "#" },
+                { icon: Phone, label: "Telepon", value: settings?.phone ?? "-", href: settings?.phone ? `tel:${settings.phone.replace(/\s/g, "")}` : "#" },
+                { icon: Mail, label: "Email", value: settings?.email ?? "-", href: settings?.email ? `mailto:${settings.email}` : "#" },
+                { icon: MapPin, label: "Alamat", value: settings?.address ?? "-", href: "#" },
                 { icon: Clock, label: "Jam Kerja", value: "Senin - Jumat, 08:00 - 17:00 WIB", href: "#" },
               ].map((item, i) => (
                 <motion.a
@@ -80,16 +95,18 @@ export function ContactPage() {
                 </motion.a>
               ))}
 
-              <div className="p-4 bg-green-50 rounded-2xl">
-                <div className="flex items-center gap-2 text-green-700 font-semibold mb-1">
-                  <MessageCircle size={18} />
-                  Chat WhatsApp
+              {settings?.whatsapp && (
+                <div className="p-4 bg-green-50 rounded-2xl">
+                  <div className="flex items-center gap-2 text-green-700 font-semibold mb-1">
+                    <MessageCircle size={18} />
+                    Chat WhatsApp
+                  </div>
+                  <p className="text-sm text-green-600 mb-3">Respon lebih cepat via WhatsApp</p>
+                  <a href={`https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer">
+                    <Button className="bg-green-600 hover:bg-green-700 w-full">Chat Sekarang</Button>
+                  </a>
                 </div>
-                <p className="text-sm text-green-600 mb-3">Respon lebih cepat via WhatsApp</p>
-                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-green-600 hover:bg-green-700 w-full">Chat Sekarang</Button>
-                </a>
-              </div>
+              )}
             </div>
 
             {/* Contact Form */}

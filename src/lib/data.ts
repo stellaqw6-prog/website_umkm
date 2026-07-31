@@ -7,6 +7,7 @@ import {
   faqs,
   blogPosts,
   banners,
+  siteSettings,
 } from "@/db/schema";
 
 export interface ProductCardData {
@@ -161,4 +162,12 @@ export async function getBlogPostBySlug(slug: string) {
 
 export async function getActiveBanners() {
   return db.select().from(banners).where(eq(banners.isActive, true)).orderBy(banners.sortOrder);
+}
+
+export async function getSiteSettings() {
+  const existing = await db.select().from(siteSettings).limit(1);
+  if (existing.length > 0) return existing[0];
+
+  const [created] = await db.insert(siteSettings).values({}).returning();
+  return created;
 }

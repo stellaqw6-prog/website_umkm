@@ -54,9 +54,19 @@ export function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [wishlistCount] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [siteName, setSiteName] = useState("UMKM Store");
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.settings?.siteName) setSiteName(data.settings.siteName);
+      })
+      .catch(() => {});
   }, []);
 
   return (
@@ -92,11 +102,11 @@ export function Header() {
             className="flex items-center gap-2 text-xl font-bold tracking-tight"
           >
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-sm font-extrabold shadow-lg shadow-blue-500/25">
-              U
+              {siteName.charAt(0)}
             </div>
             <span className="hidden sm:block">
-              <span className="text-gray-900">UMKM</span>
-              <span className="text-blue-600">Store</span>
+              <span className="text-gray-900">{siteName.split(" ")[0]}</span>
+              <span className="text-blue-600">{siteName.split(" ").slice(1).join(" ")}</span>
             </span>
           </Link>
 
