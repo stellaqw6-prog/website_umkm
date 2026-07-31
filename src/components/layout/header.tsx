@@ -14,6 +14,7 @@ import {
   User,
   LogOut,
   LayoutDashboard,
+  Package,
   Menu,
   X,
   ChevronDown,
@@ -201,6 +202,12 @@ export function Header() {
                           <LayoutDashboard size={15} /> Dashboard Admin
                         </Link>
                       )}
+                      <Link
+                        href="/pesanan"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                      >
+                        <Package size={15} /> Pesanan Saya
+                      </Link>
                       <button
                         onClick={logout}
                         className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
@@ -291,6 +298,13 @@ export function Header() {
                         Dashboard Admin
                       </Link>
                     )}
+                    <Link
+                      href="/pesanan"
+                      onClick={() => setMobileOpen(false)}
+                      className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
+                    >
+                      Pesanan Saya
+                    </Link>
                     <button
                       onClick={() => {
                         setMobileOpen(false);
