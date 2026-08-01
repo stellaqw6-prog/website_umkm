@@ -12,6 +12,14 @@ import { AdminModal } from "@/components/admin/admin-modal";
 import { formatCurrency } from "@/lib/utils";
 import toast from "react-hot-toast";
 
+interface ProductVariant {
+  id?: number;
+  name: string;
+  price: string;
+  stock: string;
+  sku: string;
+}
+
 interface Product {
   id: number;
   name: string;
@@ -25,6 +33,7 @@ interface Product {
   isActive: boolean;
   isFeatured: boolean;
   isBestSeller: boolean;
+  variants?: { id: number; name: string; price: number | null; stock: number; sku: string | null }[];
 }
 
 interface Category {
@@ -44,6 +53,7 @@ const emptyForm = {
   isActive: true,
   isFeatured: false,
   isBestSeller: false,
+  variants: [] as ProductVariant[],
 };
 
 function slugify(text: string) {
@@ -96,8 +106,30 @@ export function AdminProducts() {
       isActive: p.isActive,
       isFeatured: p.isFeatured,
       isBestSeller: p.isBestSeller,
+      variants: (p.variants ?? []).map((v) => ({
+        id: v.id,
+        name: v.name,
+        price: v.price !== null ? String(v.price) : "",
+        stock: String(v.stock),
+        sku: v.sku ?? "",
+      })),
     });
     setModalOpen(true);
+  };
+
+  const addVariantRow = () => {
+    setForm((f) => ({ ...f, variants: [...f.variants, { name: "", price: "", stock: "0", sku: "" }] }));
+  };
+
+  const updateVariantRow = (index: number, patch: Partial<ProductVariant>) => {
+    setForm((f) => ({
+      ...f,
+      variants: f.variants.map((v, i) => (i === index ? { ...v, ...patch } : v)),
+    }));
+  };
+
+  const removeVariantRow = (index: number) => {
+    setForm((f) => ({ ...f, variants: f.variants.filter((_, i) => i !== index) }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -116,6 +148,15 @@ export function AdminProducts() {
         isActive: form.isActive,
         isFeatured: form.isFeatured,
         isBestSeller: form.isBestSeller,
+        variants: form.variants
+          .filter((v) => v.name.trim().length > 0)
+          .map((v) => ({
+            id: v.id,
+            name: v.name,
+            price: v.price || undefined,
+            stock: Number(v.stock) || 0,
+            sku: v.sku || undefined,
+          })),
       };
       const url = editing ? `/api/admin/products/${editing.id}` : "/api/admin/products";
       const method = editing ? "PUT" : "POST";
@@ -278,6 +319,59 @@ export function AdminProducts() {
               <input type="checkbox" checked={form.isBestSeller} onChange={(e) => setForm({ ...form, isBestSeller: e.target.checked })} className="rounded" /> Best Seller
             </label>
           </div>
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-sm font-medium text-gray-700 block">Varian Produk (opsional)</label>
+              <button type="button" onClick={addVariantRow} className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700">
+                <Plus size={13} /> Tambah Varian
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mb-2">
+              Contoh: &quot;Merah - L&quot;, &quot;Rasa Coklat&quot;. Kosongkan harga varian kalau ingin pakai harga produk utama di atas.
+            </p>
+            {form.variants.length === 0 ? (
+              <p className="text-xs text-gray-400 border border-dashed border-gray-200 rounded-xl py-4 text-center">
+                Belum ada varian. Produk akan dijual langsung pakai harga & stok di atas.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {form.variants.map((v, i) => (
+                  <div key={v.id ?? `new-${i}`} className="grid grid-cols-12 gap-2 items-center bg-gray-50 rounded-xl p-2">
+                    <Input
+                      className="col-span-4"
+                      placeholder="Nama varian"
+                      value={v.name}
+                      onChange={(e) => updateVariantRow(i, { name: e.target.value })}
+                    />
+                    <Input
+                      className="col-span-3"
+                      type="number"
+                      placeholder="Harga (opsional)"
+                      value={v.price}
+                      onChange={(e) => updateVariantRow(i, { price: e.target.value })}
+                    />
+                    <Input
+                      className="col-span-2"
+                      type="number"
+                      placeholder="Stok"
+                      value={v.stock}
+                      onChange={(e) => updateVariantRow(i, { stock: e.target.value })}
+                    />
+                    <Input
+                      className="col-span-2"
+                      placeholder="SKU"
+                      value={v.sku}
+                      onChange={(e) => updateVariantRow(i, { sku: e.target.value })}
+                    />
+                    <button type="button" onClick={() => removeVariantRow(i)} className="col-span-1 flex justify-center text-gray-400 hover:text-red-600">
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="flex gap-2 pt-2">
             <Button type="button" variant="outline" className="flex-1" onClick={() => setModalOpen(false)}>Batal</Button>
             <Button type="submit" variant="premium" className="flex-1" disabled={saving}>

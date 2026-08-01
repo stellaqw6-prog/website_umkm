@@ -20,6 +20,7 @@ import {
   Star,
   LogOut,
   HelpCircle,
+  Wallet,
 } from "lucide-react";
 
 const menuGroups = [
@@ -58,6 +59,7 @@ const menuGroups = [
   {
     label: "Sistem",
     items: [
+      { label: "Pembayaran", href: "/admin/payment-methods", icon: Wallet },
       { label: "Pengaturan", href: "/admin/settings", icon: Settings },
     ],
   },

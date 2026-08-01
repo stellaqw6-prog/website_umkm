@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
-import { orders, orderItems, products, promotions, users } from "@/db/schema";
+import { orders, orderItems, products, productVariants, promotions, users } from "@/db/schema";
 import { verifySessionToken, SESSION_COOKIE } from "@/lib/auth";
 import { generateOrderNumber } from "@/lib/order-utils";
 import { sendOrderConfirmationEmail } from "@/lib/email";
@@ -14,6 +14,7 @@ const orderSchema = z.object({
       z.object({
         productId: z.number(),
         quantity: z.number().int().min(1),
+        variantId: z.number().optional(),
       })
     )
     .min(1, "Keranjang kosong"),
@@ -45,20 +46,37 @@ export async function POST(req: NextRequest) {
     const dbProducts = await db.select().from(products).where(eq(products.isActive, true));
     const productMap = new Map(dbProducts.filter((p) => productIds.includes(p.id)).map((p) => [p.id, p]));
 
+    const variantIds = items.map((i) => i.variantId).filter((id): id is number => !!id);
+    const dbVariants = variantIds.length > 0
+      ? await db.select().from(productVariants).where(inArray(productVariants.id, variantIds))
+      : [];
+    const variantMap = new Map(dbVariants.map((v) => [v.id, v]));
+
     for (const item of items) {
       const product = productMap.get(item.productId);
       if (!product) {
         return NextResponse.json({ error: `Produk dengan ID ${item.productId} tidak ditemukan` }, { status: 404 });
       }
-      if (product.stock < item.quantity) {
+      if (item.variantId) {
+        const variant = variantMap.get(item.variantId);
+        if (!variant || variant.productId !== item.productId) {
+          return NextResponse.json({ error: `Varian produk "${product.name}" tidak ditemukan` }, { status: 404 });
+        }
+        if (variant.stock < item.quantity) {
+          return NextResponse.json({ error: `Stok "${product.name} (${variant.name})" tidak mencukupi (sisa ${variant.stock})` }, { status: 400 });
+        }
+      } else if (product.stock < item.quantity) {
         return NextResponse.json({ error: `Stok "${product.name}" tidak mencukupi (sisa ${product.stock})` }, { status: 400 });
       }
     }
 
-    const subtotal = items.reduce((sum, item) => {
+    const getEffectivePrice = (item: (typeof items)[number]) => {
       const product = productMap.get(item.productId)!;
-      return sum + Number(product.price) * item.quantity;
-    }, 0);
+      const variant = item.variantId ? variantMap.get(item.variantId) : undefined;
+      return variant?.price ? Number(variant.price) : Number(product.price);
+    };
+
+    const subtotal = items.reduce((sum, item) => sum + getEffectivePrice(item) * item.quantity, 0);
 
     let discountAmount = 0;
     let shippingCost = subtotal >= 200000 ? 0 : 15000;
@@ -113,20 +131,32 @@ export async function POST(req: NextRequest) {
 
     for (const item of items) {
       const product = productMap.get(item.productId)!;
+      const variant = item.variantId ? variantMap.get(item.variantId) : undefined;
+      const price = getEffectivePrice(item);
+
       await db.insert(orderItems).values({
         orderId: createdOrder.id,
         productId: product.id,
         productName: product.name,
         productImage: product.images?.[0] ?? null,
-        price: product.price,
+        variantId: variant?.id ?? null,
+        variantName: variant?.name ?? null,
+        price: String(price),
         quantity: item.quantity,
-        subtotal: String(Number(product.price) * item.quantity),
+        subtotal: String(price * item.quantity),
       });
 
-      await db
-        .update(products)
-        .set({ stock: product.stock - item.quantity })
-        .where(eq(products.id, product.id));
+      if (variant) {
+        await db
+          .update(productVariants)
+          .set({ stock: variant.stock - item.quantity })
+          .where(eq(productVariants.id, variant.id));
+      } else {
+        await db
+          .update(products)
+          .set({ stock: product.stock - item.quantity })
+          .where(eq(products.id, product.id));
+      }
     }
 
     if (appliedPromo) {
@@ -146,7 +176,12 @@ export async function POST(req: NextRequest) {
         customerName: orderUser.name,
         items: items.map((item) => {
           const product = productMap.get(item.productId)!;
-          return { name: product.name, quantity: item.quantity, price: Number(product.price) };
+          const variant = item.variantId ? variantMap.get(item.variantId) : undefined;
+          return {
+            name: variant ? `${product.name} (${variant.name})` : product.name,
+            quantity: item.quantity,
+            price: getEffectivePrice(item),
+          };
         }),
         grandTotal,
         siteName: settings.siteName,

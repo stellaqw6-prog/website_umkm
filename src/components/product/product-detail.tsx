@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Star, Minus, Plus, ShoppingCart, Heart, Truck, ShieldCheck, RotateCcw, ChevronRight } from "lucide-react";
@@ -14,10 +14,20 @@ import { useWishlist } from "@/contexts/wishlist-context";
 import type { ProductCardData } from "@/lib/data";
 import toast from "react-hot-toast";
 
+interface ProductVariant {
+  id: number;
+  name: string;
+  price: number | null;
+  stock: number;
+  sku: string | null;
+  image: string | null;
+}
+
 interface ProductDetail extends ProductCardData {
   description: string | null;
   categoryName: string | null;
   images: string[];
+  variants?: ProductVariant[];
 }
 
 export function ProductDetail({
@@ -32,11 +42,26 @@ export function ProductDetail({
   const liked = productIds.has(product.id);
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
+  const variants = product.variants ?? [];
+  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(variants[0]?.id ?? null);
+  const selectedVariant = variants.find((v) => v.id === selectedVariantId) ?? null;
 
-  const images = product.images.length > 0 ? product.images : [product.image];
+  const effectivePrice = selectedVariant?.price ?? product.price;
+  const effectiveStock = selectedVariant ? selectedVariant.stock : product.stock;
+
+  useEffect(() => {
+    setQuantity((q) => Math.max(1, Math.min(q, effectiveStock || 1)));
+  }, [selectedVariantId, effectiveStock]);
+
+  const baseImages = product.images.length > 0 ? product.images : [product.image];
+  const images = selectedVariant?.image ? [selectedVariant.image, ...baseImages] : baseImages;
 
   const handleAddToCart = () => {
-    if (product.stock <= 0) {
+    if (variants.length > 0 && !selectedVariant) {
+      toast.error("Pilih varian dulu");
+      return;
+    }
+    if (effectiveStock <= 0) {
       toast.error("Stok produk habis");
       return;
     }
@@ -45,13 +70,15 @@ export function ProductDetail({
         productId: product.id,
         slug: product.slug,
         name: product.name,
-        price: product.price,
-        image: product.image,
-        stock: product.stock,
+        price: effectivePrice,
+        image: selectedVariant?.image ?? product.image,
+        stock: effectiveStock,
+        variantId: selectedVariant?.id,
+        variantName: selectedVariant?.name,
       },
       quantity
     );
-    toast.success(`${quantity}x ${product.name} ditambahkan ke keranjang`);
+    toast.success(`${quantity}x ${product.name}${selectedVariant ? ` (${selectedVariant.name})` : ""} ditambahkan ke keranjang`);
   };
 
   return (
@@ -122,19 +149,48 @@ export function ProductDetail({
               <span className="text-sm text-gray-500">{product.reviewCount} ulasan</span>
               <span className="text-gray-300">|</span>
               <span className="text-sm text-gray-500">
-                {product.stock > 0 ? `Stok ${product.stock}` : "Stok habis"}
+                {effectiveStock > 0 ? `Stok ${effectiveStock}` : "Stok habis"}
               </span>
             </div>
 
             <div className="flex items-center gap-3 mb-6">
-              <span className="text-3xl font-extrabold text-gray-900">{formatCurrency(product.price)}</span>
-              {product.compareAtPrice && (
+              <span className="text-3xl font-extrabold text-gray-900">{formatCurrency(effectivePrice)}</span>
+              {product.compareAtPrice && !selectedVariant?.price && (
                 <span className="text-lg text-gray-400 line-through">{formatCurrency(product.compareAtPrice)}</span>
               )}
             </div>
 
             {product.description && (
               <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
+            )}
+
+            {/* Varian */}
+            {variants.length > 0 && (
+              <div className="mb-6">
+                <span className="text-sm font-semibold text-gray-700 block mb-2">
+                  Pilih Varian{selectedVariant ? `: ${selectedVariant.name}` : ""}
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {variants.map((v) => (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setSelectedVariantId(v.id)}
+                      disabled={v.stock <= 0}
+                      className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${
+                        selectedVariantId === v.id
+                          ? "border-blue-600 bg-blue-50 text-blue-700"
+                          : v.stock <= 0
+                          ? "border-gray-100 text-gray-300 cursor-not-allowed line-through"
+                          : "border-gray-200 text-gray-700 hover:border-gray-300"
+                      }`}
+                    >
+                      {v.name}
+                      {v.stock <= 0 && " (Habis)"}
+                    </button>
+                  ))}
+                </div>
+              </div>
             )}
 
             {/* Quantity */}
@@ -149,7 +205,7 @@ export function ProductDetail({
                 </button>
                 <span className="w-10 text-center font-semibold text-sm">{quantity}</span>
                 <button
-                  onClick={() => setQuantity((q) => Math.min(product.stock, q + 1))}
+                  onClick={() => setQuantity((q) => Math.min(effectiveStock, q + 1))}
                   className="p-2.5 text-gray-500 hover:text-blue-600 transition-colors"
                 >
                   <Plus size={16} />
@@ -159,7 +215,7 @@ export function ProductDetail({
 
             {/* Actions */}
             <div className="flex items-center gap-3 mb-8">
-              <Button size="lg" className="flex-1 group" onClick={handleAddToCart} disabled={product.stock <= 0}>
+              <Button size="lg" className="flex-1 group" onClick={handleAddToCart} disabled={effectiveStock <= 0}>
                 <ShoppingCart size={18} className="mr-2" />
                 Tambah ke Keranjang
               </Button>

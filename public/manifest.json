@@ -1,0 +1,10 @@
+{
+  "name": "UMKM Store",
+  "short_name": "UMKM Store",
+  "description": "Platform UMKM terpercaya yang menyediakan produk-produk berkualitas dari pengusaha lokal Indonesia.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": []
+}

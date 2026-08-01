@@ -3,11 +3,21 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { CheckCircle2, Package, MapPin, CreditCard, Loader2, Home } from "lucide-react";
+import { CheckCircle2, Package, MapPin, CreditCard, Loader2, Home, Copy, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
 import toast from "react-hot-toast";
+
+interface PaymentMethod {
+  id: number;
+  name: string;
+  type: "ewallet" | "bank" | "cod";
+  accountNumber: string;
+  accountName: string;
+  qrImage: string | null;
+  instructions: string | null;
+}
 
 interface OrderData {
   id: number;
@@ -29,6 +39,7 @@ interface OrderItem {
   id: number;
   productName: string;
   productImage: string | null;
+  variantName: string | null;
   price: string;
   quantity: number;
   subtotal: string;
@@ -54,15 +65,10 @@ const statusVariant: Record<string, "warning" | "default" | "success" | "destruc
   refunded: "secondary",
 };
 
-const paymentMethodLabel: Record<string, string> = {
-  bank_transfer: "Transfer Bank",
-  ewallet: "E-Wallet",
-  cod: "Bayar di Tempat (COD)",
-};
-
 export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
   const [order, setOrder] = useState<OrderData | null>(null);
   const [items, setItems] = useState<OrderItem[]>([]);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -81,6 +87,23 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
   }, [orderNumber]);
+
+  useEffect(() => {
+    if (!order?.paymentMethod) return;
+    fetch("/api/payment-methods")
+      .then((res) => res.json())
+      .then((data) => {
+        const methods: PaymentMethod[] = data.paymentMethods ?? [];
+        const match = methods.find((m) => m.name === order.paymentMethod);
+        if (match) setPaymentMethod(match);
+      })
+      .catch(() => {});
+  }, [order?.paymentMethod]);
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Nomor disalin");
+  };
 
   if (loading) {
     return (
@@ -126,6 +149,7 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
                   <img src={item.productImage ?? ""} alt={item.productName} className="w-12 h-14 object-cover rounded-lg bg-gray-100 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 line-clamp-1">{item.productName}</p>
+                    {item.variantName && <p className="text-gray-400 text-xs">Varian: {item.variantName}</p>}
                     <p className="text-gray-500 text-xs">{item.quantity} x {formatCurrency(Number(item.price))}</p>
                   </div>
                   <span className="font-semibold text-gray-900 whitespace-nowrap">{formatCurrency(Number(item.subtotal))}</span>
@@ -148,7 +172,7 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
 
           <div className="space-y-3 text-sm">
             <div className="flex items-start gap-2"><MapPin size={15} className="text-gray-400 mt-0.5 flex-shrink-0" /><span className="text-gray-600">{order.shippingAddress}</span></div>
-            <div className="flex items-center gap-2"><CreditCard size={15} className="text-gray-400 flex-shrink-0" /><span className="text-gray-600">{paymentMethodLabel[order.paymentMethod] ?? order.paymentMethod}</span></div>
+            <div className="flex items-center gap-2"><CreditCard size={15} className="text-gray-400 flex-shrink-0" /><span className="text-gray-600">{order.paymentMethod}</span></div>
           </div>
 
           {order.trackingNumber && (
@@ -157,6 +181,45 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
             </div>
           )}
         </div>
+
+        {/* Instruksi pembayaran, tampil selama status belum "paid" (kecuali COD) */}
+        {order.paymentStatus === "unpaid" && paymentMethod && paymentMethod.type !== "cod" && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-2xl border border-blue-100 p-6 mt-4">
+            <h3 className="text-sm font-bold text-gray-900 mb-1">Selesaikan Pembayaran</h3>
+            <p className="text-xs text-gray-500 mb-4">
+              Bayar sejumlah <span className="font-semibold text-gray-900">{formatCurrency(Number(order.grandTotal))}</span> via {paymentMethod.name} sebelum pesanan diproses.
+            </p>
+
+            <div className="rounded-xl border border-blue-100 bg-blue-50/40 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs text-gray-500">
+                    {paymentMethod.type === "bank" ? "Nomor Rekening" : "Nomor HP"}
+                  </p>
+                  <p className="font-mono font-bold text-gray-900 text-lg">{paymentMethod.accountNumber}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">a.n. {paymentMethod.accountName}</p>
+                </div>
+                <button
+                  onClick={() => handleCopy(paymentMethod.accountNumber)}
+                  className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-3 py-1.5 rounded-lg border border-blue-200 flex-shrink-0"
+                >
+                  <Copy size={13} /> Salin
+                </button>
+              </div>
+
+              {paymentMethod.qrImage && (
+                <div className="mt-3 flex items-center gap-3">
+                  <img src={paymentMethod.qrImage} alt={`QR ${paymentMethod.name}`} className="w-24 h-24 rounded-lg border border-gray-200 object-contain bg-white" />
+                  <p className="text-xs text-gray-500 flex items-center gap-1"><QrCode size={13} /> Atau scan QR code di samping</p>
+                </div>
+              )}
+
+              {paymentMethod.instructions && (
+                <p className="text-xs text-gray-500 mt-3 leading-relaxed">{paymentMethod.instructions}</p>
+              )}
+            </div>
+          </motion.div>
+        )}
 
         <div className="flex gap-3 mt-6">
           <Link href="/" className="flex-1"><Button variant="outline" className="w-full"><Home size={16} className="mr-2" /> Beranda</Button></Link>

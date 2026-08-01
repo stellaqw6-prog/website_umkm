@@ -9,6 +9,8 @@ import {
   banners,
   siteSettings,
   promotions,
+  paymentMethods,
+  productVariants,
 } from "@/db/schema";
 
 export interface ProductCardData {
@@ -112,6 +114,23 @@ export async function getFeaturedProducts(limit = 8) {
   return rows.map(toProductCard);
 }
 
+export async function getProductVariants(productId: number) {
+  const rows = await db
+    .select()
+    .from(productVariants)
+    .where(and(eq(productVariants.productId, productId), eq(productVariants.isActive, true)))
+    .orderBy(productVariants.sortOrder);
+  return rows.map((v) => ({
+    id: v.id,
+    productId: v.productId,
+    name: v.name,
+    price: v.price ? Number(v.price) : null,
+    stock: v.stock,
+    sku: v.sku,
+    image: v.image,
+  }));
+}
+
 export async function getProductBySlug(slug: string) {
   const [row] = await db.select().from(products).where(eq(products.slug, slug)).limit(1);
   if (!row) return null;
@@ -122,7 +141,9 @@ export async function getProductBySlug(slug: string) {
     categoryName = cat?.name ?? null;
   }
 
-  return { ...toProductCard(row), description: row.description, categoryName, images: row.images };
+  const variants = await getProductVariants(row.id);
+
+  return { ...toProductCard(row), description: row.description, categoryName, images: row.images, variants };
 }
 
 export async function getRelatedProducts(categoryId: number | null, excludeId: number, limit = 4) {
@@ -171,6 +192,66 @@ export async function getSiteSettings() {
 
   const [created] = await db.insert(siteSettings).values({}).returning();
   return created;
+}
+
+// Data awal metode pembayaran — otomatis dibuat sekali saat tabel masih kosong,
+// setelah itu semua diatur lewat Dashboard Admin > Pembayaran.
+const defaultPaymentMethods = [
+  {
+    name: "DANA",
+    type: "ewallet" as const,
+    provider: "dana",
+    accountNumber: "082326153257",
+    accountName: "M Fuad Akbar Firmansyah",
+    sortOrder: 0,
+  },
+  {
+    name: "GoPay",
+    type: "ewallet" as const,
+    provider: "gopay",
+    accountNumber: "082326153257",
+    accountName: "M Fuad Akbar Firmansyah",
+    sortOrder: 1,
+  },
+  {
+    name: "Bank BCA",
+    type: "bank" as const,
+    provider: "bca",
+    accountNumber: "0392258076",
+    accountName: "M Fuad Akbar Firmansyah",
+    sortOrder: 2,
+  },
+  {
+    name: "QRIS",
+    type: "ewallet" as const,
+    provider: "qris",
+    accountNumber: "-",
+    accountName: "M Fuad Akbar Firmansyah",
+    instructions: "Scan kode QR menggunakan aplikasi e-wallet atau m-banking apa saja yang mendukung QRIS.",
+    sortOrder: 3,
+  },
+  {
+    name: "Bayar di Tempat (COD)",
+    type: "cod" as const,
+    provider: "cod",
+    accountNumber: "-",
+    accountName: "-",
+    instructions: "Bayar tunai langsung kepada kurir saat pesanan tiba di alamat Anda.",
+    sortOrder: 4,
+  },
+];
+
+export async function getAllPaymentMethods() {
+  const existing = await db.select().from(paymentMethods).orderBy(paymentMethods.sortOrder);
+  if (existing.length > 0) return existing;
+
+  await db.insert(paymentMethods).values(defaultPaymentMethods);
+  return db.select().from(paymentMethods).orderBy(paymentMethods.sortOrder);
+}
+
+export async function getActivePaymentMethods() {
+  const all = await getAllPaymentMethods();
+  return all.filter((m) => m.isActive);
 }
 
 export async function getActivePromotions() {

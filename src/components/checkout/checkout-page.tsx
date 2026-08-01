@@ -1,36 +1,67 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MapPin, CreditCard, Tag, ShoppingBag, Loader2, Check, X } from "lucide-react";
+import { MapPin, CreditCard, Tag, ShoppingBag, Loader2, Check, X, Copy, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { formatCurrency } from "@/lib/utils";
 import { useCart } from "@/contexts/cart-context";
 import { useSession } from "@/hooks/use-session";
+import { AddressForm } from "@/components/checkout/address-form";
 import toast from "react-hot-toast";
 
-const paymentMethods = [
-  { id: "bank_transfer", label: "Transfer Bank", desc: "BCA, Mandiri, BNI, BRI" },
-  { id: "ewallet", label: "E-Wallet", desc: "OVO, GoPay, DANA, ShopeePay" },
-  { id: "cod", label: "Bayar di Tempat (COD)", desc: "Bayar saat barang diterima" },
-];
+interface PaymentMethod {
+  id: number;
+  name: string;
+  type: "ewallet" | "bank" | "cod";
+  provider: string;
+  accountNumber: string;
+  accountName: string;
+  qrImage: string | null;
+  instructions: string | null;
+}
 
 export function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
   const { user, loading: sessionLoading } = useSession();
 
-  const [address, setAddress] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
+  const [addressValid, setAddressValid] = useState(false);
+  const [formattedAddress, setFormattedAddress] = useState("");
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [loadingPayments, setLoadingPayments] = useState(true);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(null);
   const [notes, setNotes] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [promoResult, setPromoResult] = useState<{ discount: number; freeShipping: boolean; code: string } | null>(null);
   const [applyingPromo, setApplyingPromo] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/payment-methods")
+      .then((res) => res.json())
+      .then((data) => {
+        const methods: PaymentMethod[] = data.paymentMethods ?? [];
+        setPaymentMethods(methods);
+        if (methods.length > 0) setSelectedPaymentId(methods[0].id);
+      })
+      .catch(() => toast.error("Gagal memuat metode pembayaran"))
+      .finally(() => setLoadingPayments(false));
+  }, []);
+
+  const selectedMethod = paymentMethods.find((m) => m.id === selectedPaymentId) ?? null;
+  const ewalletMethods = paymentMethods.filter((m) => m.type === "ewallet");
+  const bankMethods = paymentMethods.filter((m) => m.type === "bank");
+  const codMethods = paymentMethods.filter((m) => m.type === "cod");
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Nomor disalin");
+  };
 
   const baseShipping = totalPrice >= 200000 ? 0 : 15000;
   const shipping = promoResult?.freeShipping ? 0 : baseShipping;
@@ -70,8 +101,13 @@ export function CheckoutPage() {
       return;
     }
 
-    if (address.trim().length < 10) {
-      toast.error("Isi alamat pengiriman lengkap dulu");
+    if (!addressValid || !formattedAddress) {
+      toast.error("Lengkapi alamat pengiriman (provinsi, kota, kecamatan, kelurahan, kode pos, dan detail alamat)");
+      return;
+    }
+
+    if (!selectedMethod) {
+      toast.error("Pilih metode pembayaran dulu");
       return;
     }
 
@@ -81,9 +117,9 @@ export function CheckoutPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
-          shippingAddress: address,
-          paymentMethod,
+          items: items.map((i) => ({ productId: i.productId, quantity: i.quantity, variantId: i.variantId })),
+          shippingAddress: formattedAddress,
+          paymentMethod: selectedMethod.name,
           notes,
           promoCode: promoResult?.code,
         }),
@@ -144,34 +180,141 @@ export function CheckoutPage() {
             {/* Address */}
             <div className="bg-white rounded-2xl p-6 border border-gray-100">
               <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><MapPin size={18} className="text-blue-600" /> Alamat Pengiriman</h3>
-              <Textarea
-                required
-                rows={4}
-                placeholder="Nama penerima, nomor HP, alamat lengkap (jalan, RT/RW, kelurahan, kecamatan, kota, kode pos)"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+              <AddressForm
+                onChange={(_value, isValid, formatted) => {
+                  setAddressValid(isValid);
+                  setFormattedAddress(formatted);
+                }}
               />
             </div>
 
             {/* Payment method */}
             <div className="bg-white rounded-2xl p-6 border border-gray-100">
               <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><CreditCard size={18} className="text-blue-600" /> Metode Pembayaran</h3>
-              <div className="space-y-2">
-                {paymentMethods.map((m) => (
-                  <label
-                    key={m.id}
-                    className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                      paymentMethod === m.id ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <input type="radio" name="payment" checked={paymentMethod === m.id} onChange={() => setPaymentMethod(m.id)} className="accent-blue-600" />
+
+              {loadingPayments ? (
+                <div className="flex justify-center py-8 text-gray-400"><Loader2 className="animate-spin" size={24} /></div>
+              ) : paymentMethods.length === 0 ? (
+                <p className="text-sm text-gray-400 py-4">Belum ada metode pembayaran tersedia. Hubungi admin toko.</p>
+              ) : (
+                <div className="space-y-5">
+                  {ewalletMethods.length > 0 && (
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{m.label}</p>
-                      <p className="text-xs text-gray-500">{m.desc}</p>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">E-Wallet</p>
+                      <div className="space-y-2">
+                        {ewalletMethods.map((m) => (
+                          <label
+                            key={m.id}
+                            className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-gray-300"
+                            }`}
+                          >
+                            <input type="radio" name="payment" checked={selectedPaymentId === m.id} onChange={() => setSelectedPaymentId(m.id)} className="accent-blue-600" />
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">{m.name}</p>
+                              <p className="text-xs text-gray-500">a.n. {m.accountName}</p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                  </label>
-                ))}
-              </div>
+                  )}
+
+                  {bankMethods.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Transfer Bank</p>
+                      <div className="space-y-2">
+                        {bankMethods.map((m) => (
+                          <label
+                            key={m.id}
+                            className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-gray-300"
+                            }`}
+                          >
+                            <input type="radio" name="payment" checked={selectedPaymentId === m.id} onChange={() => setSelectedPaymentId(m.id)} className="accent-blue-600" />
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">{m.name}</p>
+                              <p className="text-xs text-gray-500">a.n. {m.accountName}</p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {codMethods.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Bayar di Tempat</p>
+                      <div className="space-y-2">
+                        {codMethods.map((m) => (
+                          <label
+                            key={m.id}
+                            className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-gray-300"
+                            }`}
+                          >
+                            <input type="radio" name="payment" checked={selectedPaymentId === m.id} onChange={() => setSelectedPaymentId(m.id)} className="accent-blue-600" />
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">{m.name}</p>
+                              <p className="text-xs text-gray-500">Bayar tunai saat pesanan tiba</p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Detail pembayaran metode terpilih */}
+                  <AnimatePresence mode="wait">
+                    {selectedMethod && (
+                      <motion.div
+                        key={selectedMethod.id}
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        className="rounded-xl border border-blue-100 bg-blue-50/40 p-4"
+                      >
+                        <p className="text-xs font-semibold text-blue-700 mb-2">Detail Pembayaran {selectedMethod.name}</p>
+                        {selectedMethod.type === "cod" ? (
+                          <p className="text-sm text-gray-600 leading-relaxed">
+                            {selectedMethod.instructions || "Bayar tunai langsung kepada kurir saat pesanan tiba di alamat Anda."}
+                          </p>
+                        ) : (
+                          <>
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <p className="text-xs text-gray-500">
+                                  {selectedMethod.type === "bank" ? "Nomor Rekening" : "Nomor HP"}
+                                </p>
+                                <p className="font-mono font-bold text-gray-900 text-lg">{selectedMethod.accountNumber}</p>
+                                <p className="text-xs text-gray-500 mt-0.5">a.n. {selectedMethod.accountName}</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(selectedMethod.accountNumber)}
+                                className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-3 py-1.5 rounded-lg border border-blue-200 flex-shrink-0"
+                              >
+                                <Copy size={13} /> Salin
+                              </button>
+                            </div>
+
+                            {selectedMethod.qrImage && (
+                              <div className="mt-3 flex items-center gap-3">
+                                <img src={selectedMethod.qrImage} alt={`QR ${selectedMethod.name}`} className="w-24 h-24 rounded-lg border border-gray-200 object-contain bg-white" />
+                                <p className="text-xs text-gray-500 flex items-center gap-1"><QrCode size={13} /> Atau scan QR code di samping</p>
+                              </div>
+                            )}
+
+                            {selectedMethod.instructions && (
+                              <p className="text-xs text-gray-500 mt-3 leading-relaxed">{selectedMethod.instructions}</p>
+                            )}
+                          </>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </div>
 
             {/* Notes */}
@@ -187,10 +330,11 @@ export function CheckoutPage() {
 
             <div className="space-y-3 max-h-52 overflow-y-auto">
               {items.map((item) => (
-                <div key={item.productId} className="flex gap-3 text-sm">
+                <div key={`${item.productId}-${item.variantId ?? "base"}`} className="flex gap-3 text-sm">
                   <img src={item.image} alt={item.name} className="w-12 h-14 object-cover rounded-lg flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 line-clamp-1">{item.name}</p>
+                    {item.variantName && <p className="text-gray-400 text-xs">Varian: {item.variantName}</p>}
                     <p className="text-gray-500 text-xs">{item.quantity} x {formatCurrency(item.price)}</p>
                   </div>
                   <span className="font-semibold text-gray-900 whitespace-nowrap">{formatCurrency(item.price * item.quantity)}</span>
@@ -235,7 +379,7 @@ export function CheckoutPage() {
               <div className="flex justify-between text-lg"><span className="font-bold">Total</span><span className="font-bold text-blue-600">{formatCurrency(grandTotal)}</span></div>
             </div>
 
-            <Button type="submit" variant="premium" size="lg" className="w-full" disabled={submitting}>
+            <Button type="submit" variant="premium" size="lg" className="w-full" disabled={submitting || !selectedMethod || !addressValid}>
               {submitting ? <Loader2 className="animate-spin" size={18} /> : "Buat Pesanan"}
             </Button>
           </div>

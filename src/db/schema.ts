@@ -37,6 +37,7 @@ export const promotionTypeEnum = pgEnum("promotion_type", [
   "fixed",
   "free_shipping",
 ]);
+export const paymentMethodTypeEnum = pgEnum("payment_method_type", ["ewallet", "bank", "cod"]);
 
 // ==================== USERS ====================
 export const users = pgTable(
@@ -116,6 +117,30 @@ export const products = pgTable(
   ]
 );
 
+// ==================== PRODUCT VARIANTS ====================
+// Satu produk/menu bisa punya banyak varian (contoh: Warna, Ukuran, Rasa, dll).
+// Kalau produk tidak punya varian sama sekali, produk tetap bisa dijual langsung
+// pakai harga & stok dari tabel products seperti biasa.
+export const productVariants = pgTable(
+  "product_variants",
+  {
+    id: serial("id").primaryKey(),
+    productId: integer("product_id")
+      .references(() => products.id, { onDelete: "cascade" })
+      .notNull(),
+    name: varchar("name", { length: 255 }).notNull(), // contoh: "Merah - Ukuran L"
+    price: decimal("price", { precision: 12, scale: 2 }), // null = pakai harga produk utama
+    stock: integer("stock").default(0).notNull(),
+    sku: varchar("sku", { length: 100 }),
+    image: text("image"), // opsional, gambar khusus varian ini
+    isActive: boolean("is_active").default(true).notNull(),
+    sortOrder: integer("sort_order").default(0).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [index("product_variants_product_idx").on(table.productId)]
+);
+
 // ==================== ORDERS ====================
 export const orders = pgTable(
   "orders",
@@ -157,6 +182,8 @@ export const orderItems = pgTable(
       .notNull(),
     productName: varchar("product_name", { length: 500 }).notNull(),
     productImage: text("product_image"),
+    variantId: integer("variant_id").references(() => productVariants.id),
+    variantName: varchar("variant_name", { length: 255 }), // snapshot nama varian saat dipesan
     price: decimal("price", { precision: 12, scale: 2 }).notNull(),
     quantity: integer("quantity").notNull(),
     subtotal: decimal("subtotal", { precision: 12, scale: 2 }).notNull(),
@@ -341,6 +368,26 @@ export const wishlists = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => [uniqueIndex("wishlists_user_product_idx").on(table.userId, table.productId)]
+);
+
+// ==================== PAYMENT METHODS ====================
+export const paymentMethods = pgTable(
+  "payment_methods",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 100 }).notNull(), // contoh: "DANA", "GoPay", "OVO", "Bank BCA"
+    type: paymentMethodTypeEnum("type").notNull(), // ewallet | bank
+    provider: varchar("provider", { length: 50 }).notNull(), // dana | gopay | ovo | bca | qris | cod | mandiri | bri | bni | dst
+    accountNumber: varchar("account_number", { length: 100 }).default("-").notNull(), // nomor HP (e-wallet) atau nomor rekening (bank); "-" untuk COD
+    accountName: varchar("account_name", { length: 255 }).default("-").notNull(), // nama pemilik akun/rekening; "-" untuk COD
+    qrImage: text("qr_image"), // URL gambar QR code (opsional)
+    instructions: text("instructions"), // instruksi tambahan (opsional)
+    isActive: boolean("is_active").default(true).notNull(),
+    sortOrder: integer("sort_order").default(0).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [index("payment_methods_active_idx").on(table.isActive)]
 );
 
 // ==================== PASSWORD RESET TOKENS ====================

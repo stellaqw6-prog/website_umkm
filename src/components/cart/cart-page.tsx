@@ -40,7 +40,7 @@ export function CartPageClient() {
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
               <motion.div
-                key={item.productId}
+                key={`${item.productId}-${item.variantId ?? "base"}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="bg-white rounded-2xl p-4 flex gap-4 border border-gray-100"
@@ -50,16 +50,19 @@ export function CartPageClient() {
                   <Link href={`/produk/${item.slug}`} className="font-semibold text-gray-900 hover:text-blue-600 transition-colors line-clamp-1">
                     {item.name}
                   </Link>
+                  {item.variantName && (
+                    <p className="text-xs text-gray-500 mt-0.5">Varian: {item.variantName}</p>
+                  )}
                   <p className="text-blue-600 font-bold mt-1">{formatCurrency(item.price)}</p>
                   <div className="flex items-center gap-3 mt-3">
-                    <button onClick={() => updateQuantity(item.productId, item.quantity - 1)} className="p-1 rounded-lg border border-gray-200 hover:bg-gray-50">
+                    <button onClick={() => updateQuantity(item.productId, item.quantity - 1, item.variantId)} className="p-1 rounded-lg border border-gray-200 hover:bg-gray-50">
                       <Minus size={14} />
                     </button>
                     <span className="font-semibold text-sm w-8 text-center">{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.productId, item.quantity + 1)} className="p-1 rounded-lg border border-gray-200 hover:bg-gray-50">
+                    <button onClick={() => updateQuantity(item.productId, item.quantity + 1, item.variantId)} className="p-1 rounded-lg border border-gray-200 hover:bg-gray-50">
                       <Plus size={14} />
                     </button>
-                    <button onClick={() => removeItem(item.productId)} className="ml-auto p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all">
+                    <button onClick={() => removeItem(item.productId, item.variantId)} className="ml-auto p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all">
                       <Trash2 size={16} />
                     </button>
                   </div>
