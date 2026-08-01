@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { hashPassword, createSessionToken, SESSION_COOKIE, sessionCookieOptions } from "@/lib/auth";
+import { checkRateLimit, getClientKey } from "@/lib/rate-limit";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Nama minimal 2 karakter"),
@@ -13,6 +14,14 @@ const registerSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const rateLimit = checkRateLimit(getClientKey(req, "register"), 5, 300); // 5 pendaftaran per 5 menit per IP
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: `Terlalu banyak percobaan pendaftaran. Coba lagi dalam ${rateLimit.retryAfterSeconds} detik.` },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await req.json();
     const parsed = registerSchema.safeParse(body);

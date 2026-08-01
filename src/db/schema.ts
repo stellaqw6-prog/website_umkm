@@ -326,3 +326,35 @@ export const visitorLogs = pgTable("visitor_logs", {
   country: varchar("country", { length: 100 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+// ==================== WISHLIST ====================
+export const wishlists = pgTable(
+  "wishlists",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    productId: integer("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [uniqueIndex("wishlists_user_product_idx").on(table.userId, table.productId)]
+);
+
+// ==================== PASSWORD RESET TOKENS ====================
+export const passwordResetTokens = pgTable(
+  "password_reset_tokens",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    token: varchar("token", { length: 255 }).notNull().unique(),
+    expiresAt: timestamp("expires_at").notNull(),
+    used: boolean("used").default(false).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("password_reset_tokens_token_idx").on(table.token)]
+);

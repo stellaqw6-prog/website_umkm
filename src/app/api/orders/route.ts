@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { orders, orderItems, products, promotions } from "@/db/schema";
+import { orders, orderItems, products, promotions, users } from "@/db/schema";
 import { verifySessionToken, SESSION_COOKIE } from "@/lib/auth";
 import { generateOrderNumber } from "@/lib/order-utils";
+import { sendOrderConfirmationEmail } from "@/lib/email";
+import { getSiteSettings } from "@/lib/data";
 
 const orderSchema = z.object({
   items: z
@@ -132,6 +134,24 @@ export async function POST(req: NextRequest) {
         .update(promotions)
         .set({ usedCount: appliedPromo.usedCount + 1 })
         .where(eq(promotions.id, appliedPromo.id));
+    }
+
+    // Kirim email konfirmasi (tidak menghambat response kalau gagal/lambat)
+    const [orderUser] = await db.select().from(users).where(eq(users.id, session.userId)).limit(1);
+    if (orderUser) {
+      const settings = await getSiteSettings();
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
+      sendOrderConfirmationEmail(orderUser.email, {
+        orderNumber: createdOrder.orderNumber,
+        customerName: orderUser.name,
+        items: items.map((item) => {
+          const product = productMap.get(item.productId)!;
+          return { name: product.name, quantity: item.quantity, price: Number(product.price) };
+        }),
+        grandTotal,
+        siteName: settings.siteName,
+        orderUrl: `${appUrl}/pesanan/${createdOrder.orderNumber}`,
+      }).catch(() => {});
     }
 
     return NextResponse.json({ order: createdOrder }, { status: 201 });

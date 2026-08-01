@@ -2,17 +2,18 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
 import { Star, Heart, ShoppingCart, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
 import { useCart } from "@/contexts/cart-context";
+import { useWishlist } from "@/contexts/wishlist-context";
 import type { ProductCardData } from "@/lib/data";
 import toast from "react-hot-toast";
 
 export function ProductCard({ product, index = 0 }: { product: ProductCardData; index?: number }) {
-  const [liked, setLiked] = useState(false);
   const { addItem } = useCart();
+  const { productIds, toggle } = useWishlist();
+  const liked = productIds.has(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -65,7 +66,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductCardData; 
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300">
           <div className="absolute right-3 top-12 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLiked(!liked); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(product.id); }}
               className={`p-2 rounded-xl ${
                 liked ? "bg-red-500 text-white" : "bg-white text-gray-600 hover:text-red-500"
               } shadow-sm transition-all`}

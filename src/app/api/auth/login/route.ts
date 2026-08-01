@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { verifyPassword, createSessionToken, SESSION_COOKIE, sessionCookieOptions } from "@/lib/auth";
+import { checkRateLimit, getClientKey, resetRateLimit } from "@/lib/rate-limit";
 
 const loginSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -11,6 +12,16 @@ const loginSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const rateLimitKey = getClientKey(req, "login");
+  const rateLimit = checkRateLimit(rateLimitKey, 5, 60); // 5 percobaan per menit per IP
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: `Terlalu banyak percobaan login. Coba lagi dalam ${rateLimit.retryAfterSeconds} detik.` },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await req.json();
     const parsed = loginSchema.safeParse(body);
@@ -51,6 +62,7 @@ export async function POST(req: NextRequest) {
     const res = NextResponse.json({
       user: { id: user.id, name: user.name, email: user.email, role: user.role },
     });
+    resetRateLimit(rateLimitKey);
     res.cookies.set(SESSION_COOKIE, token, sessionCookieOptions);
     return res;
   } catch (err) {

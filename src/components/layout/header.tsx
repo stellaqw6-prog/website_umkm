@@ -6,6 +6,7 @@ import { useScroll } from "@/hooks/use-scroll";
 import { useMobile } from "@/hooks/use-mobile";
 import { useSession } from "@/hooks/use-session";
 import { useCart } from "@/contexts/cart-context";
+import { useWishlist } from "@/contexts/wishlist-context";
 import { cn } from "@/lib/utils";
 import {
   Search,
@@ -52,7 +53,8 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [wishlistCount] = useState(0);
+  const { productIds: wishlistIds } = useWishlist();
+  const wishlistCount = wishlistIds.size;
   const [mounted, setMounted] = useState(false);
   const [siteName, setSiteName] = useState("UMKM Store");
 

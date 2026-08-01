@@ -1,105 +1,147 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Search, Mail, MailOpen, Trash2, Reply, Archive } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Search, Mail, MailOpen, Trash2, Loader2, Inbox } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
 
-const messages = [
-  { id: 1, name: "Fitri Ramadhani", email: "fitri.r@gmail.com", subject: "Tanya ketersediaan stok batik ukuran L", message: "Halo, saya mau tanya apakah Batik Tulis Madura Premium ukuran L masih tersedia? Terima kasih.", date: "2 jam lalu", read: false },
-  { id: 2, name: "Hendra Gunawan", email: "hendra.g@yahoo.com", subject: "Kerjasama reseller", message: "Selamat siang, saya tertarik menjadi reseller untuk produk kopi dan keripik. Bagaimana caranya ya?", date: "5 jam lalu", read: false },
-  { id: 3, name: "Lina Marlina", email: "lina.m@gmail.com", subject: "Komplain pesanan belum sampai", message: "Pesanan saya #ORD-231 sudah 10 hari belum sampai, mohon dicek statusnya.", date: "1 hari lalu", read: true },
-  { id: 4, name: "Yusuf Ibrahim", email: "yusuf.ibrahim@outlook.com", subject: "Request custom motif tenun", message: "Apakah bisa pesan kain tenun dengan motif custom sesuai request? Untuk acara pernikahan.", date: "2 hari lalu", read: true },
-];
+interface Message {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  subject: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}
 
 export function AdminMessages() {
-  const [selected, setSelected] = useState(messages[0]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<Message | null>(null);
+
+  const load = () => {
+    fetch("/api/admin/messages")
+      .then((res) => res.json())
+      .then((data) => {
+        setMessages(data.messages ?? []);
+        if (data.messages?.length > 0) setSelected((prev) => prev ?? data.messages[0]);
+      })
+      .finally(() => setLoading(false));
+  };
+  useEffect(load, []);
+
+  const openMessage = async (msg: Message) => {
+    setSelected(msg);
+    if (!msg.isRead) {
+      await fetch(`/api/admin/messages/${msg.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isRead: true }),
+      });
+      setMessages((prev) => prev.map((m) => (m.id === msg.id ? { ...m, isRead: true } : m)));
+    }
+  };
+
+  const handleDelete = async (msg: Message) => {
+    if (!confirm("Hapus pesan ini?")) return;
+    const res = await fetch(`/api/admin/messages/${msg.id}`, { method: "DELETE" });
+    if (!res.ok) {
+      toast.error("Gagal menghapus pesan");
+      return;
+    }
+    toast.success("Pesan dihapus");
+    setMessages((prev) => prev.filter((m) => m.id !== msg.id));
+    if (selected?.id === msg.id) setSelected(null);
+  };
+
+  const filtered = messages.filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || m.subject.toLowerCase().includes(search.toLowerCase()));
+
+  if (loading) {
+    return <div className="flex justify-center py-24 text-gray-400"><Loader2 className="animate-spin" size={32} /></div>;
+  }
 
   return (
     <div className="space-y-6">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+      <div>
         <h1 className="text-2xl font-bold text-gray-900">Pesan</h1>
         <p className="text-gray-500 text-sm mt-1">Pesan masuk dari formulir kontak pelanggan</p>
-      </motion.div>
-
-      <div className="grid lg:grid-cols-5 gap-4">
-        {/* List */}
-        <Card className="lg:col-span-2 overflow-hidden">
-          <div className="p-3 border-b border-gray-100">
-            <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <Input placeholder="Cari pesan..." className="pl-9 h-9" />
-            </div>
-          </div>
-          <div className="divide-y divide-gray-50 max-h-[520px] overflow-y-auto">
-            {messages.map((msg) => (
-              <button
-                key={msg.id}
-                onClick={() => setSelected(msg)}
-                className={cn(
-                  "w-full text-left p-4 hover:bg-gray-50/50 transition-colors",
-                  selected.id === msg.id && "bg-blue-50/50"
-                )}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className={cn("text-sm", !msg.read ? "font-bold text-gray-900" : "font-medium text-gray-700")}>
-                    {msg.name}
-                  </span>
-                  {!msg.read && <span className="w-2 h-2 rounded-full bg-blue-600 flex-shrink-0" />}
-                </div>
-                <p className={cn("text-xs mb-1 truncate", !msg.read ? "font-semibold text-gray-800" : "text-gray-500")}>
-                  {msg.subject}
-                </p>
-                <p className="text-xs text-gray-400 truncate">{msg.message}</p>
-                <p className="text-[10px] text-gray-400 mt-1">{msg.date}</p>
-              </button>
-            ))}
-          </div>
-        </Card>
-
-        {/* Detail */}
-        <Card className="lg:col-span-3">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">{selected.subject}</h2>
-                <p className="text-sm text-gray-500 mt-1">
-                  Dari <span className="font-medium text-gray-700">{selected.name}</span> ({selected.email})
-                </p>
-                <p className="text-xs text-gray-400 mt-0.5">{selected.date}</p>
-              </div>
-              <Badge variant={selected.read ? "secondary" : "default"} className="text-[10px] flex items-center gap-1 flex-shrink-0">
-                {selected.read ? <MailOpen size={11} /> : <Mail size={11} />}
-                {selected.read ? "Dibaca" : "Baru"}
-              </Badge>
-            </div>
-
-            <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-600 leading-relaxed mb-5">
-              {selected.message}
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1">
-                <Reply size={14} /> Balas Pesan
-              </label>
-              <Textarea placeholder="Tulis balasan Anda di sini..." rows={4} />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button variant="premium" size="sm">Kirim Balasan</Button>
-              <Button variant="outline" size="sm"><Archive size={14} className="mr-1.5" /> Arsipkan</Button>
-              <Button variant="outline" size="sm" className="text-red-600 hover:bg-red-50 hover:border-red-200">
-                <Trash2 size={14} className="mr-1.5" /> Hapus
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
+
+      {messages.length === 0 ? (
+        <Card>
+          <div className="py-20 flex flex-col items-center justify-center text-center text-gray-400">
+            <Inbox size={40} className="mb-3 opacity-40" />
+            <p className="text-sm">Belum ada pesan masuk.</p>
+          </div>
+        </Card>
+      ) : (
+        <div className="grid lg:grid-cols-5 gap-4">
+          <Card className="lg:col-span-2 overflow-hidden">
+            <div className="p-3 border-b border-gray-100">
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Input placeholder="Cari pesan..." className="pl-9 h-9" value={search} onChange={(e) => setSearch(e.target.value)} />
+              </div>
+            </div>
+            <div className="divide-y divide-gray-50 max-h-[520px] overflow-y-auto">
+              {filtered.map((msg) => (
+                <button
+                  key={msg.id}
+                  onClick={() => openMessage(msg)}
+                  className={cn("w-full text-left p-4 hover:bg-gray-50/50 transition-colors", selected?.id === msg.id && "bg-blue-50/50")}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className={cn("text-sm", !msg.isRead ? "font-bold text-gray-900" : "font-medium text-gray-700")}>{msg.name}</span>
+                    {!msg.isRead && <span className="w-2 h-2 rounded-full bg-blue-600 flex-shrink-0" />}
+                  </div>
+                  <p className={cn("text-xs mb-1 truncate", !msg.isRead ? "font-semibold text-gray-800" : "text-gray-500")}>{msg.subject}</p>
+                  <p className="text-xs text-gray-400 truncate">{msg.message}</p>
+                  <p className="text-[10px] text-gray-400 mt-1">{new Date(msg.createdAt).toLocaleString("id-ID")}</p>
+                </button>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="lg:col-span-3">
+            {selected ? (
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-900">{selected.subject}</h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Dari <span className="font-medium text-gray-700">{selected.name}</span> ({selected.email})
+                      {selected.phone && ` · ${selected.phone}`}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-0.5">{new Date(selected.createdAt).toLocaleString("id-ID")}</p>
+                  </div>
+                  <Badge variant={selected.isRead ? "secondary" : "default"} className="text-[10px] flex items-center gap-1 flex-shrink-0">
+                    {selected.isRead ? <MailOpen size={11} /> : <Mail size={11} />} {selected.isRead ? "Dibaca" : "Baru"}
+                  </Badge>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-600 leading-relaxed mb-5">{selected.message}</div>
+
+                <div className="flex items-center gap-2">
+                  <a href={`mailto:${selected.email}?subject=Re: ${selected.subject}`}>
+                    <button className="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all">Balas via Email</button>
+                  </a>
+                  <button onClick={() => handleDelete(selected)} className="px-4 py-2 rounded-xl border border-gray-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-all flex items-center gap-1.5">
+                    <Trash2 size={14} /> Hapus
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="py-20 flex items-center justify-center text-gray-400 text-sm">Pilih pesan untuk melihat detail</div>
+            )}
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

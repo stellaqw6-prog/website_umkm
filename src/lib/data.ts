@@ -8,6 +8,7 @@ import {
   blogPosts,
   banners,
   siteSettings,
+  promotions,
 } from "@/db/schema";
 
 export interface ProductCardData {
@@ -170,4 +171,10 @@ export async function getSiteSettings() {
 
   const [created] = await db.insert(siteSettings).values({}).returning();
   return created;
+}
+
+export async function getActivePromotions() {
+  const now = new Date();
+  const rows = await db.select().from(promotions).where(eq(promotions.isActive, true));
+  return rows.filter((p) => now >= new Date(p.startDate) && now <= new Date(p.endDate) && (!p.usageLimit || p.usedCount < p.usageLimit));
 }

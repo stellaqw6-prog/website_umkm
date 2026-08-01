@@ -7,8 +7,10 @@ import { Star, Minus, Plus, ShoppingCart, Heart, Truck, ShieldCheck, RotateCcw, 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProductCard } from "@/components/product/product-card";
+import { ProductReviews } from "@/components/product/product-reviews";
 import { formatCurrency } from "@/lib/utils";
 import { useCart } from "@/contexts/cart-context";
+import { useWishlist } from "@/contexts/wishlist-context";
 import type { ProductCardData } from "@/lib/data";
 import toast from "react-hot-toast";
 
@@ -26,9 +28,10 @@ export function ProductDetail({
   relatedProducts: ProductCardData[];
 }) {
   const { addItem } = useCart();
+  const { productIds, toggle } = useWishlist();
+  const liked = productIds.has(product.id);
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
-  const [liked, setLiked] = useState(false);
 
   const images = product.images.length > 0 ? product.images : [product.image];
 
@@ -161,7 +164,7 @@ export function ProductDetail({
                 Tambah ke Keranjang
               </Button>
               <button
-                onClick={() => setLiked(!liked)}
+                onClick={() => toggle(product.id)}
                 className={`p-3.5 rounded-xl border transition-all ${
                   liked ? "bg-red-50 border-red-200 text-red-500" : "border-gray-200 text-gray-400 hover:text-red-500"
                 }`}
@@ -187,6 +190,8 @@ export function ProductDetail({
             </div>
           </div>
         </div>
+
+        <ProductReviews productId={product.id} productSlug={product.slug} />
 
         {/* Related products */}
         {relatedProducts.length > 0 && (
