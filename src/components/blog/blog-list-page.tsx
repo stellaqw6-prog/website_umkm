@@ -12,11 +12,11 @@ interface Post {
   excerpt: string | null;
   coverImage: string | null;
   category: string | null;
-  publishedAt: string | null;
+  publishedAt: Date | string | null;
   content: string;
 }
 
-function formatDate(date: string | null) {
+function formatDate(date: Date | string | null) {
   if (!date) return "";
   return new Date(date).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 }
