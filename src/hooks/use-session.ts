@@ -6,7 +6,7 @@ export interface SessionUser {
   id: number;
   name: string;
   email: string;
-  role: "customer" | "admin" | "superadmin";
+  role: "customer" | "seller" | "admin" | "superadmin";
 }
 
 export function useSession() {

@@ -4,8 +4,10 @@ import { verifySessionToken, SESSION_COOKIE } from "@/lib/auth";
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  const isProtected = pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
-  if (!isProtected) {
+  const isAdminRoute = pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
+  const isSellerRoute = pathname.startsWith("/seller") || pathname.startsWith("/api/seller");
+
+  if (!isAdminRoute && !isSellerRoute) {
     return NextResponse.next();
   }
 
@@ -13,14 +15,17 @@ export async function middleware(req: NextRequest) {
   const session = token ? await verifySessionToken(token) : null;
 
   const isAdmin = session && (session.role === "admin" || session.role === "superadmin");
+  const isSellerOrAbove = session && (session.role === "seller" || session.role === "admin" || session.role === "superadmin");
 
-  if (!isAdmin) {
-    if (pathname.startsWith("/api/admin")) {
-      return NextResponse.json({ error: "Akses ditolak. Login sebagai admin diperlukan." }, { status: 403 });
+  const allowed = isAdminRoute ? isAdmin : isSellerOrAbove;
+
+  if (!allowed) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Akses ditolak." }, { status: 403 });
     }
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("redirect", pathname);
-    loginUrl.searchParams.set("reason", "admin_required");
+    loginUrl.searchParams.set("reason", isAdminRoute ? "admin_required" : "seller_required");
     return NextResponse.redirect(loginUrl);
   }
 
@@ -28,5 +33,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/seller/:path*", "/api/seller/:path*"],
 };

@@ -18,7 +18,7 @@ export interface SessionPayload {
   userId: number;
   email: string;
   name: string;
-  role: "customer" | "admin" | "superadmin";
+  role: "customer" | "seller" | "admin" | "superadmin";
   [key: string]: unknown;
 }
 

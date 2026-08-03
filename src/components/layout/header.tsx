@@ -16,6 +16,7 @@ import {
   LogOut,
   LayoutDashboard,
   Package,
+  Store,
   Menu,
   X,
   ChevronDown,
@@ -214,6 +215,22 @@ export function Header() {
                           <LayoutDashboard size={15} /> Dashboard Admin
                         </Link>
                       )}
+                      {user.role === "seller" && (
+                        <Link
+                          href="/seller/dashboard"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors"
+                        >
+                          <LayoutDashboard size={15} /> Dashboard Toko
+                        </Link>
+                      )}
+                      {user.role === "customer" && (
+                        <Link
+                          href="/jadi-seller"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors"
+                        >
+                          <Store size={15} /> Buka Toko Sendiri
+                        </Link>
+                      )}
                       <Link
                         href="/pesanan"
                         className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
@@ -308,6 +325,24 @@ export function Header() {
                         className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
                       >
                         Dashboard Admin
+                      </Link>
+                    )}
+                    {user.role === "seller" && (
+                      <Link
+                        href="/seller/dashboard"
+                        onClick={() => setMobileOpen(false)}
+                        className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
+                      >
+                        Dashboard Toko
+                      </Link>
+                    )}
+                    {user.role === "customer" && (
+                      <Link
+                        href="/jadi-seller"
+                        onClick={() => setMobileOpen(false)}
+                        className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
+                      >
+                        Buka Toko Sendiri
                       </Link>
                     )}
                     <Link

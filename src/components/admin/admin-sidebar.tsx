@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/hooks/use-session";
 import {
   LayoutDashboard,
   Package,
@@ -21,6 +22,8 @@ import {
   LogOut,
   HelpCircle,
   Wallet,
+  ShieldCheck,
+  UserCog,
 } from "lucide-react";
 
 const menuGroups = [
@@ -63,11 +66,23 @@ const menuGroups = [
       { label: "Pengaturan", href: "/admin/settings", icon: Settings },
     ],
   },
+  {
+    label: "Developer",
+    developerOnly: true,
+    items: [
+      { label: "Verifikasi Seller", href: "/admin/seller-requests", icon: ShieldCheck },
+      { label: "Kelola Role User", href: "/admin/users", icon: UserCog },
+    ],
+  },
 ];
 
 export function AdminSidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const { user } = useSession();
+  const isDeveloper = user?.role === "superadmin";
+
+  const visibleGroups = menuGroups.filter((group) => !group.developerOnly || isDeveloper);
 
   return (
     <>
@@ -106,7 +121,7 @@ export function AdminSidebar() {
 
         {/* Menu */}
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
-          {menuGroups.map((group) => (
+          {visibleGroups.map((group) => (
             <div key={group.label}>
               {!collapsed && (
                 <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">

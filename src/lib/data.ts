@@ -11,6 +11,7 @@ import {
   promotions,
   paymentMethods,
   productVariants,
+  stores,
 } from "@/db/schema";
 
 export interface ProductCardData {
@@ -141,9 +142,17 @@ export async function getProductBySlug(slug: string) {
     categoryName = cat?.name ?? null;
   }
 
+  let storeName: string | null = null;
+  let storeSlug: string | null = null;
+  if (row.sellerId) {
+    const [store] = await db.select().from(stores).where(eq(stores.sellerId, row.sellerId)).limit(1);
+    storeName = store?.name ?? null;
+    storeSlug = store?.slug ?? null;
+  }
+
   const variants = await getProductVariants(row.id);
 
-  return { ...toProductCard(row), description: row.description, categoryName, images: row.images, variants };
+  return { ...toProductCard(row), description: row.description, categoryName, images: row.images, variants, storeName, storeSlug };
 }
 
 export async function getRelatedProducts(categoryId: number | null, excludeId: number, limit = 4) {

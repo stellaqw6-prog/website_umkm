@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Star, Minus, Plus, ShoppingCart, Heart, Truck, ShieldCheck, RotateCcw, ChevronRight } from "lucide-react";
+import { Star, Minus, Plus, ShoppingCart, Heart, Truck, ShieldCheck, RotateCcw, ChevronRight, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProductCard } from "@/components/product/product-card";
@@ -26,6 +26,8 @@ interface ProductVariant {
 interface ProductDetail extends ProductCardData {
   description: string | null;
   categoryName: string | null;
+  storeName?: string | null;
+  storeSlug?: string | null;
   images: string[];
   variants?: ProductVariant[];
 }
@@ -139,6 +141,13 @@ export function ProductDetail({
               </Link>
             )}
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
+
+            {product.storeName && (
+              <div className="flex items-center gap-1.5 mb-4 text-sm text-gray-500">
+                <Store size={14} className="text-emerald-600" />
+                Dijual oleh <span className="font-semibold text-gray-700">{product.storeName}</span>
+              </div>
+            )}
 
             <div className="flex items-center gap-3 mb-5">
               <div className="flex items-center gap-1">

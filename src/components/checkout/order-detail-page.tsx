@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { CheckCircle2, Package, MapPin, CreditCard, Loader2, Home, Copy, QrCode } from "lucide-react";
+import { CheckCircle2, Package, MapPin, CreditCard, Loader2, Home, Copy, QrCode, Upload, ImageIcon, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
@@ -30,6 +30,7 @@ interface OrderData {
   grandTotal: string;
   shippingAddress: string;
   paymentMethod: string;
+  paymentProofUrl: string | null;
   trackingNumber: string | null;
   notes: string | null;
   createdAt: string;
@@ -71,6 +72,8 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/orders/${orderNumber}`)
@@ -103,6 +106,47 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success("Nomor disalin");
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Ukuran file maksimal 5MB");
+      return;
+    }
+
+    setPreviewUrl(URL.createObjectURL(file));
+    uploadProof(file);
+  };
+
+  const uploadProof = async (file: File) => {
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch(`/api/orders/${orderNumber}/payment-proof`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error ?? "Gagal mengunggah bukti transfer");
+        setPreviewUrl(null);
+        return;
+      }
+
+      setOrder(data.order);
+      toast.success("Bukti transfer berhasil diunggah! Menunggu verifikasi admin.");
+    } catch {
+      toast.error("Tidak bisa terhubung ke server");
+      setPreviewUrl(null);
+    } finally {
+      setUploading(false);
+    }
   };
 
   if (loading) {
@@ -216,6 +260,52 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
 
               {paymentMethod.instructions && (
                 <p className="text-xs text-gray-500 mt-3 leading-relaxed">{paymentMethod.instructions}</p>
+              )}
+            </div>
+
+            {/* Upload bukti transfer */}
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              {order.paymentProofUrl ? (
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge variant="warning" className="flex items-center gap-1"><Clock size={11} /> Menunggu Verifikasi Admin</Badge>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <img src={order.paymentProofUrl} alt="Bukti transfer" className="w-20 h-20 object-cover rounded-xl border border-gray-200" />
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500 mb-2">Bukti transfer sudah diunggah. Admin akan segera memverifikasi pembayaranmu.</p>
+                      <label className="text-xs font-medium text-blue-600 hover:underline cursor-pointer">
+                        Ganti Bukti Transfer
+                        <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFileSelect} disabled={uploading} />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5"><Upload size={14} /> Upload Bukti Transfer</h4>
+                  <p className="text-xs text-gray-500 mb-3">Setelah transfer, upload screenshot/foto bukti pembayaran di sini supaya pesananmu segera diproses.</p>
+                  <label
+                    className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl py-8 cursor-pointer transition-colors ${
+                      uploading ? "border-gray-200 bg-gray-50" : "border-blue-200 hover:border-blue-400 hover:bg-blue-50/50"
+                    }`}
+                  >
+                    {uploading ? (
+                      <>
+                        {previewUrl && <img src={previewUrl} alt="preview" className="w-16 h-16 object-cover rounded-lg mb-1" />}
+                        <Loader2 className="animate-spin text-blue-600" size={22} />
+                        <span className="text-xs text-gray-500">Mengunggah...</span>
+                      </>
+                    ) : (
+                      <>
+                        <ImageIcon size={24} className="text-blue-400" />
+                        <span className="text-xs font-medium text-blue-600">Klik untuk pilih foto bukti transfer</span>
+                        <span className="text-[11px] text-gray-400">JPG, PNG, atau WEBP — maks 5MB</span>
+                      </>
+                    )}
+                    <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFileSelect} disabled={uploading} />
+                  </label>
+                </div>
               )}
             </div>
           </motion.div>

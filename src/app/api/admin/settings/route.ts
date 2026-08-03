@@ -25,6 +25,7 @@ const settingsSchema = z.object({
   gaTrackingId: z.string().optional(),
   metaPixelId: z.string().optional(),
   tiktokPixelId: z.string().optional(),
+  sellerUpgradeFee: z.union([z.string(), z.number()]).transform((v) => String(v)).optional(),
 });
 
 export async function GET(req: NextRequest) {

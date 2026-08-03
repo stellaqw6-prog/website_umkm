@@ -23,12 +23,14 @@ interface Settings {
   tiktok: string | null;
   youtube: string | null;
   twitter: string | null;
+  sellerUpgradeFee: string;
 }
 
 const emptySettings: Settings = {
   siteName: "", siteDescription: "", logo: "", primaryColor: "#2563eb",
   phone: "", email: "", address: "", whatsapp: "",
   facebook: "", instagram: "", tiktok: "", youtube: "", twitter: "",
+  sellerUpgradeFee: "100000",
 };
 
 export function AdminSettings() {
@@ -179,6 +181,18 @@ export function AdminSettings() {
               <Input value={settings.primaryColor} onChange={(e) => setSettings({ ...settings, primaryColor: e.target.value })} className="w-32" />
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Seller */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">🏪 Program Seller</CardTitle>
+          <CardDescription>Biaya yang harus dibayar pelanggan untuk upgrade jadi seller (buka toko sendiri)</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Biaya Upgrade Seller (Rp)</label>
+          <Input type="number" value={settings.sellerUpgradeFee} onChange={(e) => setSettings({ ...settings, sellerUpgradeFee: e.target.value })} className="max-w-xs" />
         </CardContent>
       </Card>
 

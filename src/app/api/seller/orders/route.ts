@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { orders, users, stores } from "@/db/schema";
-import { requireAdmin } from "@/lib/require-admin";
+import { orders, users } from "@/db/schema";
+import { requireSeller } from "@/lib/require-admin";
 
 export async function GET(req: NextRequest) {
-  const admin = await requireAdmin(req);
-  if ("error" in admin) return admin.error;
+  const seller = await requireSeller(req);
+  if ("error" in seller) return seller.error;
 
   const rows = await db
     .select({
@@ -19,11 +19,10 @@ export async function GET(req: NextRequest) {
       createdAt: orders.createdAt,
       customerName: users.name,
       customerEmail: users.email,
-      storeName: stores.name,
     })
     .from(orders)
     .leftJoin(users, eq(orders.userId, users.id))
-    .leftJoin(stores, eq(orders.sellerId, stores.sellerId))
+    .where(eq(orders.sellerId, seller.session.userId))
     .orderBy(desc(orders.createdAt));
 
   return NextResponse.json({ orders: rows });

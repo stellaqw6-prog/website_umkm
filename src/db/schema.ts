@@ -15,7 +15,8 @@ import {
 } from "drizzle-orm/pg-core";
 
 // ==================== ENUMS ====================
-export const userRoleEnum = pgEnum("user_role", ["customer", "admin", "superadmin"]);
+export const userRoleEnum = pgEnum("user_role", ["customer", "seller", "admin", "superadmin"]);
+export const sellerUpgradeStatusEnum = pgEnum("seller_upgrade_status", ["pending", "approved", "rejected"]);
 export const membershipEnum = pgEnum("membership", ["regular", "silver", "gold", "platinum"]);
 export const orderStatusEnum = pgEnum("order_status", [
   "pending",
@@ -94,6 +95,7 @@ export const products = pgTable(
     sku: varchar("sku", { length: 100 }),
     stock: integer("stock").default(0).notNull(),
     categoryId: integer("category_id").references(() => categories.id),
+    sellerId: integer("seller_id").references(() => users.id), // null = produk milik platform/admin
     images: jsonb("images").$type<string[]>().default([]).notNull(),
     videoUrl: text("video_url"),
     isActive: boolean("is_active").default(true).notNull(),
@@ -114,6 +116,7 @@ export const products = pgTable(
     index("products_slug_idx").on(table.slug),
     index("products_category_idx").on(table.categoryId),
     index("products_featured_idx").on(table.isFeatured),
+    index("products_seller_idx").on(table.sellerId),
   ]
 );
 
@@ -149,6 +152,8 @@ export const orders = pgTable(
     userId: integer("user_id")
       .references(() => users.id)
       .notNull(),
+    sellerId: integer("seller_id").references(() => users.id), // null = pesanan produk platform/admin
+    checkoutGroupId: varchar("checkout_group_id", { length: 100 }), // menandai beberapa order yang lahir dari 1x checkout (beda seller)
     orderNumber: varchar("order_number", { length: 50 }).notNull().unique(),
     status: orderStatusEnum("status").default("pending").notNull(),
     totalAmount: decimal("total_amount", { precision: 12, scale: 2 }).notNull(),
@@ -158,6 +163,8 @@ export const orders = pgTable(
     shippingAddress: text("shipping_address").notNull(),
     paymentMethod: varchar("payment_method", { length: 100 }),
     paymentStatus: paymentStatusEnum("payment_status").default("unpaid").notNull(),
+    paymentProofUrl: text("payment_proof_url"),
+    paymentProofUploadedAt: timestamp("payment_proof_uploaded_at"),
     trackingNumber: varchar("tracking_number", { length: 100 }),
     notes: text("notes"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -166,6 +173,7 @@ export const orders = pgTable(
   (table) => [
     index("orders_user_idx").on(table.userId),
     index("orders_number_idx").on(table.orderNumber),
+    index("orders_seller_idx").on(table.sellerId),
   ]
 );
 
@@ -327,6 +335,7 @@ export const siteSettings = pgTable("site_settings", {
   gaTrackingId: varchar("ga_tracking_id", { length: 50 }),
   metaPixelId: varchar("meta_pixel_id", { length: 50 }),
   tiktokPixelId: varchar("tiktok_pixel_id", { length: 50 }),
+  sellerUpgradeFee: decimal("seller_upgrade_fee", { precision: 12, scale: 2 }).default("100000").notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -404,4 +413,49 @@ export const passwordResetTokens = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => [index("password_reset_tokens_token_idx").on(table.token)]
+);
+
+// ==================== STORES (TOKO SELLER) ====================
+export const stores = pgTable(
+  "stores",
+  {
+    id: serial("id").primaryKey(),
+    sellerId: integer("seller_id")
+      .notNull()
+      .unique()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: varchar("name", { length: 255 }).notNull(),
+    slug: varchar("slug", { length: 255 }).notNull().unique(),
+    description: text("description"),
+    logo: text("logo"),
+    banner: text("banner"),
+    phone: varchar("phone", { length: 50 }),
+    address: text("address"),
+    isActive: boolean("is_active").default(true).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [index("stores_seller_idx").on(table.sellerId), index("stores_slug_idx").on(table.slug)]
+);
+
+// ==================== SELLER UPGRADE REQUESTS ====================
+export const sellerUpgradeRequests = pgTable(
+  "seller_upgrade_requests",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    storeName: varchar("store_name", { length: 255 }).notNull(),
+    phone: varchar("phone", { length: 50 }),
+    amount: decimal("amount", { precision: 12, scale: 2 }).notNull(),
+    paymentMethod: varchar("payment_method", { length: 100 }),
+    paymentProofUrl: text("payment_proof_url"),
+    status: sellerUpgradeStatusEnum("status").default("pending").notNull(),
+    reviewedBy: integer("reviewed_by").references(() => users.id),
+    reviewedAt: timestamp("reviewed_at"),
+    rejectionReason: text("rejection_reason"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("seller_upgrade_requests_user_idx").on(table.userId), index("seller_upgrade_requests_status_idx").on(table.status)]
 );

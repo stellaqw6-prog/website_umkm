@@ -130,8 +130,14 @@ export function CheckoutPage() {
         return;
       }
       clearCart();
-      toast.success("Pesanan berhasil dibuat!");
-      router.push(`/pesanan/${data.order.orderNumber}`);
+      const createdOrders: { orderNumber: string }[] = data.orders ?? [];
+      if (createdOrders.length > 1) {
+        toast.success(`${createdOrders.length} pesanan berhasil dibuat (dari toko berbeda)!`);
+        router.push(`/checkout/berhasil?ids=${createdOrders.map((o) => o.orderNumber).join(",")}`);
+      } else {
+        toast.success("Pesanan berhasil dibuat!");
+        router.push(`/pesanan/${createdOrders[0].orderNumber}`);
+      }
     } catch {
       toast.error("Tidak bisa terhubung ke server");
     } finally {
