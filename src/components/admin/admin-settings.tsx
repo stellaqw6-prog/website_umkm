@@ -30,7 +30,7 @@ const emptySettings: Settings = {
   siteName: "", siteDescription: "", logo: "", primaryColor: "#2563eb",
   phone: "", email: "", address: "", whatsapp: "",
   facebook: "", instagram: "", tiktok: "", youtube: "", twitter: "",
-  sellerUpgradeFee: "100000",
+  sellerUpgradeFee: "35000",
 };
 
 export function AdminSettings() {
@@ -51,10 +51,16 @@ export function AdminSettings() {
   const handleSave = async () => {
     setSaving(true);
     try {
+      // Pastikan tidak ada nilai null yang terkirim (field yang belum pernah diisi
+      // tersimpan sebagai null dari database, dan itu bikin validasi di server gagal)
+      const payload = Object.fromEntries(
+        Object.entries(settings).map(([key, value]) => [key, value ?? ""])
+      );
+
       const res = await fetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(settings),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (!res.ok) {

@@ -6,26 +6,38 @@ import { siteSettings } from "@/db/schema";
 import { getSiteSettings } from "@/lib/data";
 import { requireAdmin } from "@/lib/require-admin";
 
+const nullableString = z
+  .string()
+  .nullable()
+  .optional()
+  .transform((v) => v ?? "");
+
 const settingsSchema = z.object({
   siteName: z.string().min(1, "Nama website wajib diisi").optional(),
-  siteDescription: z.string().optional(),
-  logo: z.string().optional(),
-  favicon: z.string().optional(),
+  siteDescription: nullableString,
+  logo: nullableString,
+  favicon: nullableString,
   primaryColor: z.string().optional(),
-  phone: z.string().optional(),
-  email: z.union([z.string().email("Format email tidak valid"), z.literal("")]).optional(),
-  address: z.string().optional(),
-  whatsapp: z.string().optional(),
-  facebook: z.string().optional(),
-  instagram: z.string().optional(),
-  tiktok: z.string().optional(),
-  youtube: z.string().optional(),
-  twitter: z.string().optional(),
-  googleMaps: z.string().optional(),
-  gaTrackingId: z.string().optional(),
-  metaPixelId: z.string().optional(),
-  tiktokPixelId: z.string().optional(),
-  sellerUpgradeFee: z.union([z.string(), z.number()]).transform((v) => String(v)).optional(),
+  phone: nullableString,
+  email: z
+    .union([z.string().email("Format email tidak valid"), z.literal(""), z.null()])
+    .optional()
+    .transform((v) => v ?? ""),
+  address: nullableString,
+  whatsapp: nullableString,
+  facebook: nullableString,
+  instagram: nullableString,
+  tiktok: nullableString,
+  youtube: nullableString,
+  twitter: nullableString,
+  googleMaps: nullableString,
+  gaTrackingId: nullableString,
+  metaPixelId: nullableString,
+  tiktokPixelId: nullableString,
+  sellerUpgradeFee: z
+    .union([z.string(), z.number()])
+    .transform((v) => String(v))
+    .optional(),
 });
 
 export async function GET(req: NextRequest) {

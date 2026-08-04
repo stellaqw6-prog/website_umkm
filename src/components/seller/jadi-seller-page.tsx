@@ -46,7 +46,7 @@ export function JadiSellerPage() {
       fetch("/api/settings").then((r) => r.json()),
       fetch("/api/payment-methods").then((r) => r.json()),
     ]).then(([settingsData, methodsData]) => {
-      setFee(Number(settingsData.settings?.sellerUpgradeFee ?? 100000));
+      setFee(Number(settingsData.settings?.sellerUpgradeFee ?? 35000));
       const nonCod = (methodsData.paymentMethods ?? []).filter((m: PaymentMethod) => m.type !== "cod");
       setMethods(nonCod);
       setSelectedMethod(nonCod[0] ?? null);

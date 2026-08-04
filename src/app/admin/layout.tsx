@@ -4,8 +4,8 @@ import { AdminHeader } from "@/components/admin/admin-header";
 
 export const metadata = {
   title: {
-    default: "Dashboard Admin | UMKM Store",
-    template: "%s | Admin UMKM Store",
+    default: "Dashboard | UMKM Store",
+    template: "%s | Panel UMKM Store",
   },
   robots: { index: false, follow: false },
 };

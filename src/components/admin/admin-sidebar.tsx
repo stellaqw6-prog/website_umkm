@@ -107,7 +107,7 @@ export function AdminSidebar() {
             </div>
             {!collapsed && (
               <span className="font-bold text-gray-900 text-sm">
-                UMKM<span className="text-blue-600">Admin</span>
+                UMKM<span className="text-blue-600">{isDeveloper ? "Developer" : "Admin"}</span>
               </span>
             )}
           </Link>
@@ -118,6 +118,21 @@ export function AdminSidebar() {
             {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
         </div>
+
+        {/* Role badge — biar jelas beda antara Developer asli dan Admin biasa */}
+        {!collapsed && user && (
+          <div className="px-4 pt-3">
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold",
+                isDeveloper ? "bg-indigo-50 text-indigo-700" : "bg-blue-50 text-blue-700"
+              )}
+            >
+              {isDeveloper ? <ShieldCheck size={12} /> : <UserCog size={12} />}
+              {isDeveloper ? "Developer" : "Admin"}
+            </span>
+          </div>
+        )}
 
         {/* Menu */}
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, Search, LogOut } from "lucide-react";
+import { Bell, Search, LogOut, ShieldCheck, UserCog } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useSession } from "@/hooks/use-session";
 import { AnimatePresence, motion } from "framer-motion";
@@ -10,6 +10,7 @@ export function AdminHeader() {
   const { user, logout } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const displayName = user?.name ?? "Admin";
+  const isDeveloper = user?.role === "superadmin";
 
   return (
     <header className="sticky top-0 z-30 h-16 bg-white/80 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between px-4 md:px-6">
@@ -40,7 +41,17 @@ export function AdminHeader() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
               {displayName.charAt(0)}
             </div>
-            <span className="text-sm font-medium hidden md:block">{displayName}</span>
+            <span className="hidden md:flex flex-col items-start leading-tight">
+              <span className="text-sm font-medium">{displayName}</span>
+              <span
+                className={`inline-flex items-center gap-1 text-[10px] font-semibold ${
+                  isDeveloper ? "text-indigo-600" : "text-blue-600"
+                }`}
+              >
+                {isDeveloper ? <ShieldCheck size={10} /> : <UserCog size={10} />}
+                {isDeveloper ? "Developer" : "Admin"}
+              </span>
+            </span>
           </button>
           <AnimatePresence>
             {menuOpen && (

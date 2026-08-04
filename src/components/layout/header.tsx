@@ -7,6 +7,7 @@ import { useMobile } from "@/hooks/use-mobile";
 import { useSession } from "@/hooks/use-session";
 import { useCart } from "@/contexts/cart-context";
 import { useWishlist } from "@/contexts/wishlist-context";
+import { useSellerUpgrade } from "@/contexts/seller-upgrade-context";
 import { cn } from "@/lib/utils";
 import {
   Search,
@@ -50,6 +51,7 @@ export function Header() {
   const isMobile = useMobile();
   const { theme, setTheme } = useTheme();
   const { user, logout } = useSession();
+  const { openSellerUpgrade } = useSellerUpgrade();
   const { totalItems: cartCount } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -212,7 +214,7 @@ export function Header() {
                           href="/admin/dashboard"
                           className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
                         >
-                          <LayoutDashboard size={15} /> Dashboard Admin
+                          <LayoutDashboard size={15} /> {user.role === "superadmin" ? "Dashboard Developer" : "Dashboard Admin"}
                         </Link>
                       )}
                       {user.role === "seller" && (
@@ -224,12 +226,16 @@ export function Header() {
                         </Link>
                       )}
                       {user.role === "customer" && (
-                        <Link
-                          href="/jadi-seller"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors"
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            openSellerUpgrade();
+                          }}
+                          className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors text-left"
                         >
-                          <Store size={15} /> Buka Toko Sendiri
-                        </Link>
+                          <Store size={15} /> Upgrade Role Premium
+                        </button>
                       )}
                       <Link
                         href="/pesanan"
@@ -324,7 +330,7 @@ export function Header() {
                         onClick={() => setMobileOpen(false)}
                         className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
                       >
-                        Dashboard Admin
+                        {user.role === "superadmin" ? "Dashboard Developer" : "Dashboard Admin"}
                       </Link>
                     )}
                     {user.role === "seller" && (
@@ -337,13 +343,16 @@ export function Header() {
                       </Link>
                     )}
                     {user.role === "customer" && (
-                      <Link
-                        href="/jadi-seller"
-                        onClick={() => setMobileOpen(false)}
-                        className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMobileOpen(false);
+                          openSellerUpgrade();
+                        }}
+                        className="text-left px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
                       >
-                        Buka Toko Sendiri
-                      </Link>
+                        Upgrade Role Premium
+                      </button>
                     )}
                     <Link
                       href="/pesanan"

@@ -335,7 +335,7 @@ export const siteSettings = pgTable("site_settings", {
   gaTrackingId: varchar("ga_tracking_id", { length: 50 }),
   metaPixelId: varchar("meta_pixel_id", { length: 50 }),
   tiktokPixelId: varchar("tiktok_pixel_id", { length: 50 }),
-  sellerUpgradeFee: decimal("seller_upgrade_fee", { precision: 12, scale: 2 }).default("100000").notNull(),
+  sellerUpgradeFee: decimal("seller_upgrade_fee", { precision: 12, scale: 2 }).default("35000").notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
