@@ -109,6 +109,10 @@ export const products = pgTable(
     specifications: jsonb("specifications").$type<Record<string, string>>(),
     seoTitle: varchar("seo_title", { length: 255 }),
     seoDescription: text("seo_description"),
+    // Ongkir khusus produk ini. shippingCost null = ikut aturan toko/platform.
+    // freeShipping true = produk ini SELALU gratis ongkir, mengalahkan semua pengaturan lain.
+    freeShipping: boolean("free_shipping").default(false).notNull(),
+    shippingCost: decimal("shipping_cost", { precision: 12, scale: 2 }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
@@ -336,6 +340,9 @@ export const siteSettings = pgTable("site_settings", {
   metaPixelId: varchar("meta_pixel_id", { length: 50 }),
   tiktokPixelId: varchar("tiktok_pixel_id", { length: 50 }),
   sellerUpgradeFee: decimal("seller_upgrade_fee", { precision: 12, scale: 2 }).default("35000").notNull(),
+  // Ongkir default platform — dipakai untuk produk yang tidak punya pengaturan ongkir toko/produk sendiri.
+  shippingEnabled: boolean("shipping_enabled").default(true).notNull(),
+  defaultShippingCost: decimal("default_shipping_cost", { precision: 12, scale: 2 }).default("15000").notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -432,6 +439,11 @@ export const stores = pgTable(
     phone: varchar("phone", { length: 50 }),
     address: text("address"),
     isActive: boolean("is_active").default(true).notNull(),
+    // Ongkir default toko ini — dipakai untuk semua produk toko yang tidak diatur ongkir khususnya sendiri.
+    // shippingEnabled false = semua produk toko ini otomatis gratis ongkir (kecuali produk override sendiri).
+    // shippingCost null = ikut default platform.
+    shippingEnabled: boolean("shipping_enabled").default(true).notNull(),
+    shippingCost: decimal("shipping_cost", { precision: 12, scale: 2 }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },

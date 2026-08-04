@@ -29,6 +29,8 @@ export function ProductCard({ product, index = 0 }: { product: ProductCardData; 
       price: product.price,
       image: product.image,
       stock: product.stock,
+      sellerId: product.sellerId,
+      shippingCost: product.shippingCost,
     });
     toast.success(`${product.name} ditambahkan ke keranjang`);
   };

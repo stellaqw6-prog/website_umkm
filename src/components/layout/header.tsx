@@ -79,7 +79,7 @@ export function Header() {
       {/* Top Bar */}
       <div className="hidden md:block bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
         <div className="container mx-auto flex items-center justify-between px-4 py-1.5 text-xs font-medium">
-          <p>🚀 Gratis Ongkir untuk pembelian di atas Rp 200.000!</p>
+          <p>🚀 Belanja produk UMKM asli Indonesia, ongkir transparan setiap toko!</p>
           <div className="flex items-center gap-4">
             <a href="tel:+6281234567890" className="hover:underline">
               📞 +62 812-3456-7890

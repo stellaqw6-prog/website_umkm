@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { desc, eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
-import { orders, orderItems, products, productVariants, promotions, users } from "@/db/schema";
+import { orders, orderItems, products, productVariants, promotions, users, stores } from "@/db/schema";
 import { verifySessionToken, SESSION_COOKIE } from "@/lib/auth";
 import { generateOrderNumber } from "@/lib/order-utils";
 import { sendOrderConfirmationEmail } from "@/lib/email";
 import { getSiteSettings } from "@/lib/data";
+import { computeProductShippingCost, computeGroupShippingCost } from "@/lib/shipping";
 
 const orderSchema = z.object({
   items: z
@@ -110,11 +111,18 @@ export async function POST(req: NextRequest) {
     const [orderUser] = await db.select().from(users).where(eq(users.id, session.userId)).limit(1);
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
 
+    // Ambil data toko untuk semua seller yang produknya ada di keranjang, dipakai buat hitung ongkir per toko
+    const sellerIds = [...groups.values()].map((g) => g.sellerId).filter((id): id is number => id !== null);
+    const storeRows = sellerIds.length > 0 ? await db.select().from(stores).where(inArray(stores.sellerId, sellerIds)) : [];
+    const storeMap = new Map(storeRows.map((s) => [s.sellerId, s]));
+
     for (const group of groups.values()) {
       const subtotal = group.items.reduce((sum, item) => sum + getEffectivePrice(item) * item.quantity, 0);
 
       let discountAmount = 0;
-      let shippingCost = subtotal >= 200000 ? 0 : 15000;
+      const store = group.sellerId ? storeMap.get(group.sellerId) ?? null : null;
+      const perItemShipping = group.items.map((item) => computeProductShippingCost(productMap.get(item.productId)!, store, settings));
+      let shippingCost = computeGroupShippingCost(perItemShipping);
 
       if (promo) {
         const meetsMin = !promo.minPurchase || subtotal >= Number(promo.minPurchase);

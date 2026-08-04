@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Save, Globe, Mail, Phone, MapPin, ImageIcon, Loader2 } from "lucide-react";
+import { Save, Globe, Mail, Phone, MapPin, ImageIcon, Loader2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +24,8 @@ interface Settings {
   youtube: string | null;
   twitter: string | null;
   sellerUpgradeFee: string;
+  shippingEnabled: boolean;
+  defaultShippingCost: string;
 }
 
 const emptySettings: Settings = {
@@ -31,6 +33,8 @@ const emptySettings: Settings = {
   phone: "", email: "", address: "", whatsapp: "",
   facebook: "", instagram: "", tiktok: "", youtube: "", twitter: "",
   sellerUpgradeFee: "35000",
+  shippingEnabled: true,
+  defaultShippingCost: "15000",
 };
 
 export function AdminSettings() {
@@ -199,6 +203,40 @@ export function AdminSettings() {
         <CardContent>
           <label className="block text-sm font-medium text-gray-700 mb-1">Biaya Upgrade Seller (Rp)</label>
           <Input type="number" value={settings.sellerUpgradeFee} onChange={(e) => setSettings({ ...settings, sellerUpgradeFee: e.target.value })} className="max-w-xs" />
+        </CardContent>
+      </Card>
+
+      {/* Ongkir Platform */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><Truck size={20} className="text-blue-600" /> Ongkir Platform (Default)</CardTitle>
+          <CardDescription>
+            Ongkir ini dipakai untuk produk yang tidak diatur ongkir khususnya sendiri oleh toko/seller. Bisa di-override per toko di halaman Profil Toko seller, dan per produk saat tambah/edit produk.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={settings.shippingEnabled}
+              onChange={(e) => setSettings({ ...settings, shippingEnabled: e.target.checked })}
+              className="rounded"
+            />
+            Aktifkan biaya ongkir default platform
+          </label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Biaya Ongkir Default (Rp)</label>
+            <Input
+              type="number"
+              value={settings.defaultShippingCost}
+              onChange={(e) => setSettings({ ...settings, defaultShippingCost: e.target.value })}
+              className="max-w-xs"
+              disabled={!settings.shippingEnabled}
+            />
+            {!settings.shippingEnabled && (
+              <p className="text-xs text-gray-400 mt-1">Nonaktif — semua produk yang ikut aturan default otomatis gratis ongkir.</p>
+            )}
+          </div>
         </CardContent>
       </Card>
 

@@ -35,6 +35,11 @@ const productUpdateSchema = z.object({
   isBestSeller: z.boolean().optional(),
   isTrending: z.boolean().optional(),
   weight: z.number().int().optional(),
+  freeShipping: z.boolean().optional(),
+  shippingCost: z
+    .union([z.string(), z.number(), z.null()])
+    .optional()
+    .transform((v) => (v === undefined || v === null || v === "" ? null : String(v))),
   variants: z.array(variantSchema).optional(),
 });
 

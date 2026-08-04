@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, ilike, lte, SQL } from "drizzle-orm";
+import { and, desc, eq, gte, ilike, lte, inArray, sql, SQL } from "drizzle-orm";
 import { db } from "@/db";
 import {
   products,
@@ -12,7 +12,10 @@ import {
   paymentMethods,
   productVariants,
   stores,
+  orders,
+  reviews,
 } from "@/db/schema";
+import { computeProductShippingCost } from "@/lib/shipping";
 
 export interface ProductCardData {
   id: number;
@@ -28,9 +31,11 @@ export interface ProductCardData {
   discount: number;
   stock: number;
   categoryId: number | null;
+  sellerId: number | null;
+  shippingCost: number;
 }
 
-function toProductCard(p: typeof products.$inferSelect): ProductCardData {
+function toProductCard(p: typeof products.$inferSelect): Omit<ProductCardData, "shippingCost"> {
   const price = Number(p.price);
   const compareAtPrice = p.compareAtPrice ? Number(p.compareAtPrice) : null;
   const discount =
@@ -53,7 +58,30 @@ function toProductCard(p: typeof products.$inferSelect): ProductCardData {
     discount,
     stock: p.stock,
     categoryId: p.categoryId,
+    sellerId: p.sellerId,
   };
+}
+
+/**
+ * Hitung ongkir akhir untuk sekumpulan produk sekaligus (batch), biar nggak query
+ * toko satu-satu per produk. Dipakai buat nempelin field `shippingCost` di listing/detail produk.
+ */
+async function attachShippingCost<T extends { sellerId: number | null; shippingCost?: never }>(
+  cards: T[],
+  rawProducts: typeof products.$inferSelect[]
+): Promise<(T & { shippingCost: number })[]> {
+  const settings = await getSiteSettings();
+  const sellerIds = [...new Set(cards.map((c) => c.sellerId).filter((id): id is number => id !== null))];
+  const storeRows = sellerIds.length > 0 ? await db.select().from(stores).where(inArray(stores.sellerId, sellerIds)) : [];
+  const storeMap = new Map(storeRows.map((s) => [s.sellerId, s]));
+  const rawMap = new Map(rawProducts.map((p) => [p.id, p]));
+
+  return cards.map((card) => {
+    const raw = rawMap.get((card as unknown as { id: number }).id);
+    const store = card.sellerId ? storeMap.get(card.sellerId) ?? null : null;
+    const shippingCost = raw ? computeProductShippingCost(raw, store, settings) : 0;
+    return { ...card, shippingCost };
+  });
 }
 
 export interface ProductFilters {
@@ -102,7 +130,7 @@ export async function getProducts(filters: ProductFilters = {}) {
     .limit(pageSize)
     .offset((page - 1) * pageSize);
 
-  return rows.map(toProductCard);
+  return attachShippingCost(rows.map(toProductCard), rows);
 }
 
 export async function getFeaturedProducts(limit = 8) {
@@ -112,7 +140,7 @@ export async function getFeaturedProducts(limit = 8) {
     .where(and(eq(products.isActive, true), eq(products.isFeatured, true)))
     .orderBy(desc(products.createdAt))
     .limit(limit);
-  return rows.map(toProductCard);
+  return attachShippingCost(rows.map(toProductCard), rows);
 }
 
 export async function getProductVariants(productId: number) {
@@ -152,7 +180,9 @@ export async function getProductBySlug(slug: string) {
 
   const variants = await getProductVariants(row.id);
 
-  return { ...toProductCard(row), description: row.description, categoryName, images: row.images, variants, storeName, storeSlug };
+  const [withShipping] = await attachShippingCost([toProductCard(row)], [row]);
+
+  return { ...withShipping, description: row.description, categoryName, images: row.images, variants, storeName, storeSlug };
 }
 
 export async function getRelatedProducts(categoryId: number | null, excludeId: number, limit = 4) {
@@ -162,7 +192,8 @@ export async function getRelatedProducts(categoryId: number | null, excludeId: n
     .from(products)
     .where(and(eq(products.isActive, true), eq(products.categoryId, categoryId)))
     .limit(limit + 1);
-  return rows.filter((r) => r.id !== excludeId).slice(0, limit).map(toProductCard);
+  const filtered = rows.filter((r) => r.id !== excludeId).slice(0, limit);
+  return attachShippingCost(filtered.map(toProductCard), filtered);
 }
 
 export async function getCategories() {
@@ -267,4 +298,33 @@ export async function getActivePromotions() {
   const now = new Date();
   const rows = await db.select().from(promotions).where(eq(promotions.isActive, true));
   return rows.filter((p) => now >= new Date(p.startDate) && now <= new Date(p.endDate) && (!p.usageLimit || p.usedCount < p.usageLimit));
+}
+
+// ==================== PLATFORM STATS (real-time, dari data sesungguhnya) ====================
+export interface PlatformStats {
+  storeCount: number;
+  productCount: number;
+  customerCount: number;
+  avgRating: number;
+  reviewCount: number;
+}
+
+export async function getPlatformStats(): Promise<PlatformStats> {
+  const [[storeRow], [productRow], [customerRow], [ratingRow]] = await Promise.all([
+    db.select({ count: sql<number>`count(*)` }).from(stores).where(eq(stores.isActive, true)),
+    db.select({ count: sql<number>`count(*)` }).from(products).where(eq(products.isActive, true)),
+    db.select({ count: sql<number>`count(distinct ${orders.userId})` }).from(orders),
+    db
+      .select({ avg: sql<string | null>`avg(${reviews.rating})`, count: sql<number>`count(*)` })
+      .from(reviews)
+      .where(eq(reviews.isActive, true)),
+  ]);
+
+  return {
+    storeCount: Number(storeRow?.count ?? 0),
+    productCount: Number(productRow?.count ?? 0),
+    customerCount: Number(customerRow?.count ?? 0),
+    avgRating: ratingRow?.avg ? Math.round(Number(ratingRow.avg) * 10) / 10 : 0,
+    reviewCount: Number(ratingRow?.count ?? 0),
+  };
 }

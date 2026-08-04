@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Save, Store, Loader2 } from "lucide-react";
+import { Save, Store, Loader2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,6 +17,8 @@ interface StoreData {
   banner: string | null;
   phone: string | null;
   address: string | null;
+  shippingEnabled: boolean;
+  shippingCost: string | null;
 }
 
 export function SellerSettings() {
@@ -36,10 +38,20 @@ export function SellerSettings() {
     if (!store) return;
     setSaving(true);
     try {
+      // Sama seperti Pengaturan Platform: field yang belum pernah diisi tersimpan null dari
+      // database, jadi dibersihkan dulu sebelum dikirim biar tidak gagal validasi di server.
+      const payload = {
+        ...store,
+        description: store.description ?? "",
+        logo: store.logo ?? "",
+        banner: store.banner ?? "",
+        phone: store.phone ?? "",
+        address: store.address ?? "",
+      };
       const res = await fetch("/api/seller/store", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(store),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (!res.ok) { toast.error(data.error ?? "Gagal menyimpan"); return; }
@@ -96,6 +108,40 @@ export function SellerSettings() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">URL Banner Toko</label>
             <Input value={store.banner ?? ""} onChange={(e) => setStore({ ...store, banner: e.target.value })} placeholder="https://..." />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><Truck size={20} className="text-emerald-600" /> Ongkir Toko</CardTitle>
+          <CardDescription>
+            Ongkir default untuk semua produk di toko ini. Bisa di-override lagi untuk produk tertentu saat tambah/edit produk. Kosongkan harga untuk ikut ongkir default platform.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={store.shippingEnabled}
+              onChange={(e) => setStore({ ...store, shippingEnabled: e.target.checked })}
+              className="rounded"
+            />
+            Aktifkan biaya ongkir untuk toko ini
+          </label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Biaya Ongkir Toko (Rp)</label>
+            <Input
+              type="number"
+              value={store.shippingCost ?? ""}
+              onChange={(e) => setStore({ ...store, shippingCost: e.target.value === "" ? null : e.target.value })}
+              placeholder="Kosongkan = pakai ongkir default platform"
+              className="max-w-xs"
+              disabled={!store.shippingEnabled}
+            />
+            {!store.shippingEnabled && (
+              <p className="text-xs text-gray-400 mt-1">Nonaktif — semua produk toko ini otomatis gratis ongkir (kecuali diatur khusus per produk).</p>
+            )}
           </div>
         </CardContent>
       </Card>

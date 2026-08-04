@@ -34,8 +34,8 @@ export function HeroSection() {
       >
         <div className="glass-card p-4 rounded-2xl -rotate-3">
           <Truck className="text-blue-600" size={24} />
-          <p className="text-sm font-semibold mt-1">Gratis Ongkir</p>
-          <p className="text-xs text-gray-500">Min. Belanja 200rb</p>
+          <p className="text-sm font-semibold mt-1">Ongkir Transparan</p>
+          <p className="text-xs text-gray-500">Dihitung tiap toko</p>
         </div>
       </motion.div>
 
@@ -107,7 +107,7 @@ export function HeroSection() {
             >
               {[
                 { icon: Shield, label: "100% Original" },
-                { icon: Truck, label: "Gratis Ongkir" },
+                { icon: Truck, label: "Ongkir Transparan" },
                 { icon: RotateCcw, label: "7 Hari Retur" },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm text-gray-500">

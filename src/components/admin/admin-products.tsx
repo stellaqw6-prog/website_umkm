@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Edit, Trash2, Loader2, ImageIcon } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Loader2, ImageIcon, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,6 +33,8 @@ interface Product {
   isActive: boolean;
   isFeatured: boolean;
   isBestSeller: boolean;
+  freeShipping: boolean;
+  shippingCost: string | null;
   variants?: { id: number; name: string; price: number | null; stock: number; sku: string | null }[];
 }
 
@@ -53,6 +55,8 @@ const emptyForm = {
   isActive: true,
   isFeatured: false,
   isBestSeller: false,
+  freeShipping: false,
+  shippingCost: "",
   variants: [] as ProductVariant[],
 };
 
@@ -106,6 +110,8 @@ export function AdminProducts() {
       isActive: p.isActive,
       isFeatured: p.isFeatured,
       isBestSeller: p.isBestSeller,
+      freeShipping: p.freeShipping,
+      shippingCost: p.shippingCost ?? "",
       variants: (p.variants ?? []).map((v) => ({
         id: v.id,
         name: v.name,
@@ -148,6 +154,8 @@ export function AdminProducts() {
         isActive: form.isActive,
         isFeatured: form.isFeatured,
         isBestSeller: form.isBestSeller,
+        freeShipping: form.freeShipping,
+        shippingCost: form.freeShipping || !form.shippingCost ? null : form.shippingCost,
         variants: form.variants
           .filter((v) => v.name.trim().length > 0)
           .map((v) => ({
@@ -244,7 +252,14 @@ export function AdminProducts() {
                       <td className="py-3 px-4 text-sm text-right font-semibold text-gray-900">{formatCurrency(Number(p.price))}</td>
                       <td className="py-3 px-4 text-sm text-right text-gray-700">{p.stock}</td>
                       <td className="py-3 px-4 text-center">
-                        <Badge variant={p.isActive ? "success" : "secondary"} className="text-[10px]">{p.isActive ? "Aktif" : "Nonaktif"}</Badge>
+                        <div className="flex flex-col items-center gap-1">
+                          <Badge variant={p.isActive ? "success" : "secondary"} className="text-[10px]">{p.isActive ? "Aktif" : "Nonaktif"}</Badge>
+                          {p.freeShipping ? (
+                            <span className="text-[10px] text-emerald-600 font-medium">Gratis Ongkir</span>
+                          ) : p.shippingCost ? (
+                            <span className="text-[10px] text-gray-400">Ongkir {formatCurrency(Number(p.shippingCost))}</span>
+                          ) : null}
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex items-center justify-end gap-1">
@@ -319,6 +334,35 @@ export function AdminProducts() {
               <input type="checkbox" checked={form.isBestSeller} onChange={(e) => setForm({ ...form, isBestSeller: e.target.checked })} className="rounded" /> Best Seller
             </label>
           </div>
+
+          <div className="border border-gray-100 rounded-xl p-3 space-y-3 bg-gray-50/50">
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Truck size={15} className="text-blue-600" /> Ongkir Produk Ini
+            </label>
+            <label className="flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={form.freeShipping}
+                onChange={(e) => setForm({ ...form, freeShipping: e.target.checked })}
+                className="rounded"
+              />
+              Gratis ongkir untuk produk ini
+            </label>
+            <div>
+              <label className="text-xs font-medium text-gray-500 mb-1 block">Biaya Ongkir Khusus (opsional)</label>
+              <Input
+                type="number"
+                value={form.shippingCost}
+                onChange={(e) => setForm({ ...form, shippingCost: e.target.value })}
+                placeholder="Kosongkan = pakai ongkir default toko/platform"
+                disabled={form.freeShipping}
+              />
+              <p className="text-[11px] text-gray-400 mt-1">
+                Kosongkan untuk ikut ongkir toko seller (kalau produk milik seller) atau ongkir default platform (kalau produk platform).
+              </p>
+            </div>
+          </div>
+
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-sm font-medium text-gray-700 block">Varian Produk (opsional)</label>

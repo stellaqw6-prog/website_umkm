@@ -38,6 +38,11 @@ const settingsSchema = z.object({
     .union([z.string(), z.number()])
     .transform((v) => String(v))
     .optional(),
+  shippingEnabled: z.boolean().optional(),
+  defaultShippingCost: z
+    .union([z.string(), z.number()])
+    .transform((v) => String(v))
+    .optional(),
 });
 
 export async function GET(req: NextRequest) {

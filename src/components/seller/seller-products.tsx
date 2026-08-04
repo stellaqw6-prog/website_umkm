@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Edit, Trash2, Loader2, ImageIcon } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Loader2, ImageIcon, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +24,8 @@ interface Product {
   images: string[];
   isActive: boolean;
   isBestSeller: boolean;
+  freeShipping: boolean;
+  shippingCost: string | null;
 }
 
 interface Category { id: number; name: string; }
@@ -31,6 +33,7 @@ interface Category { id: number; name: string; }
 const emptyForm = {
   name: "", slug: "", description: "", price: "", compareAtPrice: "", stock: "0",
   categoryId: "", images: "", isActive: true, isBestSeller: false,
+  freeShipping: false, shippingCost: "",
 };
 
 function slugify(text: string) {
@@ -67,6 +70,7 @@ export function SellerProducts() {
       compareAtPrice: p.compareAtPrice ?? "", stock: String(p.stock),
       categoryId: p.categoryId ? String(p.categoryId) : "", images: p.images?.[0] ?? "",
       isActive: p.isActive, isBestSeller: p.isBestSeller,
+      freeShipping: p.freeShipping, shippingCost: p.shippingCost ?? "",
     });
     setModalOpen(true);
   };
@@ -80,6 +84,8 @@ export function SellerProducts() {
         compareAtPrice: form.compareAtPrice || undefined, stock: Number(form.stock),
         categoryId: form.categoryId ? Number(form.categoryId) : null,
         images: form.images ? [form.images] : [], isActive: form.isActive, isBestSeller: form.isBestSeller,
+        freeShipping: form.freeShipping,
+        shippingCost: form.freeShipping || !form.shippingCost ? null : form.shippingCost,
       };
       const url = editing ? `/api/seller/products/${editing.id}` : "/api/seller/products";
       const res = await fetch(url, { method: editing ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
@@ -150,7 +156,16 @@ export function SellerProducts() {
                       <td className="py-3 px-4 text-sm text-right text-gray-700">
                         <span className={p.stock <= 5 ? "text-red-600 font-semibold" : ""}>{p.stock}</span>
                       </td>
-                      <td className="py-3 px-4 text-center"><Badge variant={p.isActive ? "success" : "secondary"} className="text-[10px]">{p.isActive ? "Aktif" : "Nonaktif"}</Badge></td>
+                      <td className="py-3 px-4 text-center">
+                        <div className="flex flex-col items-center gap-1">
+                          <Badge variant={p.isActive ? "success" : "secondary"} className="text-[10px]">{p.isActive ? "Aktif" : "Nonaktif"}</Badge>
+                          {p.freeShipping ? (
+                            <span className="text-[10px] text-emerald-600 font-medium">Gratis Ongkir</span>
+                          ) : p.shippingCost ? (
+                            <span className="text-[10px] text-gray-400">Ongkir {formatCurrency(Number(p.shippingCost))}</span>
+                          ) : null}
+                        </div>
+                      </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex items-center justify-end gap-1">
                           <button onClick={() => openEdit(p)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-all"><Edit size={15} /></button>
@@ -191,6 +206,33 @@ export function SellerProducts() {
             <label className="flex items-center gap-2 text-sm text-gray-700"><input type="checkbox" checked={form.isBestSeller} onChange={(e) => setForm({ ...form, isBestSeller: e.target.checked })} className="rounded" /> Best Seller</label>
           </div>
           <p className="text-xs text-gray-400">Catatan: status &quot;Unggulan&quot; (tampil di beranda) hanya bisa diatur oleh admin platform.</p>
+
+          <div className="border border-gray-100 rounded-xl p-3 space-y-3 bg-gray-50/50">
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Truck size={15} className="text-emerald-600" /> Ongkir Produk Ini
+            </label>
+            <label className="flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={form.freeShipping}
+                onChange={(e) => setForm({ ...form, freeShipping: e.target.checked })}
+                className="rounded"
+              />
+              Gratis ongkir untuk produk ini
+            </label>
+            <div>
+              <label className="text-xs font-medium text-gray-500 mb-1 block">Biaya Ongkir Khusus (opsional)</label>
+              <Input
+                type="number"
+                value={form.shippingCost}
+                onChange={(e) => setForm({ ...form, shippingCost: e.target.value })}
+                placeholder="Kosongkan = pakai ongkir default toko"
+                disabled={form.freeShipping}
+              />
+              <p className="text-[11px] text-gray-400 mt-1">Kosongkan untuk ikut ongkir toko (diatur di menu Profil Toko).</p>
+            </div>
+          </div>
+
           <div className="flex gap-2 pt-2">
             <Button type="button" variant="outline" className="flex-1" onClick={() => setModalOpen(false)}>Batal</Button>
             <Button type="submit" variant="premium" className="flex-1" disabled={saving}>{saving ? <Loader2 className="animate-spin" size={16} /> : editing ? "Simpan Perubahan" : "Tambah Produk"}</Button>

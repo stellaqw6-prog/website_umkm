@@ -12,18 +12,20 @@ import {
   getTestimonials,
   getFaqs,
   getPublishedBlogPosts,
+  getPlatformStats,
 } from "@/lib/data";
 
 // Ambil data terbaru setiap request supaya perubahan dari admin langsung terlihat
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const [featuredProducts, categories, testimonials, faqs, blogPosts] = await Promise.all([
+  const [featuredProducts, categories, testimonials, faqs, blogPosts, stats] = await Promise.all([
     getFeaturedProducts(8),
     getCategories(),
     getTestimonials(6),
     getFaqs(),
     getPublishedBlogPosts(3),
+    getPlatformStats(),
   ]);
 
   return (
@@ -31,7 +33,7 @@ export default async function HomePage() {
       <HeroSection />
       <CategorySection categories={categories} />
       <FeaturedProducts products={featuredProducts} />
-      <StatsSection />
+      <StatsSection stats={stats} />
       <TestimonialSection testimonials={testimonials} />
       <BlogSection posts={blogPosts} />
       <FaqSection faqs={faqs} />

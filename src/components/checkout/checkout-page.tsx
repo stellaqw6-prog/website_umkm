@@ -27,7 +27,7 @@ interface PaymentMethod {
 
 export function CheckoutPage() {
   const router = useRouter();
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice, clearCart, estimatedShipping } = useCart();
   const { user, loading: sessionLoading } = useSession();
 
   const [addressValid, setAddressValid] = useState(false);
@@ -63,7 +63,7 @@ export function CheckoutPage() {
     toast.success("Nomor disalin");
   };
 
-  const baseShipping = totalPrice >= 200000 ? 0 : 15000;
+  const baseShipping = estimatedShipping;
   const shipping = promoResult?.freeShipping ? 0 : baseShipping;
   const discount = promoResult?.discount ?? 0;
   const grandTotal = Math.max(totalPrice + shipping - discount, 0);

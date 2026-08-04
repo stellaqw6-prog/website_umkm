@@ -12,6 +12,8 @@ export interface CartItem {
   stock: number;
   variantId?: number;
   variantName?: string;
+  sellerId?: number | null;
+  shippingCost?: number;
 }
 
 interface CartContextValue {
@@ -22,6 +24,7 @@ interface CartContextValue {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  estimatedShipping: number;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -84,9 +87,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.quantity * i.price, 0);
 
+  // Estimasi ongkir: dikelompokkan per toko (1 toko = 1 kali kirim), ambil ongkir
+  // paling mahal di tiap toko, lalu dijumlah antar toko. Nilai final tetap dihitung
+  // ulang & divalidasi di server saat checkout — ini murni buat tampilan estimasi.
+  const shippingByStore = new Map<string, number>();
+  for (const item of items) {
+    const key = item.sellerId != null ? String(item.sellerId) : "platform";
+    const cost = item.shippingCost ?? 0;
+    shippingByStore.set(key, Math.max(shippingByStore.get(key) ?? 0, cost));
+  }
+  const estimatedShipping = [...shippingByStore.values()].reduce((sum, v) => sum + v, 0);
+
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice }}
+      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice, estimatedShipping }}
     >
       {children}
     </CartContext.Provider>

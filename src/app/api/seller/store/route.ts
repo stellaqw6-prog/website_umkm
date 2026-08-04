@@ -5,13 +5,24 @@ import { db } from "@/db";
 import { stores } from "@/db/schema";
 import { requireSeller } from "@/lib/require-admin";
 
+const nullableString = z
+  .string()
+  .nullable()
+  .optional()
+  .transform((v) => v ?? "");
+
 const storeSchema = z.object({
   name: z.string().min(2, "Nama toko minimal 2 karakter").optional(),
-  description: z.string().optional(),
-  logo: z.string().optional(),
-  banner: z.string().optional(),
-  phone: z.string().optional(),
-  address: z.string().optional(),
+  description: nullableString,
+  logo: nullableString,
+  banner: nullableString,
+  phone: nullableString,
+  address: nullableString,
+  shippingEnabled: z.boolean().optional(),
+  shippingCost: z
+    .union([z.string(), z.number(), z.null()])
+    .optional()
+    .transform((v) => (v === undefined || v === null || v === "" ? null : String(v))),
 });
 
 export async function GET(req: NextRequest) {

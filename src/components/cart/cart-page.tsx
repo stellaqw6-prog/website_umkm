@@ -8,9 +8,9 @@ import { formatCurrency } from "@/lib/utils";
 import { useCart } from "@/contexts/cart-context";
 
 export function CartPageClient() {
-  const { items, updateQuantity, removeItem, totalPrice } = useCart();
+  const { items, updateQuantity, removeItem, totalPrice, estimatedShipping } = useCart();
 
-  const shipping = totalPrice >= 200000 || totalPrice === 0 ? 0 : 15000;
+  const shipping = items.length === 0 ? 0 : estimatedShipping;
   const total = totalPrice + shipping;
 
   if (items.length === 0) {
@@ -92,7 +92,7 @@ export function CartPageClient() {
             </Link>
             <div className="mt-4 space-y-2">
               <div className="flex items-center gap-2 text-xs text-gray-500"><ShieldCheck size={14} className="text-green-500" /> Transaksi Aman</div>
-              <div className="flex items-center gap-2 text-xs text-gray-500"><Truck size={14} className="text-blue-500" /> Gratis Ongkir min. 200rb</div>
+              <div className="flex items-center gap-2 text-xs text-gray-500"><Truck size={14} className="text-blue-500" /> Ongkir dihitung otomatis per toko</div>
             </div>
           </motion.div>
         </div>

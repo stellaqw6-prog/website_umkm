@@ -77,6 +77,8 @@ export function ProductDetail({
         stock: effectiveStock,
         variantId: selectedVariant?.id,
         variantName: selectedVariant?.name,
+        sellerId: product.sellerId,
+        shippingCost: product.shippingCost,
       },
       quantity
     );
@@ -162,11 +164,18 @@ export function ProductDetail({
               </span>
             </div>
 
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-2">
               <span className="text-3xl font-extrabold text-gray-900">{formatCurrency(effectivePrice)}</span>
               {product.compareAtPrice && !selectedVariant?.price && (
                 <span className="text-lg text-gray-400 line-through">{formatCurrency(product.compareAtPrice)}</span>
               )}
+            </div>
+
+            <div className="flex items-center gap-1.5 mb-6 text-sm">
+              <Truck size={15} className={product.shippingCost === 0 ? "text-green-600" : "text-gray-400"} />
+              <span className={product.shippingCost === 0 ? "text-green-600 font-semibold" : "text-gray-500"}>
+                Ongkir {product.shippingCost === 0 ? "GRATIS" : formatCurrency(product.shippingCost)}
+              </span>
             </div>
 
             {product.description && (
