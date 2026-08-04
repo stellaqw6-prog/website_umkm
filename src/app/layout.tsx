@@ -98,7 +98,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           }}
         />
       </head>
-      <body className="min-h-screen bg-white text-gray-900 antialiased">
+      <body className="min-h-screen bg-white text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100">
         <ThemeProvider>
           <ToastProvider />
           <CartProvider>

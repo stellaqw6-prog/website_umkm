@@ -47,14 +47,14 @@ export function AdminAnalytics() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-24 text-gray-400">
+      <div className="flex justify-center py-24 text-gray-400 dark:text-gray-500">
         <Loader2 className="animate-spin" size={32} />
       </div>
     );
   }
 
   if (!data) {
-    return <p className="text-center py-24 text-gray-400 text-sm">Gagal memuat data analitik.</p>;
+    return <p className="text-center py-24 text-gray-400 text-sm dark:text-gray-500">Gagal memuat data analitik.</p>;
   }
 
   const avgOrderValue = data.totalOrders > 0 ? data.totalRevenue / data.totalOrders : 0;
@@ -71,8 +71,8 @@ export function AdminAnalytics() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Analitik</h1>
-        <p className="text-gray-500 text-sm mt-1">Performa bisnis Anda berdasarkan data pesanan asli, 6 bulan terakhir</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Analitik</h1>
+        <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Performa bisnis Anda berdasarkan data pesanan asli, 6 bulan terakhir</p>
       </motion.div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -90,8 +90,8 @@ export function AdminAnalytics() {
                     </span>
                   )}
                 </div>
-                <div className="text-2xl font-bold text-gray-900">{item.value}</div>
-                <p className="text-xs text-gray-500 mt-1">{item.label}</p>
+                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{item.value}</div>
+                <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">{item.label}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -100,9 +100,9 @@ export function AdminAnalytics() {
 
       {data.totalOrders === 0 ? (
         <Card>
-          <CardContent className="py-20 flex flex-col items-center justify-center text-center text-gray-400">
+          <CardContent className="py-20 flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500">
             <Inbox size={40} className="mb-3 opacity-40" />
-            <h3 className="font-semibold text-gray-600 mb-1">Belum Ada Data Penjualan</h3>
+            <h3 className="font-semibold text-gray-600 mb-1 dark:text-gray-400">Belum Ada Data Penjualan</h3>
             <p className="text-sm">Grafik dan analitik akan otomatis terisi begitu pelanggan mulai memesan produk.</p>
           </CardContent>
         </Card>
@@ -144,7 +144,7 @@ export function AdminAnalytics() {
                 </CardHeader>
                 <CardContent>
                   {categoryData.length === 0 ? (
-                    <p className="text-sm text-gray-400 text-center py-10">Belum ada data kategori.</p>
+                    <p className="text-sm text-gray-400 text-center py-10 dark:text-gray-500">Belum ada data kategori.</p>
                   ) : (
                     <>
                       <div className="h-48">
@@ -162,9 +162,9 @@ export function AdminAnalytics() {
                           <div key={cat.name} className="flex items-center justify-between text-sm">
                             <div className="flex items-center gap-2">
                               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cat.color }} />
-                              <span className="text-gray-600">{cat.name}</span>
+                              <span className="text-gray-600 dark:text-gray-400">{cat.name}</span>
                             </div>
-                            <span className="font-medium text-gray-900">{cat.value}%</span>
+                            <span className="font-medium text-gray-900 dark:text-gray-100">{cat.value}%</span>
                           </div>
                         ))}
                       </div>
@@ -204,18 +204,18 @@ export function AdminAnalytics() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {data.topProducts.length === 0 ? (
-                    <p className="text-sm text-gray-400 text-center py-6">Belum ada produk terjual.</p>
+                    <p className="text-sm text-gray-400 text-center py-6 dark:text-gray-500">Belum ada produk terjual.</p>
                   ) : (
                     data.topProducts.map((p, i) => (
                       <div key={p.name} className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
                           <Badge variant="secondary" className="w-6 h-6 rounded-full flex items-center justify-center p-0 flex-shrink-0">{i + 1}</Badge>
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">{p.name}</p>
-                            <p className="text-xs text-gray-500">{p.sold} terjual</p>
+                            <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-100">{p.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{p.sold} terjual</p>
                           </div>
                         </div>
-                        <span className="text-xs font-semibold text-gray-900 whitespace-nowrap">{formatCurrency(p.revenue)}</span>
+                        <span className="text-xs font-semibold text-gray-900 whitespace-nowrap dark:text-gray-100">{formatCurrency(p.revenue)}</span>
                       </div>
                     ))
                   )}

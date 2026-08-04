@@ -72,8 +72,8 @@ export function AdminTestimonials() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Testimoni</h1>
-          <p className="text-gray-500 text-sm mt-1">Kelola ulasan dan testimoni pelanggan</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Testimoni</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Kelola ulasan dan testimoni pelanggan</p>
         </div>
         <Button variant="premium" onClick={openAdd}><Plus size={18} className="mr-2" /> Tambah Testimoni</Button>
       </motion.div>
@@ -81,23 +81,23 @@ export function AdminTestimonials() {
       <Card>
         <CardHeader className="pb-0">
           <div className="relative max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
             <Input placeholder="Cari testimoni..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </CardHeader>
         <CardContent className="pt-4">
-          {loading ? <div className="flex justify-center py-16 text-gray-400"><Loader2 className="animate-spin" size={28} /></div>
-          : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm">Belum ada testimoni.</p>
+          {loading ? <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={28} /></div>
+          : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm dark:text-gray-500">Belum ada testimoni.</p>
           : (
             <div className="grid md:grid-cols-2 gap-4">
               {filtered.map((t, i) => (
-                <motion.div key={t.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-all">
+                <motion.div key={t.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-all dark:border-gray-800">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">{t.name.charAt(0)}</div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">{t.name}</p>
-                        <p className="text-xs text-gray-500">{t.role}</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{t.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{t.role}</p>
                       </div>
                     </div>
                     <Badge variant={t.isActive ? "success" : "secondary"} className="text-[10px]">{t.isActive ? "Aktif" : "Nonaktif"}</Badge>
@@ -105,10 +105,10 @@ export function AdminTestimonials() {
                   <div className="flex items-center gap-0.5 mb-2">
                     {Array.from({ length: 5 }).map((_, idx) => <Star key={idx} size={13} className={idx < t.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-200"} />)}
                   </div>
-                  <p className="text-sm text-gray-600 mb-3 leading-relaxed line-clamp-3">&ldquo;{t.content}&rdquo;</p>
+                  <p className="text-sm text-gray-600 mb-3 leading-relaxed line-clamp-3 dark:text-gray-400">&ldquo;{t.content}&rdquo;</p>
                   <div className="flex items-center gap-1 pt-2 border-t border-gray-50">
-                    <button onClick={() => openEdit(t)} className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all"><Edit size={13} /> Edit</button>
-                    <button onClick={() => handleDelete(t)} className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all"><Trash2 size={13} /> Hapus</button>
+                    <button onClick={() => openEdit(t)} className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400"><Edit size={13} /> Edit</button>
+                    <button onClick={() => handleDelete(t)} className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400"><Trash2 size={13} /> Hapus</button>
                   </div>
                 </motion.div>
               ))}
@@ -119,11 +119,11 @@ export function AdminTestimonials() {
 
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Edit Testimoni" : "Tambah Testimoni"}>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Nama</label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Peran (mis. Pelanggan Setia)</label><Input value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Isi Testimoni</label><Textarea required rows={3} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nama</label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Peran (mis. Pelanggan Setia)</label><Input value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Isi Testimoni</label><Textarea required rows={3} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} /></div>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block">Rating</label>
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Rating</label>
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((r) => (
                 <button key={r} type="button" onClick={() => setForm({ ...form, rating: r })}>
@@ -132,7 +132,7 @@ export function AdminTestimonials() {
               ))}
             </div>
           </div>
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="rounded" /> Tampilkan di beranda
           </label>
           <div className="flex gap-2 pt-2">

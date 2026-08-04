@@ -86,38 +86,38 @@ export function AdminSellerRequests() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2"><ShieldCheck className="text-blue-600" size={26} /> Verifikasi Seller</h1>
-        <p className="text-gray-500 text-sm mt-1">Khusus Developer — tinjau dan setujui permintaan upgrade jadi seller</p>
+        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100"><ShieldCheck className="text-blue-600" size={26} /> Verifikasi Seller</h1>
+        <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Khusus Developer — tinjau dan setujui permintaan upgrade jadi seller</p>
       </motion.div>
 
       {loading ? (
-        <div className="flex justify-center py-16 text-gray-400"><Loader2 className="animate-spin" size={28} /></div>
+        <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={28} /></div>
       ) : (
         <>
           <Card>
-            <CardHeader><p className="font-semibold text-gray-900">Menunggu Verifikasi ({pending.length})</p></CardHeader>
+            <CardHeader><p className="font-semibold text-gray-900 dark:text-gray-100">Menunggu Verifikasi ({pending.length})</p></CardHeader>
             <CardContent className="space-y-4">
               {pending.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-10 text-gray-400"><Inbox size={28} className="mb-2 opacity-40" /><p className="text-sm">Tidak ada permintaan menunggu.</p></div>
+                <div className="flex flex-col items-center justify-center py-10 text-gray-400 dark:text-gray-500"><Inbox size={28} className="mb-2 opacity-40" /><p className="text-sm">Tidak ada permintaan menunggu.</p></div>
               ) : (
                 pending.map((req) => (
-                  <div key={req.id} className="flex flex-col md:flex-row gap-4 border border-gray-100 rounded-xl p-4">
+                  <div key={req.id} className="flex flex-col md:flex-row gap-4 border border-gray-100 rounded-xl p-4 dark:border-gray-800">
                     {req.paymentProofUrl && (
                       <a href={req.paymentProofUrl} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
-                        <img src={req.paymentProofUrl} alt="Bukti transfer" className="w-full md:w-28 h-28 object-cover rounded-lg border border-gray-200" />
+                        <img src={req.paymentProofUrl} alt="Bukti transfer" className="w-full md:w-28 h-28 object-cover rounded-lg border border-gray-200 dark:border-gray-700" />
                       </a>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <p className="font-semibold text-gray-900">{req.storeName}</p>
-                          <p className="text-xs text-gray-500">{req.applicantName} · {req.applicantEmail}</p>
-                          {req.phone && <p className="text-xs text-gray-500">{req.phone}</p>}
+                          <p className="font-semibold text-gray-900 dark:text-gray-100">{req.storeName}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{req.applicantName} · {req.applicantEmail}</p>
+                          {req.phone && <p className="text-xs text-gray-500 dark:text-gray-400">{req.phone}</p>}
                         </div>
                         <Badge variant={statusVariant[req.status]} className="text-[10px] flex-shrink-0">{statusLabel[req.status]}</Badge>
                       </div>
-                      <p className="text-sm text-gray-700 mt-2 font-medium">{formatCurrency(Number(req.amount))} via {req.paymentMethod}</p>
-                      <p className="text-xs text-gray-400">{new Date(req.createdAt).toLocaleString("id-ID")}</p>
+                      <p className="text-sm text-gray-700 mt-2 font-medium dark:text-gray-300">{formatCurrency(Number(req.amount))} via {req.paymentMethod}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">{new Date(req.createdAt).toLocaleString("id-ID")}</p>
                       <div className="flex items-center gap-2 mt-3">
                         <Button size="sm" variant="premium" onClick={() => handleApprove(req)} disabled={processingId === req.id}>
                           {processingId === req.id ? <Loader2 className="animate-spin" size={14} /> : <><Check size={14} className="mr-1" /> Setujui</>}
@@ -140,13 +140,13 @@ export function AdminSellerRequests() {
 
           {processed.length > 0 && (
             <Card>
-              <CardHeader><p className="font-semibold text-gray-900">Riwayat</p></CardHeader>
+              <CardHeader><p className="font-semibold text-gray-900 dark:text-gray-100">Riwayat</p></CardHeader>
               <CardContent className="space-y-2">
                 {processed.map((req) => (
                   <div key={req.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{req.storeName}</p>
-                      <p className="text-xs text-gray-400">{req.applicantName}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{req.storeName}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">{req.applicantName}</p>
                     </div>
                     <Badge variant={statusVariant[req.status]} className="text-[10px]">{statusLabel[req.status]}</Badge>
                   </div>
@@ -160,12 +160,12 @@ export function AdminSellerRequests() {
       <AdminModal open={!!rejectModal} onClose={() => setRejectModal(null)} title={`Tolak Permintaan "${rejectModal?.storeName ?? ""}"`}>
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block">Alasan Penolakan (opsional, akan dilihat pemohon)</label>
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Alasan Penolakan (opsional, akan dilihat pemohon)</label>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
               rows={3}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-gray-700"
               placeholder="Contoh: bukti transfer tidak jelas, silakan upload ulang"
             />
           </div>

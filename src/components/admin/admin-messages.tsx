@@ -63,19 +63,19 @@ export function AdminMessages() {
   const filtered = messages.filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || m.subject.toLowerCase().includes(search.toLowerCase()));
 
   if (loading) {
-    return <div className="flex justify-center py-24 text-gray-400"><Loader2 className="animate-spin" size={32} /></div>;
+    return <div className="flex justify-center py-24 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={32} /></div>;
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Pesan</h1>
-        <p className="text-gray-500 text-sm mt-1">Pesan masuk dari formulir kontak pelanggan</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Pesan</h1>
+        <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Pesan masuk dari formulir kontak pelanggan</p>
       </div>
 
       {messages.length === 0 ? (
         <Card>
-          <div className="py-20 flex flex-col items-center justify-center text-center text-gray-400">
+          <div className="py-20 flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500">
             <Inbox size={40} className="mb-3 opacity-40" />
             <p className="text-sm">Belum ada pesan masuk.</p>
           </div>
@@ -83,9 +83,9 @@ export function AdminMessages() {
       ) : (
         <div className="grid lg:grid-cols-5 gap-4">
           <Card className="lg:col-span-2 overflow-hidden">
-            <div className="p-3 border-b border-gray-100">
+            <div className="p-3 border-b border-gray-100 dark:border-gray-800">
               <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                 <Input placeholder="Cari pesan..." className="pl-9 h-9" value={search} onChange={(e) => setSearch(e.target.value)} />
               </div>
             </div>
@@ -94,15 +94,15 @@ export function AdminMessages() {
                 <button
                   key={msg.id}
                   onClick={() => openMessage(msg)}
-                  className={cn("w-full text-left p-4 hover:bg-gray-50/50 transition-colors", selected?.id === msg.id && "bg-blue-50/50")}
+                  className={cn("w-full text-left p-4 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors", selected?.id === msg.id && "bg-blue-50/50 dark:bg-blue-950/30")}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className={cn("text-sm", !msg.isRead ? "font-bold text-gray-900" : "font-medium text-gray-700")}>{msg.name}</span>
+                    <span className={cn("text-sm", !msg.isRead ? "font-bold text-gray-900 dark:text-gray-100" : "font-medium text-gray-700 dark:text-gray-300")}>{msg.name}</span>
                     {!msg.isRead && <span className="w-2 h-2 rounded-full bg-blue-600 flex-shrink-0" />}
                   </div>
-                  <p className={cn("text-xs mb-1 truncate", !msg.isRead ? "font-semibold text-gray-800" : "text-gray-500")}>{msg.subject}</p>
-                  <p className="text-xs text-gray-400 truncate">{msg.message}</p>
-                  <p className="text-[10px] text-gray-400 mt-1">{new Date(msg.createdAt).toLocaleString("id-ID")}</p>
+                  <p className={cn("text-xs mb-1 truncate", !msg.isRead ? "font-semibold text-gray-800 dark:text-gray-200" : "text-gray-500 dark:text-gray-400")}>{msg.subject}</p>
+                  <p className="text-xs text-gray-400 truncate dark:text-gray-500">{msg.message}</p>
+                  <p className="text-[10px] text-gray-400 mt-1 dark:text-gray-500">{new Date(msg.createdAt).toLocaleString("id-ID")}</p>
                 </button>
               ))}
             </div>
@@ -113,31 +113,31 @@ export function AdminMessages() {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h2 className="text-lg font-bold text-gray-900">{selected.subject}</h2>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Dari <span className="font-medium text-gray-700">{selected.name}</span> ({selected.email})
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">{selected.subject}</h2>
+                    <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">
+                      Dari <span className="font-medium text-gray-700 dark:text-gray-300">{selected.name}</span> ({selected.email})
                       {selected.phone && ` · ${selected.phone}`}
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">{new Date(selected.createdAt).toLocaleString("id-ID")}</p>
+                    <p className="text-xs text-gray-400 mt-0.5 dark:text-gray-500">{new Date(selected.createdAt).toLocaleString("id-ID")}</p>
                   </div>
                   <Badge variant={selected.isRead ? "secondary" : "default"} className="text-[10px] flex items-center gap-1 flex-shrink-0">
                     {selected.isRead ? <MailOpen size={11} /> : <Mail size={11} />} {selected.isRead ? "Dibaca" : "Baru"}
                   </Badge>
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-600 leading-relaxed mb-5">{selected.message}</div>
+                <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-600 leading-relaxed mb-5 dark:bg-gray-800/60 dark:text-gray-400">{selected.message}</div>
 
                 <div className="flex items-center gap-2">
                   <a href={`mailto:${selected.email}?subject=Re: ${selected.subject}`}>
                     <button className="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all">Balas via Email</button>
                   </a>
-                  <button onClick={() => handleDelete(selected)} className="px-4 py-2 rounded-xl border border-gray-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-all flex items-center gap-1.5">
+                  <button onClick={() => handleDelete(selected)} className="px-4 py-2 rounded-xl border border-gray-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-all flex items-center gap-1.5 dark:border-gray-700">
                     <Trash2 size={14} /> Hapus
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="py-20 flex items-center justify-center text-gray-400 text-sm">Pilih pesan untuk melihat detail</div>
+              <div className="py-20 flex items-center justify-center text-gray-400 text-sm dark:text-gray-500">Pilih pesan untuk melihat detail</div>
             )}
           </Card>
         </div>

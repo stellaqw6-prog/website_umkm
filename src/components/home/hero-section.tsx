@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-950 dark:via-gray-950 dark:to-blue-950/40">
       {/* Background decorations */}
       <div className="absolute inset-0 bg-grid opacity-50" />
       <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" />
@@ -22,8 +22,8 @@ export function HeroSection() {
       >
         <div className="glass-card p-4 rounded-2xl rotate-3">
           <Star className="text-yellow-500 fill-yellow-500" size={24} />
-          <p className="text-sm font-semibold mt-1">4.9 Rating</p>
-          <p className="text-xs text-gray-500">10rb+ Review</p>
+          <p className="text-sm font-semibold mt-1 dark:text-gray-100">4.9 Rating</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">10rb+ Review</p>
         </div>
       </motion.div>
 
@@ -34,8 +34,8 @@ export function HeroSection() {
       >
         <div className="glass-card p-4 rounded-2xl -rotate-3">
           <Truck className="text-blue-600" size={24} />
-          <p className="text-sm font-semibold mt-1">Ongkir Transparan</p>
-          <p className="text-xs text-gray-500">Dihitung tiap toko</p>
+          <p className="text-sm font-semibold mt-1 dark:text-gray-100">Ongkir Transparan</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">Dihitung tiap toko</p>
         </div>
       </motion.div>
 
@@ -48,7 +48,7 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
             >
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold mb-6 dark:bg-blue-950/50 dark:text-blue-300">
                 <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
                 #BanggaBuatanIndonesia 🇮🇩
               </span>
@@ -58,7 +58,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.05] text-gray-900 mb-6"
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.05] text-gray-900 mb-6 dark:text-gray-100"
             >
               Dukung{" "}
               <span className="text-gradient">UMKM Lokal</span>
@@ -70,7 +70,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-lg text-gray-500 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed"
+              className="text-lg text-gray-500 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed dark:text-gray-400"
             >
               Temukan produk-produk terbaik dari pengusaha lokal Indonesia. 
               Kualitas premium dengan harga terjangkau, langsung dari tangan kreatif UMKM.
@@ -110,7 +110,7 @@ export function HeroSection() {
                 { icon: Truck, label: "Ongkir Transparan" },
                 { icon: RotateCcw, label: "7 Hari Retur" },
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-gray-500">
+                <div key={i} className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                   <item.icon size={16} className="text-blue-600" />
                   <span>{item.label}</span>
                 </div>
@@ -152,7 +152,7 @@ export function HeroSection() {
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -left-12 top-20 glass-card p-3 rounded-xl"
               >
-                <p className="text-xs font-semibold">💰 Harga Terjangkau</p>
+                <p className="text-xs font-semibold dark:text-gray-100">💰 Harga Terjangkau</p>
                 <p className="text-lg font-bold text-blue-600">Mulai 50rb</p>
               </motion.div>
 
@@ -161,7 +161,7 @@ export function HeroSection() {
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -right-8 bottom-24 glass-card p-3 rounded-xl"
               >
-                <p className="text-xs font-semibold">⭐ Terpercaya</p>
+                <p className="text-xs font-semibold dark:text-gray-100">⭐ Terpercaya</p>
                 <p className="text-lg font-bold text-green-600">5000+ UMKM</p>
               </motion.div>
             </div>
@@ -174,7 +174,7 @@ export function HeroSection() {
         <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M0 50C240 100 480 0 720 50C960 100 1200 0 1440 50V100H0V50Z"
-            fill="white"
+            className="fill-white dark:fill-gray-950"
           />
         </svg>
       </div>

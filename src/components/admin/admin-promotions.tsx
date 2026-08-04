@@ -92,8 +92,8 @@ export function AdminPromotions() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Promo</h1>
-          <p className="text-gray-500 text-sm mt-1">Kelola kode voucher dan diskon</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Promo</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Kelola kode voucher dan diskon</p>
         </div>
         <Button variant="premium" onClick={openAdd}><Plus size={18} className="mr-2" /> Buat Promo</Button>
       </motion.div>
@@ -101,38 +101,38 @@ export function AdminPromotions() {
       <Card>
         <CardHeader className="pb-0">
           <div className="relative max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
             <Input placeholder="Cari kode promo..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </CardHeader>
         <CardContent className="pt-4">
-          {loading ? <div className="flex justify-center py-16 text-gray-400"><Loader2 className="animate-spin" size={28} /></div>
-          : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm">Belum ada promo.</p>
+          {loading ? <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={28} /></div>
+          : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm dark:text-gray-500">Belum ada promo.</p>
           : (
             <div className="grid md:grid-cols-2 gap-4">
               {filtered.map((promo, i) => (
-                <motion.div key={promo.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-all">
+                <motion.div key={promo.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-all dark:border-gray-800">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center flex-shrink-0"><Tag size={18} className="text-white" /></div>
                       <div>
-                        <button onClick={() => copyCode(promo.code)} className="flex items-center gap-1.5 font-mono font-bold text-gray-900 text-sm hover:text-blue-600 transition-colors">{promo.code} <Copy size={12} /></button>
-                        <p className="text-xs text-gray-500">{typeLabel[promo.type]} · {promo.type === "percentage" ? `${promo.value}%` : promo.type === "fixed" ? `Rp${Number(promo.value).toLocaleString("id")}` : "Gratis Ongkir"}</p>
+                        <button onClick={() => copyCode(promo.code)} className="flex items-center gap-1.5 font-mono font-bold text-gray-900 text-sm hover:text-blue-600 transition-colors dark:text-gray-100">{promo.code} <Copy size={12} /></button>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{typeLabel[promo.type]} · {promo.type === "percentage" ? `${promo.value}%` : promo.type === "fixed" ? `Rp${Number(promo.value).toLocaleString("id")}` : "Gratis Ongkir"}</p>
                       </div>
                     </div>
                     <Badge variant={promo.isActive ? "success" : "secondary"} className="text-[10px] flex-shrink-0">{promo.isActive ? "Aktif" : "Nonaktif"}</Badge>
                   </div>
-                  {promo.minPurchase && <p className="text-xs text-gray-500 mb-2">Min. pembelian Rp{Number(promo.minPurchase).toLocaleString("id")}</p>}
-                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-3"><Calendar size={12} /> {new Date(promo.startDate).toLocaleDateString("id-ID")} – {new Date(promo.endDate).toLocaleDateString("id-ID")}</div>
+                  {promo.minPurchase && <p className="text-xs text-gray-500 mb-2 dark:text-gray-400">Min. pembelian Rp{Number(promo.minPurchase).toLocaleString("id")}</p>}
+                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-3 dark:text-gray-500"><Calendar size={12} /> {new Date(promo.startDate).toLocaleDateString("id-ID")} – {new Date(promo.endDate).toLocaleDateString("id-ID")}</div>
                   {promo.usageLimit && (
                     <div className="mb-3">
-                      <div className="flex items-center justify-between text-xs text-gray-500 mb-1"><span>Terpakai</span><span>{promo.usedCount}/{promo.usageLimit}</span></div>
-                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${Math.min((promo.usedCount / promo.usageLimit) * 100, 100)}%` }} /></div>
+                      <div className="flex items-center justify-between text-xs text-gray-500 mb-1 dark:text-gray-400"><span>Terpakai</span><span>{promo.usedCount}/{promo.usageLimit}</span></div>
+                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden dark:bg-gray-800"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${Math.min((promo.usedCount / promo.usageLimit) * 100, 100)}%` }} /></div>
                     </div>
                   )}
                   <div className="flex items-center gap-1 pt-2 border-t border-gray-50">
-                    <button onClick={() => openEdit(promo)} className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all"><Edit size={13} /> Edit</button>
-                    <button onClick={() => handleDelete(promo)} className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all"><Trash2 size={13} /> Hapus</button>
+                    <button onClick={() => openEdit(promo)} className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400"><Edit size={13} /> Edit</button>
+                    <button onClick={() => handleDelete(promo)} className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400"><Trash2 size={13} /> Hapus</button>
                   </div>
                 </motion.div>
               ))}
@@ -143,26 +143,26 @@ export function AdminPromotions() {
 
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Edit Promo" : "Buat Promo"}>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Kode Promo</label><Input required value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} placeholder="GAJIAN25" /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Kode Promo</label><Input required value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} placeholder="GAJIAN25" /></div>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block">Jenis Diskon</label>
-            <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as Promotion["type"] })} className="w-full h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Jenis Diskon</label>
+            <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as Promotion["type"] })} className="w-full h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-gray-700">
               <option value="percentage">Persentase (%)</option>
               <option value="fixed">Nominal (Rp)</option>
               <option value="free_shipping">Gratis Ongkir</option>
             </select>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Nilai</label><Input required type="number" value={form.value} onChange={(e) => setForm({ ...form, value: e.target.value })} placeholder={form.type === "percentage" ? "25" : "50000"} /></div>
-            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Min. Pembelian</label><Input type="number" value={form.minPurchase} onChange={(e) => setForm({ ...form, minPurchase: e.target.value })} /></div>
+            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nilai</label><Input required type="number" value={form.value} onChange={(e) => setForm({ ...form, value: e.target.value })} placeholder={form.type === "percentage" ? "25" : "50000"} /></div>
+            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Min. Pembelian</label><Input type="number" value={form.minPurchase} onChange={(e) => setForm({ ...form, minPurchase: e.target.value })} /></div>
           </div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Batas Pemakaian (kosongkan jika tanpa batas)</label><Input type="number" value={form.usageLimit} onChange={(e) => setForm({ ...form, usageLimit: e.target.value })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Batas Pemakaian (kosongkan jika tanpa batas)</label><Input type="number" value={form.usageLimit} onChange={(e) => setForm({ ...form, usageLimit: e.target.value })} /></div>
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Mulai</label><Input required type="date" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} /></div>
-            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Berakhir</label><Input required type="date" value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} /></div>
+            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Mulai</label><Input required type="date" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} /></div>
+            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Berakhir</label><Input required type="date" value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} /></div>
           </div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Deskripsi</label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} /></div>
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Deskripsi</label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} /></div>
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="rounded" /> Aktifkan promo ini
           </label>
           <div className="flex gap-2 pt-2">

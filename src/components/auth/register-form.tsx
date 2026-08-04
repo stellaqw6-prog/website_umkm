@@ -58,16 +58,16 @@ export function RegisterForm() {
             U
           </div>
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Buat Akun Baru</h1>
-        <p className="text-gray-500 mt-1">Daftar dan mulai berbelanja produk UMKM</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Buat Akun Baru</h1>
+        <p className="text-gray-500 mt-1 dark:text-gray-400">Daftar dan mulai berbelanja produk UMKM</p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 border border-gray-100">
+      <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Nama Lengkap</label>
             <div className="relative">
-              <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <Input
                 placeholder="Nama lengkap Anda"
                 className="pl-11"
@@ -79,9 +79,9 @@ export function RegisterForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Email</label>
             <div className="relative">
-              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <Input
                 type="email"
                 placeholder="email@example.com"
@@ -94,9 +94,9 @@ export function RegisterForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Nomor Telepon</label>
             <div className="relative">
-              <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <Input
                 type="tel"
                 placeholder="08xxxxxxxxxx"
@@ -108,9 +108,9 @@ export function RegisterForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Password</label>
             <div className="relative">
-              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="Minimal 6 karakter"
@@ -123,7 +123,7 @@ export function RegisterForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -132,7 +132,7 @@ export function RegisterForm() {
 
           <label className="flex items-start gap-2 cursor-pointer text-sm">
             <input type="checkbox" className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" required />
-            <span className="text-gray-600">
+            <span className="text-gray-600 dark:text-gray-400">
               Saya setuju dengan{" "}
               <Link href="/syarat-ketentuan" className="text-blue-600 hover:underline">Syarat & Ketentuan</Link>{" "}
               dan{" "}
@@ -156,10 +156,10 @@ export function RegisterForm() {
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
+            <div className="w-full border-t border-gray-200 dark:border-gray-700" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-4 text-gray-500">atau daftar dengan</span>
+            <span className="bg-white px-4 text-gray-500 dark:bg-gray-900 dark:text-gray-400">atau daftar dengan</span>
           </div>
         </div>
 
@@ -173,7 +173,7 @@ export function RegisterForm() {
           Google
         </Button>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 mt-6 dark:text-gray-400">
           Sudah punya akun?{" "}
           <Link href="/login" className="text-blue-600 hover:underline font-semibold">
             Masuk

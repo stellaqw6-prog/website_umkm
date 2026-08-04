@@ -57,17 +57,17 @@ export function LoginForm() {
             U
           </div>
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Selamat Datang Kembali</h1>
-        <p className="text-gray-500 mt-1">Masuk ke akun Anda untuk melanjutkan</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Selamat Datang Kembali</h1>
+        <p className="text-gray-500 mt-1 dark:text-gray-400">Masuk ke akun Anda untuk melanjutkan</p>
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 border border-gray-100">
+      <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Email</label>
             <div className="relative">
-              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <Input
                 type="email"
                 placeholder="email@example.com"
@@ -80,9 +80,9 @@ export function LoginForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Password</label>
             <div className="relative">
-              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
@@ -94,7 +94,7 @@ export function LoginForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -104,7 +104,7 @@ export function LoginForm() {
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-              <span className="text-gray-600">Ingat saya</span>
+              <span className="text-gray-600 dark:text-gray-400">Ingat saya</span>
             </label>
             <Link href="/lupa-password" className="text-blue-600 hover:underline font-medium">
               Lupa password?
@@ -128,10 +128,10 @@ export function LoginForm() {
         {/* Divider */}
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
+            <div className="w-full border-t border-gray-200 dark:border-gray-700" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-4 text-gray-500">atau masuk dengan</span>
+            <span className="bg-white px-4 text-gray-500 dark:bg-gray-900 dark:text-gray-400">atau masuk dengan</span>
           </div>
         </div>
 
@@ -158,7 +158,7 @@ export function LoginForm() {
           Google
         </Button>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 mt-6 dark:text-gray-400">
           Belum punya akun?{" "}
           <Link href="/register" className="text-blue-600 hover:underline font-semibold">
             Daftar sekarang

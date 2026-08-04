@@ -30,7 +30,7 @@ export function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight dark:text-gray-100"
             >
               Misi Kami:{" "}
               <span className="text-gradient">Digitalisasi UMKM</span> Indonesia
@@ -39,7 +39,7 @@ export function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-lg text-gray-500 leading-relaxed"
+              className="text-lg text-gray-500 leading-relaxed dark:text-gray-400"
             >
               UMKM Store hadir sebagai jembatan antara produk UMKM berkualitas dengan pelanggan di seluruh Indonesia. 
               Kami percaya bahwa setiap UMKM memiliki potensi besar untuk berkembang dan bersaing di era digital.
@@ -49,7 +49,7 @@ export function AboutPage() {
       </section>
 
       {/* Stats */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
@@ -65,7 +65,7 @@ export function AboutPage() {
                 viewport={{ once: true }}
               >
                 <div className="text-3xl md:text-4xl font-extrabold text-blue-600">{stat.value}</div>
-                <div className="text-gray-500 text-sm mt-1">{stat.label}</div>
+                <div className="text-gray-500 text-sm mt-1 dark:text-gray-400">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -79,7 +79,7 @@ export function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12"
+            className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12 dark:text-gray-100"
           >
             Nilai-Nilai Kami
           </motion.h2>
@@ -91,13 +91,13 @@ export function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-all"
+                className="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-all dark:bg-gray-900"
               >
                 <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <v.icon className="text-blue-600" size={24} />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{v.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{v.desc}</p>
+                <h3 className="font-semibold text-gray-900 mb-2 dark:text-gray-100">{v.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed dark:text-gray-400">{v.desc}</p>
               </motion.div>
             ))}
           </div>

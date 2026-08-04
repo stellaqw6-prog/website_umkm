@@ -161,7 +161,7 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center text-center px-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Pesanan tidak ditemukan</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Pesanan tidak ditemukan</h2>
           <Link href="/"><Button variant="premium">Kembali ke Beranda</Button></Link>
         </div>
       </div>
@@ -169,34 +169,34 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
   }
 
   return (
-    <section className="py-10 bg-gray-50 min-h-screen">
+    <section className="py-10 bg-gray-50 min-h-screen dark:bg-gray-900">
       <div className="container mx-auto px-4 max-w-2xl">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <CheckCircle2 size={32} className="text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Pesanan Berhasil Dibuat!</h1>
-          <p className="text-gray-500 mt-1">Nomor pesanan: <span className="font-mono font-semibold text-gray-900">{order.orderNumber}</span></p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Pesanan Berhasil Dibuat!</h1>
+          <p className="text-gray-500 mt-1 dark:text-gray-400">Nomor pesanan: <span className="font-mono font-semibold text-gray-900 dark:text-gray-100">{order.orderNumber}</span></p>
         </motion.div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-6">
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-6 dark:bg-gray-900 dark:border-gray-800">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-500">Status Pesanan</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">Status Pesanan</span>
             <Badge variant={statusVariant[order.status] ?? "secondary"}>{statusLabel[order.status] ?? order.status}</Badge>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5"><Package size={15} /> Produk</h3>
+            <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5 dark:text-gray-300"><Package size={15} /> Produk</h3>
             <div className="space-y-3">
               {items.map((item) => (
                 <div key={item.id} className="flex gap-3 text-sm">
-                  <img src={item.productImage ?? ""} alt={item.productName} className="w-12 h-14 object-cover rounded-lg bg-gray-100 flex-shrink-0" />
+                  <img src={item.productImage ?? ""} alt={item.productName} className="w-12 h-14 object-cover rounded-lg bg-gray-100 flex-shrink-0 dark:bg-gray-800" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 line-clamp-1">{item.productName}</p>
-                    {item.variantName && <p className="text-gray-400 text-xs">Varian: {item.variantName}</p>}
-                    <p className="text-gray-500 text-xs">{item.quantity} x {formatCurrency(Number(item.price))}</p>
+                    <p className="font-medium text-gray-900 line-clamp-1 dark:text-gray-100">{item.productName}</p>
+                    {item.variantName && <p className="text-gray-400 text-xs dark:text-gray-500">Varian: {item.variantName}</p>}
+                    <p className="text-gray-500 text-xs dark:text-gray-400">{item.quantity} x {formatCurrency(Number(item.price))}</p>
                   </div>
-                  <span className="font-semibold text-gray-900 whitespace-nowrap">{formatCurrency(Number(item.subtotal))}</span>
+                  <span className="font-semibold text-gray-900 whitespace-nowrap dark:text-gray-100">{formatCurrency(Number(item.subtotal))}</span>
                 </div>
               ))}
             </div>
@@ -205,8 +205,8 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
           <hr />
 
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>{formatCurrency(Number(order.totalAmount))}</span></div>
-            <div className="flex justify-between"><span className="text-gray-500">Ongkir</span><span>{Number(order.shippingCost) === 0 ? "GRATIS" : formatCurrency(Number(order.shippingCost))}</span></div>
+            <div className="flex justify-between"><span className="text-gray-500 dark:text-gray-400">Subtotal</span><span>{formatCurrency(Number(order.totalAmount))}</span></div>
+            <div className="flex justify-between"><span className="text-gray-500 dark:text-gray-400">Ongkir</span><span>{Number(order.shippingCost) === 0 ? "GRATIS" : formatCurrency(Number(order.shippingCost))}</span></div>
             {Number(order.discountAmount) > 0 && <div className="flex justify-between text-green-600"><span>Diskon</span><span>-{formatCurrency(Number(order.discountAmount))}</span></div>}
             <hr />
             <div className="flex justify-between text-base"><span className="font-bold">Total</span><span className="font-bold text-blue-600">{formatCurrency(Number(order.grandTotal))}</span></div>
@@ -215,37 +215,37 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
           <hr />
 
           <div className="space-y-3 text-sm">
-            <div className="flex items-start gap-2"><MapPin size={15} className="text-gray-400 mt-0.5 flex-shrink-0" /><span className="text-gray-600">{order.shippingAddress}</span></div>
-            <div className="flex items-center gap-2"><CreditCard size={15} className="text-gray-400 flex-shrink-0" /><span className="text-gray-600">{order.paymentMethod}</span></div>
+            <div className="flex items-start gap-2"><MapPin size={15} className="text-gray-400 mt-0.5 flex-shrink-0 dark:text-gray-500" /><span className="text-gray-600 dark:text-gray-400">{order.shippingAddress}</span></div>
+            <div className="flex items-center gap-2"><CreditCard size={15} className="text-gray-400 flex-shrink-0 dark:text-gray-500" /><span className="text-gray-600 dark:text-gray-400">{order.paymentMethod}</span></div>
           </div>
 
           {order.trackingNumber && (
             <div className="bg-blue-50 rounded-xl p-3 text-sm">
-              <span className="text-gray-500">No. Resi: </span><span className="font-mono font-semibold text-gray-900">{order.trackingNumber}</span>
+              <span className="text-gray-500 dark:text-gray-400">No. Resi: </span><span className="font-mono font-semibold text-gray-900 dark:text-gray-100">{order.trackingNumber}</span>
             </div>
           )}
         </div>
 
         {/* Instruksi pembayaran, tampil selama status belum "paid" (kecuali COD) */}
         {order.paymentStatus === "unpaid" && paymentMethod && paymentMethod.type !== "cod" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-2xl border border-blue-100 p-6 mt-4">
-            <h3 className="text-sm font-bold text-gray-900 mb-1">Selesaikan Pembayaran</h3>
-            <p className="text-xs text-gray-500 mb-4">
-              Bayar sejumlah <span className="font-semibold text-gray-900">{formatCurrency(Number(order.grandTotal))}</span> via {paymentMethod.name} sebelum pesanan diproses.
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-2xl border border-blue-100 p-6 mt-4 dark:bg-gray-900">
+            <h3 className="text-sm font-bold text-gray-900 mb-1 dark:text-gray-100">Selesaikan Pembayaran</h3>
+            <p className="text-xs text-gray-500 mb-4 dark:text-gray-400">
+              Bayar sejumlah <span className="font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(Number(order.grandTotal))}</span> via {paymentMethod.name} sebelum pesanan diproses.
             </p>
 
             <div className="rounded-xl border border-blue-100 bg-blue-50/40 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {paymentMethod.type === "bank" ? "Nomor Rekening" : "Nomor HP"}
                   </p>
-                  <p className="font-mono font-bold text-gray-900 text-lg">{paymentMethod.accountNumber}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">a.n. {paymentMethod.accountName}</p>
+                  <p className="font-mono font-bold text-gray-900 text-lg dark:text-gray-100">{paymentMethod.accountNumber}</p>
+                  <p className="text-xs text-gray-500 mt-0.5 dark:text-gray-400">a.n. {paymentMethod.accountName}</p>
                 </div>
                 <button
                   onClick={() => handleCopy(paymentMethod.accountNumber)}
-                  className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-3 py-1.5 rounded-lg border border-blue-200 flex-shrink-0"
+                  className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-3 py-1.5 rounded-lg border border-blue-200 flex-shrink-0 dark:bg-gray-900"
                 >
                   <Copy size={13} /> Salin
                 </button>
@@ -253,27 +253,27 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
 
               {paymentMethod.qrImage && (
                 <div className="mt-3 flex items-center gap-3">
-                  <img src={paymentMethod.qrImage} alt={`QR ${paymentMethod.name}`} className="w-24 h-24 rounded-lg border border-gray-200 object-contain bg-white" />
-                  <p className="text-xs text-gray-500 flex items-center gap-1"><QrCode size={13} /> Atau scan QR code di samping</p>
+                  <img src={paymentMethod.qrImage} alt={`QR ${paymentMethod.name}`} className="w-24 h-24 rounded-lg border border-gray-200 object-contain bg-white dark:bg-gray-900 dark:border-gray-700" />
+                  <p className="text-xs text-gray-500 flex items-center gap-1 dark:text-gray-400"><QrCode size={13} /> Atau scan QR code di samping</p>
                 </div>
               )}
 
               {paymentMethod.instructions && (
-                <p className="text-xs text-gray-500 mt-3 leading-relaxed">{paymentMethod.instructions}</p>
+                <p className="text-xs text-gray-500 mt-3 leading-relaxed dark:text-gray-400">{paymentMethod.instructions}</p>
               )}
             </div>
 
             {/* Upload bukti transfer */}
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
               {order.paymentProofUrl ? (
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Badge variant="warning" className="flex items-center gap-1"><Clock size={11} /> Menunggu Verifikasi Admin</Badge>
                   </div>
                   <div className="flex items-center gap-3">
-                    <img src={order.paymentProofUrl} alt="Bukti transfer" className="w-20 h-20 object-cover rounded-xl border border-gray-200" />
+                    <img src={order.paymentProofUrl} alt="Bukti transfer" className="w-20 h-20 object-cover rounded-xl border border-gray-200 dark:border-gray-700" />
                     <div className="flex-1">
-                      <p className="text-xs text-gray-500 mb-2">Bukti transfer sudah diunggah. Admin akan segera memverifikasi pembayaranmu.</p>
+                      <p className="text-xs text-gray-500 mb-2 dark:text-gray-400">Bukti transfer sudah diunggah. Admin akan segera memverifikasi pembayaranmu.</p>
                       <label className="text-xs font-medium text-blue-600 hover:underline cursor-pointer">
                         Ganti Bukti Transfer
                         <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFileSelect} disabled={uploading} />
@@ -283,24 +283,24 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
                 </div>
               ) : (
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5"><Upload size={14} /> Upload Bukti Transfer</h4>
-                  <p className="text-xs text-gray-500 mb-3">Setelah transfer, upload screenshot/foto bukti pembayaran di sini supaya pesananmu segera diproses.</p>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5 dark:text-gray-100"><Upload size={14} /> Upload Bukti Transfer</h4>
+                  <p className="text-xs text-gray-500 mb-3 dark:text-gray-400">Setelah transfer, upload screenshot/foto bukti pembayaran di sini supaya pesananmu segera diproses.</p>
                   <label
                     className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl py-8 cursor-pointer transition-colors ${
-                      uploading ? "border-gray-200 bg-gray-50" : "border-blue-200 hover:border-blue-400 hover:bg-blue-50/50"
+                      uploading ? "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900" : "border-blue-200 hover:border-blue-400 hover:bg-blue-50/50 dark:border-blue-900 dark:hover:bg-blue-950/20"
                     }`}
                   >
                     {uploading ? (
                       <>
                         {previewUrl && <img src={previewUrl} alt="preview" className="w-16 h-16 object-cover rounded-lg mb-1" />}
                         <Loader2 className="animate-spin text-blue-600" size={22} />
-                        <span className="text-xs text-gray-500">Mengunggah...</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">Mengunggah...</span>
                       </>
                     ) : (
                       <>
                         <ImageIcon size={24} className="text-blue-400" />
                         <span className="text-xs font-medium text-blue-600">Klik untuk pilih foto bukti transfer</span>
-                        <span className="text-[11px] text-gray-400">JPG, PNG, atau WEBP — maks 5MB</span>
+                        <span className="text-[11px] text-gray-400 dark:text-gray-500">JPG, PNG, atau WEBP — maks 5MB</span>
                       </>
                     )}
                     <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFileSelect} disabled={uploading} />

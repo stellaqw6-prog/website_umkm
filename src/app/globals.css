@@ -3,11 +3,21 @@
 
 @import "tailwindcss";
 
+/* Tailwind v4 defaultnya pakai prefers-color-scheme (OS) untuk varian dark:.
+   Baris ini yang bikin varian dark: benar-benar ikut class .dark di <html>
+   (yang di-set oleh next-themes saat toggle diklik) — tanpa ini, toggle-nya
+   nyala tapi tidak ada satupun style yang berubah. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ==================== BASE STYLES ==================== */
 @layer base {
   * {
     scrollbar-width: thin;
     scrollbar-color: #d1d5db transparent;
+  }
+
+  .dark * {
+    scrollbar-color: #475569 transparent;
   }
 
   *::-webkit-scrollbar {
@@ -21,6 +31,10 @@
   *::-webkit-scrollbar-thumb {
     background-color: #d1d5db;
     border-radius: 20px;
+  }
+
+  .dark *::-webkit-scrollbar-thumb {
+    background-color: #475569;
   }
 
   html {

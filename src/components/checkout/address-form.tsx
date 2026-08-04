@@ -72,18 +72,18 @@ export function AddressForm({
     <div className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1"><User size={14} /> Nama Penerima</label>
+          <label className="text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1 dark:text-gray-300"><User size={14} /> Nama Penerima</label>
           <Input required placeholder="Nama lengkap penerima" value={recipientName} onChange={(e) => setRecipientName(e.target.value)} />
         </div>
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1"><Phone size={14} /> Nomor HP</label>
+          <label className="text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1 dark:text-gray-300"><Phone size={14} /> Nomor HP</label>
           <Input required placeholder="08xxxxxxxxxx" value={phone} onChange={(e) => setPhone(e.target.value)} />
         </div>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-1.5 block">Provinsi</label>
+          <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Provinsi</label>
           <div className="relative">
             <select
               required
@@ -102,7 +102,7 @@ export function AddressForm({
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-1.5 block">Kabupaten/Kota</label>
+          <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Kabupaten/Kota</label>
           <div className="relative">
             <select
               required
@@ -123,7 +123,7 @@ export function AddressForm({
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-1.5 block">Kecamatan</label>
+          <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Kecamatan</label>
           <div className="relative">
             <select
               required
@@ -144,7 +144,7 @@ export function AddressForm({
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-1.5 block">Kelurahan/Desa</label>
+          <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Kelurahan/Desa</label>
           <div className="relative">
             <select
               required
@@ -166,12 +166,12 @@ export function AddressForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-gray-700 mb-1.5 block">Kode Pos</label>
+        <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Kode Pos</label>
         <Input required placeholder="Contoh: 40123" value={postalCode} onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, "").slice(0, 5))} className="max-w-[160px]" />
       </div>
 
       <div>
-        <label className="text-sm font-medium text-gray-700 mb-1.5 block">Alamat Lengkap (Jalan, RT/RW, Nomor Rumah, Patokan)</label>
+        <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Alamat Lengkap (Jalan, RT/RW, Nomor Rumah, Patokan)</label>
         <Textarea
           required
           rows={3}

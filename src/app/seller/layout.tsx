@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { SellerSidebar } from "@/components/seller/seller-sidebar";
 import { AdminHeader } from "@/components/admin/admin-header";
+import { DashboardSidebarProvider } from "@/contexts/dashboard-sidebar-context";
 
 export const metadata = {
   title: {
@@ -12,12 +13,14 @@ export const metadata = {
 
 export default function SellerLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <SellerSidebar />
-      <div className="lg:pl-64">
-        <AdminHeader />
-        <main className="p-4 md:p-6 lg:p-8">{children}</main>
+    <DashboardSidebarProvider>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <SellerSidebar />
+        <div className="lg:pl-64">
+          <AdminHeader />
+          <main className="p-4 md:p-6 lg:p-8">{children}</main>
+        </div>
       </div>
-    </div>
+    </DashboardSidebarProvider>
   );
 }

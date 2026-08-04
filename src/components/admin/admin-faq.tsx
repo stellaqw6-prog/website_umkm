@@ -70,8 +70,8 @@ export function AdminFaq() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">FAQ</h1>
-          <p className="text-gray-500 text-sm mt-1">Kelola pertanyaan yang sering diajukan</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">FAQ</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Kelola pertanyaan yang sering diajukan</p>
         </div>
         <Button variant="premium" onClick={openAdd}><Plus size={18} className="mr-2" /> Tambah FAQ</Button>
       </motion.div>
@@ -79,27 +79,27 @@ export function AdminFaq() {
       <Card>
         <CardHeader className="pb-0">
           <div className="relative max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
             <Input placeholder="Cari pertanyaan..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </CardHeader>
         <CardContent className="pt-4 space-y-3">
-          {loading ? <div className="flex justify-center py-16 text-gray-400"><Loader2 className="animate-spin" size={28} /></div>
-          : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm">Belum ada FAQ.</p>
+          {loading ? <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={28} /></div>
+          : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm dark:text-gray-500">Belum ada FAQ.</p>
           : filtered.map((faq, i) => (
-            <motion.div key={faq.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }} className="border border-gray-100 rounded-xl overflow-hidden">
+            <motion.div key={faq.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }} className="border border-gray-100 rounded-xl overflow-hidden dark:border-gray-800">
               <button onClick={() => setOpenId(openId === faq.id ? null : faq.id)} className="w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50/50 transition-colors">
                 {faq.category && <Badge variant="secondary" className="text-[10px] flex-shrink-0">{faq.category}</Badge>}
-                <span className="flex-1 text-sm font-medium text-gray-900">{faq.question}</span>
+                <span className="flex-1 text-sm font-medium text-gray-900 dark:text-gray-100">{faq.question}</span>
                 {!faq.isActive && <Badge variant="secondary" className="text-[10px]">Nonaktif</Badge>}
                 <ChevronDown size={16} className={cn("text-gray-400 transition-transform flex-shrink-0", openId === faq.id && "rotate-180")} />
               </button>
               {openId === faq.id && (
                 <div className="px-4 pb-4 pl-4">
-                  <p className="text-sm text-gray-500 leading-relaxed mb-3">{faq.answer}</p>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-3 dark:text-gray-400">{faq.answer}</p>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => openEdit(faq)} className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all"><Edit size={13} /> Edit</button>
-                    <button onClick={() => handleDelete(faq)} className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all"><Trash2 size={13} /> Hapus</button>
+                    <button onClick={() => openEdit(faq)} className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400"><Edit size={13} /> Edit</button>
+                    <button onClick={() => handleDelete(faq)} className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400"><Trash2 size={13} /> Hapus</button>
                   </div>
                 </div>
               )}
@@ -110,10 +110,10 @@ export function AdminFaq() {
 
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Edit FAQ" : "Tambah FAQ"}>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Pertanyaan</label><Input required value={form.question} onChange={(e) => setForm({ ...form, question: e.target.value })} /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Jawaban</label><Textarea required rows={4} value={form.answer} onChange={(e) => setForm({ ...form, answer: e.target.value })} /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Kategori</label><Input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="Pemesanan, Pengiriman, dll" /></div>
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Pertanyaan</label><Input required value={form.question} onChange={(e) => setForm({ ...form, question: e.target.value })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Jawaban</label><Textarea required rows={4} value={form.answer} onChange={(e) => setForm({ ...form, answer: e.target.value })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Kategori</label><Input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="Pemesanan, Pengiriman, dll" /></div>
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="rounded" /> Tampilkan di website
           </label>
           <div className="flex gap-2 pt-2">

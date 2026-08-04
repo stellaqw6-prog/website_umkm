@@ -75,8 +75,8 @@ export function ProductsPage() {
         <div className="container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Katalog</span>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mt-2">Semua Produk UMKM</h1>
-            <p className="text-gray-500 mt-3 max-w-lg mx-auto">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mt-2 dark:text-gray-100">Semua Produk UMKM</h1>
+            <p className="text-gray-500 mt-3 max-w-lg mx-auto dark:text-gray-400">
               Temukan produk berkualitas dari UMKM terbaik di seluruh Indonesia
             </p>
           </motion.div>
@@ -84,12 +84,12 @@ export function ProductsPage() {
       </section>
 
       {/* Filters & Products */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           {/* Search & Sort Bar */}
           <div className="flex flex-col md:flex-row gap-4 mb-8">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
               <Input
                 placeholder="Cari produk..."
                 className="pl-11"
@@ -111,13 +111,13 @@ export function ProductsPage() {
                   {sortBy}
                   <ChevronDown size={16} />
                 </Button>
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl border border-gray-100 shadow-xl py-2 z-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl border border-gray-100 shadow-xl py-2 z-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all dark:bg-gray-900 dark:border-gray-800">
                   {sortOptions.map((option) => (
                     <button
                       key={option}
                       onClick={() => setSortBy(option)}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
-                        sortBy === option ? "text-blue-600 font-semibold" : "text-gray-700"
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                        sortBy === option ? "text-blue-600 font-semibold dark:text-blue-400" : "text-gray-700 dark:text-gray-300"
                       }`}
                     >
                       {option}
@@ -137,7 +137,7 @@ export function ProductsPage() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   selectedCategory === cat.slug
                     ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
                 {cat.name}
@@ -150,24 +150,24 @@ export function ProductsPage() {
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
-              className="bg-gray-50 rounded-2xl p-6 mb-8 overflow-hidden"
+              className="bg-gray-50 rounded-2xl p-6 mb-8 overflow-hidden dark:bg-gray-900"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900">Filter Produk</h3>
-                <button onClick={() => setShowFilters(false)} className="text-gray-400 hover:text-gray-600">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Filter Produk</h3>
+                <button onClick={() => setShowFilters(false)} className="text-gray-400 hover:text-gray-600 dark:text-gray-500">
                   <X size={18} />
                 </button>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block">Rentang Harga (Rp)</label>
+                  <label className="text-sm font-semibold text-gray-700 mb-2 block dark:text-gray-300">Rentang Harga (Rp)</label>
                   <div className="flex gap-2">
                     <Input placeholder="Min" type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
                     <Input placeholder="Max" type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block">Rating Minimum</label>
+                  <label className="text-sm font-semibold text-gray-700 mb-2 block dark:text-gray-300">Rating Minimum</label>
                   <div className="flex gap-1">
                     {[4, 3, 2, 1].map((r) => (
                       <button
@@ -176,7 +176,7 @@ export function ProductsPage() {
                         className={`px-3 py-1.5 rounded-lg border text-sm transition-colors ${
                           minRating === r
                             ? "bg-blue-600 border-blue-600 text-white"
-                            : "bg-white border-gray-200 hover:border-blue-500"
+                            : "bg-white border-gray-200 hover:border-blue-500 dark:bg-gray-900 dark:border-gray-700"
                         }`}
                       >
                         ⭐ {r}+
@@ -196,7 +196,7 @@ export function ProductsPage() {
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {skeletons.map((_, i) => (
-                <div key={i} className="bg-gray-50 rounded-2xl overflow-hidden">
+                <div key={i} className="bg-gray-50 rounded-2xl overflow-hidden dark:bg-gray-900">
                   <div className="aspect-[4/5] skeleton" />
                   <div className="p-4 space-y-2">
                     <div className="h-4 w-3/4 skeleton" />
@@ -209,8 +209,8 @@ export function ProductsPage() {
           ) : products.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <PackageX size={48} className="text-gray-300 mb-4" />
-              <h3 className="font-semibold text-gray-900 mb-1">Produk tidak ditemukan</h3>
-              <p className="text-gray-500 text-sm">Coba ubah kata kunci pencarian atau filter Anda</p>
+              <h3 className="font-semibold text-gray-900 mb-1 dark:text-gray-100">Produk tidak ditemukan</h3>
+              <p className="text-gray-500 text-sm dark:text-gray-400">Coba ubah kata kunci pencarian atau filter Anda</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">

@@ -61,16 +61,16 @@ export function SellerSettings() {
   };
 
   if (loading) {
-    return <div className="flex justify-center py-24 text-gray-400"><Loader2 className="animate-spin" size={32} /></div>;
+    return <div className="flex justify-center py-24 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={32} /></div>;
   }
-  if (!store) return <p className="text-center py-24 text-gray-400 text-sm">Profil toko tidak ditemukan.</p>;
+  if (!store) return <p className="text-center py-24 text-gray-400 text-sm dark:text-gray-500">Profil toko tidak ditemukan.</p>;
 
   return (
     <div className="space-y-6 max-w-2xl">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Profil Toko</h1>
-          <p className="text-gray-500 text-sm mt-1">Info toko ini akan tampil ke pelanggan</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Profil Toko</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Info toko ini akan tampil ke pelanggan</p>
         </div>
         <Button variant="premium" onClick={handleSave} disabled={saving}>
           {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={18} className="mr-2" />} Simpan
@@ -84,29 +84,29 @@ export function SellerSettings() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nama Toko</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Nama Toko</label>
             <Input value={store.name} onChange={(e) => setStore({ ...store, name: e.target.value })} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi Toko</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Deskripsi Toko</label>
             <Textarea value={store.description ?? ""} onChange={(e) => setStore({ ...store, description: e.target.value })} rows={3} />
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nomor HP/WhatsApp</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Nomor HP/WhatsApp</label>
               <Input value={store.phone ?? ""} onChange={(e) => setStore({ ...store, phone: e.target.value })} />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Alamat</label>
             <Textarea value={store.address ?? ""} onChange={(e) => setStore({ ...store, address: e.target.value })} rows={2} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">URL Logo Toko</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">URL Logo Toko</label>
             <Input value={store.logo ?? ""} onChange={(e) => setStore({ ...store, logo: e.target.value })} placeholder="https://..." />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">URL Banner Toko</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">URL Banner Toko</label>
             <Input value={store.banner ?? ""} onChange={(e) => setStore({ ...store, banner: e.target.value })} placeholder="https://..." />
           </div>
         </CardContent>
@@ -120,7 +120,7 @@ export function SellerSettings() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input
               type="checkbox"
               checked={store.shippingEnabled}
@@ -130,7 +130,7 @@ export function SellerSettings() {
             Aktifkan biaya ongkir untuk toko ini
           </label>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Biaya Ongkir Toko (Rp)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Biaya Ongkir Toko (Rp)</label>
             <Input
               type="number"
               value={store.shippingCost ?? ""}
@@ -140,7 +140,7 @@ export function SellerSettings() {
               disabled={!store.shippingEnabled}
             />
             {!store.shippingEnabled && (
-              <p className="text-xs text-gray-400 mt-1">Nonaktif — semua produk toko ini otomatis gratis ongkir (kecuali diatur khusus per produk).</p>
+              <p className="text-xs text-gray-400 mt-1 dark:text-gray-500">Nonaktif — semua produk toko ini otomatis gratis ongkir (kecuali diatur khusus per produk).</p>
             )}
           </div>
         </CardContent>

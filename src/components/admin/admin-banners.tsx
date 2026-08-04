@@ -65,30 +65,30 @@ export function AdminBanners() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Banner</h1>
-          <p className="text-gray-500 text-sm mt-1">Kelola banner promosi di halaman website</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Banner</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Kelola banner promosi di halaman website</p>
         </div>
         <Button variant="premium" onClick={openAdd}><Plus size={18} className="mr-2" /> Tambah Banner</Button>
       </motion.div>
 
       <Card>
-        <CardHeader><p className="text-sm text-gray-500">Banner dengan urutan (sortOrder) lebih kecil tampil lebih dulu</p></CardHeader>
+        <CardHeader><p className="text-sm text-gray-500 dark:text-gray-400">Banner dengan urutan (sortOrder) lebih kecil tampil lebih dulu</p></CardHeader>
         <CardContent className="space-y-3">
-          {loading ? <div className="flex justify-center py-16 text-gray-400"><Loader2 className="animate-spin" size={28} /></div>
-          : items.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm">Belum ada banner.</p>
+          {loading ? <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={28} /></div>
+          : items.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm dark:text-gray-500">Belum ada banner.</p>
           : items.map((banner, i) => (
-            <motion.div key={banner.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="flex items-center gap-4 border border-gray-100 rounded-xl p-3 hover:shadow-md transition-all">
-              <div className="w-28 h-16 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center">
+            <motion.div key={banner.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="flex items-center gap-4 border border-gray-100 rounded-xl p-3 hover:shadow-md transition-all dark:border-gray-800">
+              <div className="w-28 h-16 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center dark:bg-gray-800">
                 {banner.image ? <img src={banner.image} alt={banner.title} className="w-full h-full object-cover" /> : <ImageIcon size={22} className="text-gray-300" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 text-sm truncate">{banner.title}</p>
-                {banner.link && <span className="text-xs text-gray-400 flex items-center gap-1 truncate"><ExternalLink size={11} /> {banner.link}</span>}
+                <p className="font-semibold text-gray-900 text-sm truncate dark:text-gray-100">{banner.title}</p>
+                {banner.link && <span className="text-xs text-gray-400 flex items-center gap-1 truncate dark:text-gray-500"><ExternalLink size={11} /> {banner.link}</span>}
               </div>
               <Badge variant={banner.isActive ? "success" : "secondary"} className="text-[10px] flex-shrink-0">{banner.isActive ? "Tayang" : "Nonaktif"}</Badge>
               <div className="flex items-center gap-1 flex-shrink-0">
-                <button onClick={() => openEdit(banner)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-all"><Edit size={15} /></button>
-                <button onClick={() => handleDelete(banner)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 transition-all"><Trash2 size={15} /></button>
+                <button onClick={() => openEdit(banner)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-all dark:hover:bg-gray-800 dark:text-gray-500"><Edit size={15} /></button>
+                <button onClick={() => handleDelete(banner)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 transition-all dark:hover:bg-gray-800 dark:text-gray-500"><Trash2 size={15} /></button>
               </div>
             </motion.div>
           ))}
@@ -97,12 +97,12 @@ export function AdminBanners() {
 
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Edit Banner" : "Tambah Banner"}>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Judul</label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Subjudul</label><Input value={form.subtitle} onChange={(e) => setForm({ ...form, subtitle: e.target.value })} /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">URL Gambar</label><Input required value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://..." /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Link Tujuan</label><Input value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })} placeholder="/promo" /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Urutan Tampil</label><Input type="number" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: Number(e.target.value) })} /></div>
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Judul</label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Subjudul</label><Input value={form.subtitle} onChange={(e) => setForm({ ...form, subtitle: e.target.value })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">URL Gambar</label><Input required value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://..." /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Link Tujuan</label><Input value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })} placeholder="/promo" /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Urutan Tampil</label><Input type="number" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: Number(e.target.value) })} /></div>
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="rounded" /> Tayangkan banner ini
           </label>
           <div className="flex gap-2 pt-2">

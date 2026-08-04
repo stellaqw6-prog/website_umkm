@@ -109,15 +109,15 @@ export function Footer() {
   ].filter((s) => s.href);
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-100">
+    <footer className="bg-gray-50 border-t border-gray-100 dark:bg-gray-950 dark:border-gray-800">
       {/* Newsletter */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-2xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2 dark:text-gray-100">
               Dapatkan Info Terbaru
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-500 mb-6 dark:text-gray-400">
               Berlangganan newsletter kami untuk mendapatkan promo eksklusif dan info produk terbaru.
             </p>
             <form onSubmit={handleSubscribe} className="flex gap-2 max-w-md mx-auto">
@@ -147,15 +147,15 @@ export function Footer() {
                 {firstWord.charAt(0)}
               </div>
               <span className="text-xl font-bold">
-                <span className="text-gray-900">{firstWord}</span>
+                <span className="text-gray-900 dark:text-gray-100">{firstWord}</span>
                 {restWord && <span className="text-blue-600">{restWord}</span>}
               </span>
             </Link>
-            <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-sm">
+            <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-sm dark:text-gray-400">
               {settings?.siteDescription ?? "Platform UMKM terpercaya yang menyediakan produk-produk berkualitas dari pengusaha lokal Indonesia."}
             </p>
             {(settings?.phone || settings?.email || settings?.address) && (
-              <div className="space-y-1.5 mb-4 text-sm text-gray-500">
+              <div className="space-y-1.5 mb-4 text-sm text-gray-500 dark:text-gray-400">
                 {settings?.phone && <p className="flex items-center gap-2"><Phone size={13} /> {settings.phone}</p>}
                 {settings?.email && <p className="flex items-center gap-2"><Mail size={13} /> {settings.email}</p>}
                 {settings?.address && <p className="flex items-center gap-2"><MapPin size={13} /> {settings.address}</p>}
@@ -169,7 +169,7 @@ export function Footer() {
                     href={social.href!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-2 rounded-xl text-gray-400 transition-all ${social.color}`}
+                    className={`p-2 rounded-xl text-gray-400 transition-all dark:bg-gray-900 dark:text-gray-500 ${social.color}`}
                   >
                     <social.icon size={18} />
                   </a>
@@ -181,13 +181,13 @@ export function Footer() {
           {/* Links */}
           {Object.entries(footerLinks).map(([key, links]) => (
             <div key={key}>
-              <h4 className="font-semibold text-gray-900 mb-4 capitalize">{key}</h4>
+              <h4 className="font-semibold text-gray-900 mb-4 capitalize dark:text-gray-100">{key}</h4>
               <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-1 group"
+                      className="text-sm text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-1 group dark:text-gray-400 dark:hover:text-blue-400"
                     >
                       {link.label}
                       <ArrowUpRight
@@ -204,19 +204,19 @@ export function Footer() {
       </div>
 
       {/* Bottom */}
-      <div className="border-t border-gray-200">
+      <div className="border-t border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-400 flex items-center gap-1">
+          <p className="text-sm text-gray-400 flex items-center gap-1 dark:text-gray-500">
             © {new Date().getFullYear()} {siteName}. Made with <Heart size={14} className="text-red-500 fill-red-500" /> in Indonesia.
           </p>
-          <div className="flex items-center gap-4 text-sm text-gray-400">
-            <Link href="/kebijakan-privasi" className="hover:text-blue-600 transition-colors">
+          <div className="flex items-center gap-4 text-sm text-gray-400 dark:text-gray-500">
+            <Link href="/kebijakan-privasi" className="hover:text-blue-600 transition-colors dark:hover:text-blue-400">
               Privasi
             </Link>
-            <Link href="/syarat-ketentuan" className="hover:text-blue-600 transition-colors">
+            <Link href="/syarat-ketentuan" className="hover:text-blue-600 transition-colors dark:hover:text-blue-400">
               Ketentuan
             </Link>
-            <Link href="/sitemap.xml" className="hover:text-blue-600 transition-colors">
+            <Link href="/sitemap.xml" className="hover:text-blue-600 transition-colors dark:hover:text-blue-400">
               Sitemap
             </Link>
           </div>

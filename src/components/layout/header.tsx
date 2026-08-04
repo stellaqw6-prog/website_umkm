@@ -96,8 +96,8 @@ export function Header() {
         className={cn(
           "sticky top-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm"
-            : "bg-white border-b border-transparent"
+            ? "bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm dark:bg-gray-950/80 dark:border-gray-800"
+            : "bg-white border-b border-transparent dark:bg-gray-950"
         )}
       >
         <div className="container mx-auto flex items-center justify-between px-4 h-16 md:h-20">
@@ -110,7 +110,7 @@ export function Header() {
               {siteName.charAt(0)}
             </div>
             <span className="hidden sm:block">
-              <span className="text-gray-900">{siteName.split(" ")[0]}</span>
+              <span className="text-gray-900 dark:text-gray-100">{siteName.split(" ")[0]}</span>
               <span className="text-blue-600">{siteName.split(" ").slice(1).join(" ")}</span>
             </span>
           </Link>
@@ -124,7 +124,7 @@ export function Header() {
                     <Link
                       key={child.href}
                       href={child.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors dark:text-gray-300 dark:hover:bg-gray-800"
                     >
                       {child.label}
                     </Link>
@@ -134,7 +134,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 rounded-lg hover:bg-gray-50 transition-all"
+                  className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 rounded-lg hover:bg-gray-50 transition-all dark:text-gray-300 dark:hover:bg-gray-800"
                 >
                   {link.label}
                 </Link>
@@ -147,7 +147,7 @@ export function Header() {
             {/* Search */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all"
+              className="p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all dark:text-gray-400 dark:hover:bg-gray-800"
               aria-label="Search"
             >
               <Search size={20} />
@@ -156,7 +156,7 @@ export function Header() {
             {/* Theme Toggle */}
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all"
+              className="p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all dark:text-gray-400 dark:hover:bg-gray-800"
               aria-label="Toggle theme"
             >
               {mounted ? (theme === "dark" ? <Sun size={20} /> : <Moon size={20} />) : <Moon size={20} className="opacity-0" />}
@@ -165,7 +165,7 @@ export function Header() {
             {/* Wishlist */}
             <Link
               href="/wishlist"
-              className="relative p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all"
+              className="relative p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <Heart size={20} />
               {wishlistCount > 0 && (
@@ -178,7 +178,7 @@ export function Header() {
             {/* Cart */}
             <Link
               href="/cart"
-              className="relative p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all"
+              className="relative p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <ShoppingCart size={20} />
               {cartCount > 0 && (
@@ -195,11 +195,11 @@ export function Header() {
                 onMouseEnter={() => setUserMenuOpen(true)}
                 onMouseLeave={() => setUserMenuOpen(false)}
               >
-                <button className="flex items-center gap-2 p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all">
+                <button className="flex items-center gap-2 p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all dark:text-gray-400 dark:hover:bg-gray-800">
                   <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold">
                     {user.name.charAt(0)}
                   </div>
-                  <span className="text-sm font-medium max-w-[100px] truncate">{user.name}</span>
+                  <span className="text-sm font-medium max-w-[100px] truncate dark:text-gray-200">{user.name}</span>
                 </button>
                 <AnimatePresence>
                   {userMenuOpen && (
@@ -207,12 +207,12 @@ export function Header() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
-                      className="absolute top-full right-0 mt-1 w-48 bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 py-2 z-50"
+                      className="absolute top-full right-0 mt-1 w-48 bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 py-2 z-50 dark:bg-gray-900 dark:border-gray-800 dark:shadow-black/40"
                     >
                       {(user.role === "admin" || user.role === "superadmin") && (
                         <Link
                           href="/admin/dashboard"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors dark:text-gray-300 dark:hover:bg-gray-800"
                         >
                           <LayoutDashboard size={15} /> {user.role === "superadmin" ? "Dashboard Developer" : "Dashboard Admin"}
                         </Link>
@@ -220,7 +220,7 @@ export function Header() {
                       {user.role === "seller" && (
                         <Link
                           href="/seller/dashboard"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors dark:text-gray-300 dark:hover:bg-gray-800"
                         >
                           <LayoutDashboard size={15} /> Dashboard Toko
                         </Link>
@@ -232,20 +232,20 @@ export function Header() {
                             setUserMenuOpen(false);
                             openSellerUpgrade();
                           }}
-                          className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors text-left"
+                          className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors text-left dark:text-gray-300 dark:hover:bg-gray-800"
                         >
                           <Store size={15} /> Upgrade Role Premium
                         </button>
                       )}
                       <Link
                         href="/pesanan"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors dark:text-gray-300 dark:hover:bg-gray-800"
                       >
                         <Package size={15} /> Pesanan Saya
                       </Link>
                       <button
                         onClick={logout}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors dark:hover:bg-red-950/40"
                       >
                         <LogOut size={15} /> Keluar
                       </button>
@@ -256,7 +256,7 @@ export function Header() {
             ) : (
               <Link
                 href="/login"
-                className="hidden sm:flex items-center gap-2 p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all"
+                className="hidden sm:flex items-center gap-2 p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all dark:text-gray-400 dark:hover:bg-gray-800"
               >
                 <User size={20} />
                 <span className="text-sm font-medium">Masuk</span>
@@ -266,7 +266,7 @@ export function Header() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all"
+              className="lg:hidden p-2 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all dark:text-gray-400 dark:hover:bg-gray-800"
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -281,7 +281,7 @@ export function Header() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="border-t border-gray-100 bg-white overflow-hidden"
+              className="border-t border-gray-100 bg-white overflow-hidden dark:bg-gray-950 dark:border-gray-800"
             >
               <div className="container mx-auto px-4 py-3">
                 <div className="relative">
@@ -292,7 +292,7 @@ export function Header() {
                   <input
                     type="text"
                     placeholder="Cari produk, kategori, atau artikel..."
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none text-sm transition-all"
+                    className="w-full pl-11 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none text-sm transition-all dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     autoFocus
                   />
                 </div>
@@ -308,7 +308,7 @@ export function Header() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="lg:hidden border-t border-gray-100 bg-white"
+              className="lg:hidden border-t border-gray-100 bg-white dark:bg-gray-950 dark:border-gray-800"
             >
               <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
                 {navLinks.map((link) => (
@@ -316,19 +316,19 @@ export function Header() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="px-4 py-3 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-xl transition-all"
+                    className="px-4 py-3 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-xl transition-all dark:text-gray-300 dark:hover:bg-gray-800"
                   >
                     {link.label}
                   </Link>
                 ))}
-                <hr className="my-2" />
+                <hr className="my-2 dark:border-gray-800" />
                 {user ? (
                   <>
                     {(user.role === "admin" || user.role === "superadmin") && (
                       <Link
                         href="/admin/dashboard"
                         onClick={() => setMobileOpen(false)}
-                        className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
+                        className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all dark:text-gray-300 dark:hover:bg-gray-800"
                       >
                         {user.role === "superadmin" ? "Dashboard Developer" : "Dashboard Admin"}
                       </Link>
@@ -337,7 +337,7 @@ export function Header() {
                       <Link
                         href="/seller/dashboard"
                         onClick={() => setMobileOpen(false)}
-                        className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
+                        className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all dark:text-gray-300 dark:hover:bg-gray-800"
                       >
                         Dashboard Toko
                       </Link>
@@ -349,7 +349,7 @@ export function Header() {
                           setMobileOpen(false);
                           openSellerUpgrade();
                         }}
-                        className="text-left px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
+                        className="text-left px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all dark:text-gray-300 dark:hover:bg-gray-800"
                       >
                         Upgrade Role Premium
                       </button>
@@ -357,7 +357,7 @@ export function Header() {
                     <Link
                       href="/pesanan"
                       onClick={() => setMobileOpen(false)}
-                      className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all"
+                      className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all dark:text-gray-300 dark:hover:bg-gray-800"
                     >
                       Pesanan Saya
                     </Link>
@@ -366,7 +366,7 @@ export function Header() {
                         setMobileOpen(false);
                         logout();
                       }}
-                      className="text-left px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                      className="text-left px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition-all dark:hover:bg-red-950/40"
                     >
                       Keluar ({user.name})
                     </button>
@@ -375,7 +375,7 @@ export function Header() {
                   <Link
                     href="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                    className="px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-xl transition-all dark:hover:bg-blue-950/40"
                   >
                     Masuk / Daftar
                   </Link>
@@ -404,7 +404,7 @@ function DropdownMenu({
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 rounded-lg hover:bg-gray-50 transition-all">
+      <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 rounded-lg hover:bg-gray-50 transition-all dark:text-gray-300 dark:hover:bg-gray-800">
         {label}
         <ChevronDown size={14} className={open ? "rotate-180 transition-transform" : "transition-transform"} />
       </button>
@@ -414,7 +414,7 @@ function DropdownMenu({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            className="absolute top-full left-0 mt-2 w-52 bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 py-2 z-50"
+            className="absolute top-full left-0 mt-2 w-52 bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 py-2 z-50 dark:bg-gray-900 dark:border-gray-800 dark:shadow-black/40"
           >
             {children}
           </motion.div>

@@ -41,9 +41,9 @@ export function ProductCard({ product, index = 0 }: { product: ProductCardData; 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
-      className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300"
+      className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 dark:bg-gray-900 dark:border-gray-800 dark:hover:shadow-black/40"
     >
-      <Link href={`/produk/${product.slug}`} className="block relative aspect-[4/5] overflow-hidden bg-gray-100">
+      <Link href={`/produk/${product.slug}`} className="block relative aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-gray-800">
         <img
           src={product.image}
           alt={product.name}
@@ -61,7 +61,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductCardData; 
           </Badge>
         )}
         {product.stock <= 0 && (
-          <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+          <div className="absolute inset-0 bg-white/70 flex items-center justify-center dark:bg-gray-950/70">
             <Badge variant="secondary" className="text-xs">Stok Habis</Badge>
           </div>
         )}
@@ -70,20 +70,20 @@ export function ProductCard({ product, index = 0 }: { product: ProductCardData; 
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(product.id); }}
               className={`p-2 rounded-xl ${
-                liked ? "bg-red-500 text-white" : "bg-white text-gray-600 hover:text-red-500"
+                liked ? "bg-red-500 text-white" : "bg-white text-gray-600 hover:text-red-500 dark:bg-gray-800 dark:text-gray-300"
               } shadow-sm transition-all`}
             >
               <Heart size={16} fill={liked ? "currentColor" : "none"} />
             </button>
             <span
-              className="p-2 rounded-xl bg-white text-gray-600 shadow-sm inline-flex"
+              className="p-2 rounded-xl bg-white text-gray-600 shadow-sm inline-flex dark:bg-gray-800 dark:text-gray-300"
               aria-hidden="true"
             >
               <Eye size={16} />
             </span>
             <button
               onClick={handleAddToCart}
-              className="p-2 rounded-xl bg-white text-gray-600 hover:text-blue-600 shadow-sm transition-all"
+              className="p-2 rounded-xl bg-white text-gray-600 hover:text-blue-600 shadow-sm transition-all dark:bg-gray-800 dark:text-gray-300"
             >
               <ShoppingCart size={16} />
             </button>
@@ -98,19 +98,19 @@ export function ProductCard({ product, index = 0 }: { product: ProductCardData; 
 
       <div className="p-4">
         <Link href={`/produk/${product.slug}`}>
-          <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 mb-1 group-hover:text-blue-600 transition-colors">
+          <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 mb-1 group-hover:text-blue-600 transition-colors dark:text-gray-100">
             {product.name}
           </h3>
         </Link>
         <div className="flex items-center gap-1 mb-2">
           <Star size={14} className="text-yellow-500 fill-yellow-500" />
-          <span className="text-sm font-medium text-gray-700">{product.rating.toFixed(1)}</span>
-          <span className="text-xs text-gray-400">({product.reviewCount})</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{product.rating.toFixed(1)}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">({product.reviewCount})</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-bold text-gray-900">{formatCurrency(product.price)}</span>
+          <span className="font-bold text-gray-900 dark:text-gray-100">{formatCurrency(product.price)}</span>
           {product.compareAtPrice && (
-            <span className="text-xs text-gray-400 line-through">{formatCurrency(product.compareAtPrice)}</span>
+            <span className="text-xs text-gray-400 line-through dark:text-gray-500">{formatCurrency(product.compareAtPrice)}</span>
           )}
         </div>
       </div>

@@ -86,10 +86,10 @@ export function ProductDetail({
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-gray-900">
       {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <div className="container mx-auto px-4 py-3 flex items-center gap-1.5 text-xs text-gray-500 overflow-x-auto whitespace-nowrap">
+      <div className="border-b border-gray-100 dark:border-gray-800">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-1.5 text-xs text-gray-500 overflow-x-auto whitespace-nowrap dark:text-gray-400">
           <Link href="/" className="hover:text-blue-600">Beranda</Link>
           <ChevronRight size={12} />
           <Link href="/produk" className="hover:text-blue-600">Produk</Link>
@@ -100,7 +100,7 @@ export function ProductDetail({
             </>
           )}
           <ChevronRight size={12} />
-          <span className="text-gray-900 font-medium">{product.name}</span>
+          <span className="text-gray-900 font-medium dark:text-gray-100">{product.name}</span>
         </div>
       </div>
 
@@ -111,7 +111,7 @@ export function ProductDetail({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-3"
+              className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-3 dark:bg-gray-800"
             >
               <img src={images[activeImage]} alt={product.name} className="w-full h-full object-cover" />
               {product.discount > 0 && (
@@ -142,32 +142,32 @@ export function ProductDetail({
                 <Badge variant="secondary" className="mb-3">{product.categoryName}</Badge>
               </Link>
             )}
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 dark:text-gray-100">{product.name}</h1>
 
             {product.storeName && (
-              <div className="flex items-center gap-1.5 mb-4 text-sm text-gray-500">
+              <div className="flex items-center gap-1.5 mb-4 text-sm text-gray-500 dark:text-gray-400">
                 <Store size={14} className="text-emerald-600" />
-                Dijual oleh <span className="font-semibold text-gray-700">{product.storeName}</span>
+                Dijual oleh <span className="font-semibold text-gray-700 dark:text-gray-300">{product.storeName}</span>
               </div>
             )}
 
             <div className="flex items-center gap-3 mb-5">
               <div className="flex items-center gap-1">
                 <Star size={16} className="text-yellow-500 fill-yellow-500" />
-                <span className="font-semibold text-gray-900">{product.rating.toFixed(1)}</span>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">{product.rating.toFixed(1)}</span>
               </div>
               <span className="text-gray-300">|</span>
-              <span className="text-sm text-gray-500">{product.reviewCount} ulasan</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">{product.reviewCount} ulasan</span>
               <span className="text-gray-300">|</span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 {effectiveStock > 0 ? `Stok ${effectiveStock}` : "Stok habis"}
               </span>
             </div>
 
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-3xl font-extrabold text-gray-900">{formatCurrency(effectivePrice)}</span>
+              <span className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">{formatCurrency(effectivePrice)}</span>
               {product.compareAtPrice && !selectedVariant?.price && (
-                <span className="text-lg text-gray-400 line-through">{formatCurrency(product.compareAtPrice)}</span>
+                <span className="text-lg text-gray-400 line-through dark:text-gray-500">{formatCurrency(product.compareAtPrice)}</span>
               )}
             </div>
 
@@ -179,13 +179,13 @@ export function ProductDetail({
             </div>
 
             {product.description && (
-              <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
+              <p className="text-gray-600 leading-relaxed mb-6 dark:text-gray-400">{product.description}</p>
             )}
 
             {/* Varian */}
             {variants.length > 0 && (
               <div className="mb-6">
-                <span className="text-sm font-semibold text-gray-700 block mb-2">
+                <span className="text-sm font-semibold text-gray-700 block mb-2 dark:text-gray-300">
                   Pilih Varian{selectedVariant ? `: ${selectedVariant.name}` : ""}
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -197,10 +197,10 @@ export function ProductDetail({
                       disabled={v.stock <= 0}
                       className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${
                         selectedVariantId === v.id
-                          ? "border-blue-600 bg-blue-50 text-blue-700"
+                          ? "border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400"
                           : v.stock <= 0
-                          ? "border-gray-100 text-gray-300 cursor-not-allowed line-through"
-                          : "border-gray-200 text-gray-700 hover:border-gray-300"
+                          ? "border-gray-100 text-gray-300 cursor-not-allowed line-through dark:border-gray-800 dark:text-gray-600"
+                          : "border-gray-200 text-gray-700 hover:border-gray-300 dark:border-gray-700 dark:text-gray-300 dark:hover:border-gray-600"
                       }`}
                     >
                       {v.name}
@@ -213,18 +213,18 @@ export function ProductDetail({
 
             {/* Quantity */}
             <div className="flex items-center gap-4 mb-6">
-              <span className="text-sm font-semibold text-gray-700">Jumlah</span>
-              <div className="flex items-center border border-gray-200 rounded-xl">
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Jumlah</span>
+              <div className="flex items-center border border-gray-200 rounded-xl dark:border-gray-700">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="p-2.5 text-gray-500 hover:text-blue-600 transition-colors"
+                  className="p-2.5 text-gray-500 hover:text-blue-600 transition-colors dark:text-gray-400"
                 >
                   <Minus size={16} />
                 </button>
                 <span className="w-10 text-center font-semibold text-sm">{quantity}</span>
                 <button
                   onClick={() => setQuantity((q) => Math.min(effectiveStock, q + 1))}
-                  className="p-2.5 text-gray-500 hover:text-blue-600 transition-colors"
+                  className="p-2.5 text-gray-500 hover:text-blue-600 transition-colors dark:text-gray-400"
                 >
                   <Plus size={16} />
                 </button>
@@ -240,7 +240,7 @@ export function ProductDetail({
               <button
                 onClick={() => toggle(product.id)}
                 className={`p-3.5 rounded-xl border transition-all ${
-                  liked ? "bg-red-50 border-red-200 text-red-500" : "border-gray-200 text-gray-400 hover:text-red-500"
+                  liked ? "bg-red-50 border-red-200 text-red-500 dark:bg-red-950/30 dark:border-red-900" : "border-gray-200 text-gray-400 hover:text-red-500 dark:border-gray-700"
                 }`}
               >
                 <Heart size={20} fill={liked ? "currentColor" : "none"} />
@@ -248,18 +248,18 @@ export function ProductDetail({
             </div>
 
             {/* Trust badges */}
-            <div className="grid grid-cols-3 gap-3 border-t border-gray-100 pt-6">
+            <div className="grid grid-cols-3 gap-3 border-t border-gray-100 pt-6 dark:border-gray-800">
               <div className="flex flex-col items-center text-center gap-1.5">
                 <Truck size={20} className="text-blue-600" />
-                <span className="text-[11px] text-gray-500">Pengiriman Cepat</span>
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">Pengiriman Cepat</span>
               </div>
               <div className="flex flex-col items-center text-center gap-1.5">
                 <ShieldCheck size={20} className="text-blue-600" />
-                <span className="text-[11px] text-gray-500">100% Original</span>
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">100% Original</span>
               </div>
               <div className="flex flex-col items-center text-center gap-1.5">
                 <RotateCcw size={20} className="text-blue-600" />
-                <span className="text-[11px] text-gray-500">Garansi Retur 7 Hari</span>
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">Garansi Retur 7 Hari</span>
               </div>
             </div>
           </div>
@@ -270,7 +270,7 @@ export function ProductDetail({
         {/* Related products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Produk Serupa</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6 dark:text-gray-100">Produk Serupa</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {relatedProducts.map((p, i) => (
                 <ProductCard key={p.id} product={p} index={i} />

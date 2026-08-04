@@ -31,10 +31,10 @@ export function PromoGrid({ promotions }: { promotions: Promo[] }) {
 
   if (promotions.length === 0) {
     return (
-      <div className="max-w-md mx-auto bg-gray-50 rounded-2xl p-10 text-center">
+      <div className="max-w-md mx-auto bg-gray-50 rounded-2xl p-10 text-center dark:bg-gray-900">
         <p className="text-6xl mb-4">🏷️</p>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Belum Ada Promo Aktif</h2>
-        <p className="text-gray-500">Promo spesial sedang kami siapkan. Pantau terus halaman ini!</p>
+        <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Belum Ada Promo Aktif</h2>
+        <p className="text-gray-500 dark:text-gray-400">Promo spesial sedang kami siapkan. Pantau terus halaman ini!</p>
       </div>
     );
   }
@@ -59,20 +59,20 @@ export function PromoGrid({ promotions }: { promotions: Promo[] }) {
               </div>
               <Badge variant="destructive" className="text-[10px]">{typeLabel[promo.type] ?? promo.type}</Badge>
             </div>
-            <h3 className="text-2xl font-extrabold text-gray-900 mb-1">{formatValue(promo)}</h3>
-            {promo.description && <p className="text-sm text-gray-600 mb-3">{promo.description}</p>}
+            <h3 className="text-2xl font-extrabold text-gray-900 mb-1 dark:text-gray-100">{formatValue(promo)}</h3>
+            {promo.description && <p className="text-sm text-gray-600 mb-3 dark:text-gray-400">{promo.description}</p>}
             {promo.minPurchase && (
-              <p className="text-xs text-gray-500 mb-3">Min. belanja Rp{Number(promo.minPurchase).toLocaleString("id-ID")}</p>
+              <p className="text-xs text-gray-500 mb-3 dark:text-gray-400">Min. belanja Rp{Number(promo.minPurchase).toLocaleString("id-ID")}</p>
             )}
             <div className="flex items-center justify-between pt-3 border-t border-red-100">
-              <span className="font-mono font-bold text-gray-900 flex items-center gap-1.5">
+              <span className="font-mono font-bold text-gray-900 flex items-center gap-1.5 dark:text-gray-100">
                 <Tag size={13} /> {promo.code}
               </span>
               <span className="flex items-center gap-1 text-xs text-blue-600 font-medium group-hover:underline">
                 <Copy size={12} /> Salin
               </span>
             </div>
-            <p className="text-[11px] text-gray-400 mt-2 flex items-center gap-1">
+            <p className="text-[11px] text-gray-400 mt-2 flex items-center gap-1 dark:text-gray-500">
               <Calendar size={11} /> Berlaku hingga {new Date(promo.endDate).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
             </p>
           </div>

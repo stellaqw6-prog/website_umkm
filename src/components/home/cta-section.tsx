@@ -38,7 +38,7 @@ export function CtaSection() {
             <Link href="/produk">
               <Button
                 size="xl"
-                className="bg-white text-blue-700 hover:bg-gray-100 shadow-xl shadow-black/20 group"
+                className="bg-white text-blue-700 hover:bg-gray-100 shadow-xl shadow-black/20 group dark:bg-gray-900 dark:hover:bg-gray-800"
               >
                 Jelajahi Produk
                 <ArrowRight

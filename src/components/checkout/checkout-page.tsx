@@ -147,11 +147,11 @@ export function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center bg-gray-50">
+      <div className="min-h-[60vh] flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
           <ShoppingBag size={64} className="mx-auto text-gray-300 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Keranjang Kosong</h2>
-          <p className="text-gray-500 mb-6">Tambahkan produk dulu sebelum checkout.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 dark:text-gray-100">Keranjang Kosong</h2>
+          <p className="text-gray-500 mb-6 dark:text-gray-400">Tambahkan produk dulu sebelum checkout.</p>
           <Link href="/produk">
             <Button variant="premium" size="lg">Jelajahi Produk</Button>
           </Link>
@@ -162,10 +162,10 @@ export function CheckoutPage() {
 
   if (!sessionLoading && !user) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center bg-gray-50 px-4">
+      <div className="min-h-[60vh] flex items-center justify-center bg-gray-50 px-4 dark:bg-gray-900">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Login Diperlukan</h2>
-          <p className="text-gray-500 mb-6">Silakan login dulu untuk melanjutkan checkout.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 dark:text-gray-100">Login Diperlukan</h2>
+          <p className="text-gray-500 mb-6 dark:text-gray-400">Silakan login dulu untuk melanjutkan checkout.</p>
           <Link href="/login?redirect=/checkout">
             <Button variant="premium" size="lg">Login Sekarang</Button>
           </Link>
@@ -175,17 +175,17 @@ export function CheckoutPage() {
   }
 
   return (
-    <section className="py-10 bg-gray-50 min-h-screen">
+    <section className="py-10 bg-gray-50 min-h-screen dark:bg-gray-900">
       <div className="container mx-auto px-4 max-w-5xl">
-        <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-2xl font-bold text-gray-900 mb-8">
+        <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-2xl font-bold text-gray-900 mb-8 dark:text-gray-100">
           Checkout
         </motion.h1>
 
         <form onSubmit={handleSubmit} className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             {/* Address */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><MapPin size={18} className="text-blue-600" /> Alamat Pengiriman</h3>
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+              <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 dark:text-gray-100"><MapPin size={18} className="text-blue-600" /> Alamat Pengiriman</h3>
               <AddressForm
                 onChange={(_value, isValid, formatted) => {
                   setAddressValid(isValid);
@@ -195,30 +195,30 @@ export function CheckoutPage() {
             </div>
 
             {/* Payment method */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><CreditCard size={18} className="text-blue-600" /> Metode Pembayaran</h3>
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+              <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 dark:text-gray-100"><CreditCard size={18} className="text-blue-600" /> Metode Pembayaran</h3>
 
               {loadingPayments ? (
-                <div className="flex justify-center py-8 text-gray-400"><Loader2 className="animate-spin" size={24} /></div>
+                <div className="flex justify-center py-8 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={24} /></div>
               ) : paymentMethods.length === 0 ? (
-                <p className="text-sm text-gray-400 py-4">Belum ada metode pembayaran tersedia. Hubungi admin toko.</p>
+                <p className="text-sm text-gray-400 py-4 dark:text-gray-500">Belum ada metode pembayaran tersedia. Hubungi admin toko.</p>
               ) : (
                 <div className="space-y-5">
                   {ewalletMethods.length > 0 && (
                     <div>
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">E-Wallet</p>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 dark:text-gray-400">E-Wallet</p>
                       <div className="space-y-2">
                         {ewalletMethods.map((m) => (
                           <label
                             key={m.id}
                             className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-gray-300"
+                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50 dark:bg-blue-950/30" : "border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
                             }`}
                           >
                             <input type="radio" name="payment" checked={selectedPaymentId === m.id} onChange={() => setSelectedPaymentId(m.id)} className="accent-blue-600" />
                             <div>
-                              <p className="text-sm font-medium text-gray-900">{m.name}</p>
-                              <p className="text-xs text-gray-500">a.n. {m.accountName}</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{m.name}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">a.n. {m.accountName}</p>
                             </div>
                           </label>
                         ))}
@@ -228,19 +228,19 @@ export function CheckoutPage() {
 
                   {bankMethods.length > 0 && (
                     <div>
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Transfer Bank</p>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 dark:text-gray-400">Transfer Bank</p>
                       <div className="space-y-2">
                         {bankMethods.map((m) => (
                           <label
                             key={m.id}
                             className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-gray-300"
+                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50 dark:bg-blue-950/30" : "border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
                             }`}
                           >
                             <input type="radio" name="payment" checked={selectedPaymentId === m.id} onChange={() => setSelectedPaymentId(m.id)} className="accent-blue-600" />
                             <div>
-                              <p className="text-sm font-medium text-gray-900">{m.name}</p>
-                              <p className="text-xs text-gray-500">a.n. {m.accountName}</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{m.name}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">a.n. {m.accountName}</p>
                             </div>
                           </label>
                         ))}
@@ -250,19 +250,19 @@ export function CheckoutPage() {
 
                   {codMethods.length > 0 && (
                     <div>
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Bayar di Tempat</p>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 dark:text-gray-400">Bayar di Tempat</p>
                       <div className="space-y-2">
                         {codMethods.map((m) => (
                           <label
                             key={m.id}
                             className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-gray-300"
+                              selectedPaymentId === m.id ? "border-blue-600 bg-blue-50/50 dark:bg-blue-950/30" : "border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
                             }`}
                           >
                             <input type="radio" name="payment" checked={selectedPaymentId === m.id} onChange={() => setSelectedPaymentId(m.id)} className="accent-blue-600" />
                             <div>
-                              <p className="text-sm font-medium text-gray-900">{m.name}</p>
-                              <p className="text-xs text-gray-500">Bayar tunai saat pesanan tiba</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{m.name}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">Bayar tunai saat pesanan tiba</p>
                             </div>
                           </label>
                         ))}
@@ -278,27 +278,27 @@ export function CheckoutPage() {
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="rounded-xl border border-blue-100 bg-blue-50/40 p-4"
+                        className="rounded-xl border border-blue-100 bg-blue-50/40 p-4 dark:border-blue-900/50 dark:bg-blue-950/20"
                       >
                         <p className="text-xs font-semibold text-blue-700 mb-2">Detail Pembayaran {selectedMethod.name}</p>
                         {selectedMethod.type === "cod" ? (
-                          <p className="text-sm text-gray-600 leading-relaxed">
+                          <p className="text-sm text-gray-600 leading-relaxed dark:text-gray-400">
                             {selectedMethod.instructions || "Bayar tunai langsung kepada kurir saat pesanan tiba di alamat Anda."}
                           </p>
                         ) : (
                           <>
                             <div className="flex items-start justify-between gap-3">
                               <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
                                   {selectedMethod.type === "bank" ? "Nomor Rekening" : "Nomor HP"}
                                 </p>
-                                <p className="font-mono font-bold text-gray-900 text-lg">{selectedMethod.accountNumber}</p>
-                                <p className="text-xs text-gray-500 mt-0.5">a.n. {selectedMethod.accountName}</p>
+                                <p className="font-mono font-bold text-gray-900 text-lg dark:text-gray-100">{selectedMethod.accountNumber}</p>
+                                <p className="text-xs text-gray-500 mt-0.5 dark:text-gray-400">a.n. {selectedMethod.accountName}</p>
                               </div>
                               <button
                                 type="button"
                                 onClick={() => handleCopy(selectedMethod.accountNumber)}
-                                className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-3 py-1.5 rounded-lg border border-blue-200 flex-shrink-0"
+                                className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-3 py-1.5 rounded-lg border border-blue-200 flex-shrink-0 dark:bg-gray-900"
                               >
                                 <Copy size={13} /> Salin
                               </button>
@@ -306,13 +306,13 @@ export function CheckoutPage() {
 
                             {selectedMethod.qrImage && (
                               <div className="mt-3 flex items-center gap-3">
-                                <img src={selectedMethod.qrImage} alt={`QR ${selectedMethod.name}`} className="w-24 h-24 rounded-lg border border-gray-200 object-contain bg-white" />
-                                <p className="text-xs text-gray-500 flex items-center gap-1"><QrCode size={13} /> Atau scan QR code di samping</p>
+                                <img src={selectedMethod.qrImage} alt={`QR ${selectedMethod.name}`} className="w-24 h-24 rounded-lg border border-gray-200 object-contain bg-white dark:bg-gray-900 dark:border-gray-700" />
+                                <p className="text-xs text-gray-500 flex items-center gap-1 dark:text-gray-400"><QrCode size={13} /> Atau scan QR code di samping</p>
                               </div>
                             )}
 
                             {selectedMethod.instructions && (
-                              <p className="text-xs text-gray-500 mt-3 leading-relaxed">{selectedMethod.instructions}</p>
+                              <p className="text-xs text-gray-500 mt-3 leading-relaxed dark:text-gray-400">{selectedMethod.instructions}</p>
                             )}
                           </>
                         )}
@@ -324,35 +324,35 @@ export function CheckoutPage() {
             </div>
 
             {/* Notes */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-3">Catatan (opsional)</h3>
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+              <h3 className="font-bold text-gray-900 mb-3 dark:text-gray-100">Catatan (opsional)</h3>
               <Textarea rows={2} placeholder="Contoh: titip di satpam, jangan dibanting, dll" value={notes} onChange={(e) => setNotes(e.target.value)} />
             </div>
           </div>
 
           {/* Summary */}
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 h-fit sticky top-24 space-y-5">
-            <h3 className="font-bold text-gray-900">Ringkasan Pesanan</h3>
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 h-fit sticky top-24 space-y-5 dark:bg-gray-900 dark:border-gray-800">
+            <h3 className="font-bold text-gray-900 dark:text-gray-100">Ringkasan Pesanan</h3>
 
             <div className="space-y-3 max-h-52 overflow-y-auto">
               {items.map((item) => (
                 <div key={`${item.productId}-${item.variantId ?? "base"}`} className="flex gap-3 text-sm">
                   <img src={item.image} alt={item.name} className="w-12 h-14 object-cover rounded-lg flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 line-clamp-1">{item.name}</p>
-                    {item.variantName && <p className="text-gray-400 text-xs">Varian: {item.variantName}</p>}
-                    <p className="text-gray-500 text-xs">{item.quantity} x {formatCurrency(item.price)}</p>
+                    <p className="font-medium text-gray-900 line-clamp-1 dark:text-gray-100">{item.name}</p>
+                    {item.variantName && <p className="text-gray-400 text-xs dark:text-gray-500">Varian: {item.variantName}</p>}
+                    <p className="text-gray-500 text-xs dark:text-gray-400">{item.quantity} x {formatCurrency(item.price)}</p>
                   </div>
-                  <span className="font-semibold text-gray-900 whitespace-nowrap">{formatCurrency(item.price * item.quantity)}</span>
+                  <span className="font-semibold text-gray-900 whitespace-nowrap dark:text-gray-100">{formatCurrency(item.price * item.quantity)}</span>
                 </div>
               ))}
             </div>
 
             {/* Promo code */}
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1"><Tag size={14} /> Kode Promo</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1 dark:text-gray-300"><Tag size={14} /> Kode Promo</label>
               {promoResult ? (
-                <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+                <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2 dark:bg-green-950/30 dark:border-green-900">
                   <span className="text-sm font-medium text-green-700 flex items-center gap-1"><Check size={14} /> {promoResult.code}</span>
                   <button type="button" onClick={() => { setPromoResult(null); setPromoCode(""); }} className="text-green-700 hover:text-red-600">
                     <X size={14} />
@@ -371,9 +371,9 @@ export function CheckoutPage() {
             <hr />
 
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span className="font-semibold">{formatCurrency(totalPrice)}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500 dark:text-gray-400">Subtotal</span><span className="font-semibold">{formatCurrency(totalPrice)}</span></div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Pengiriman</span>
+                <span className="text-gray-500 dark:text-gray-400">Pengiriman</span>
                 <span className={shipping === 0 ? "text-green-600 font-semibold" : "font-semibold"}>{shipping === 0 ? "GRATIS" : formatCurrency(shipping)}</span>
               </div>
               {discount > 0 && (

@@ -60,50 +60,50 @@ export function AdminUsers() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2"><UserCog className="text-blue-600" size={26} /> Kelola Role User</h1>
-        <p className="text-gray-500 text-sm mt-1">Khusus Developer — naikkan/turunkan hak akses user (Customer, Seller, Admin, Developer)</p>
+        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100"><UserCog className="text-blue-600" size={26} /> Kelola Role User</h1>
+        <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Khusus Developer — naikkan/turunkan hak akses user (Customer, Seller, Admin, Developer)</p>
       </motion.div>
 
       <Card>
         <CardHeader className="pb-0">
           <div className="relative max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
             <Input placeholder="Cari nama atau email..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </CardHeader>
         <CardContent className="pt-4">
           {loading ? (
-            <div className="flex justify-center py-16 text-gray-400"><Loader2 className="animate-spin" size={28} /></div>
+            <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={28} /></div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">User</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Role Saat Ini</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Ubah Jadi</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Bergabung</th>
+                  <tr className="border-b border-gray-100 dark:border-gray-800">
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">User</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Role Saat Ini</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Ubah Jadi</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Bergabung</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((u) => (
                     <tr key={u.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                       <td className="py-3 px-4">
-                        <p className="font-medium text-gray-900 text-sm">{u.name}</p>
-                        <p className="text-xs text-gray-500">{u.email}</p>
+                        <p className="font-medium text-gray-900 text-sm dark:text-gray-100">{u.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{u.email}</p>
                       </td>
                       <td className="py-3 px-4 text-center">
                         <Badge variant={roleVariant[u.role]} className="text-[10px]">{roleLabel[u.role]}</Badge>
                       </td>
                       <td className="py-3 px-4 text-center">
                         {u.id === currentUser?.id ? (
-                          <span className="text-xs text-gray-400">Akun kamu sendiri</span>
+                          <span className="text-xs text-gray-400 dark:text-gray-500">Akun kamu sendiri</span>
                         ) : (
                           <select
                             value={u.role}
                             onChange={(e) => handleRoleChange(u, e.target.value)}
                             disabled={updatingId === u.id}
-                            className="h-9 rounded-lg border border-gray-200 px-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                            className="h-9 rounded-lg border border-gray-200 px-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-gray-700"
                           >
                             <option value="customer">Customer</option>
                             <option value="seller">Seller</option>
@@ -112,7 +112,7 @@ export function AdminUsers() {
                           </select>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-sm text-gray-500">{new Date(u.createdAt).toLocaleDateString("id-ID")}</td>
+                      <td className="py-3 px-4 text-sm text-gray-500 dark:text-gray-400">{new Date(u.createdAt).toLocaleDateString("id-ID")}</td>
                     </tr>
                   ))}
                 </tbody>

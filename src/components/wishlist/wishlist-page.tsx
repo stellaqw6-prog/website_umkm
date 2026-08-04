@@ -44,8 +44,8 @@ export function WishlistPage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center text-center px-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Login Diperlukan</h2>
-          <p className="text-gray-500 mb-6">Silakan login untuk melihat wishlist Anda.</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Login Diperlukan</h2>
+          <p className="text-gray-500 mb-6 dark:text-gray-400">Silakan login untuk melihat wishlist Anda.</p>
           <Link href="/login?redirect=/wishlist"><Button variant="premium">Login Sekarang</Button></Link>
         </div>
       </div>
@@ -53,17 +53,17 @@ export function WishlistPage() {
   }
 
   return (
-    <section className="py-10 bg-gray-50 min-h-screen">
+    <section className="py-10 bg-gray-50 min-h-screen dark:bg-gray-900">
       <div className="container mx-auto px-4">
-        <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-2xl font-bold text-gray-900 mb-8">
+        <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-2xl font-bold text-gray-900 mb-8 dark:text-gray-100">
           Wishlist Saya
         </motion.h1>
 
         {items.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
+          <div className="text-center py-20 bg-white rounded-2xl border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
             <Heart size={48} className="mx-auto text-gray-300 mb-4" />
-            <h3 className="font-semibold text-gray-900 mb-1">Wishlist masih kosong</h3>
-            <p className="text-gray-500 text-sm mb-6">Tap ikon hati di produk untuk menyimpannya di sini.</p>
+            <h3 className="font-semibold text-gray-900 mb-1 dark:text-gray-100">Wishlist masih kosong</h3>
+            <p className="text-gray-500 text-sm mb-6 dark:text-gray-400">Tap ikon hati di produk untuk menyimpannya di sini.</p>
             <Link href="/produk"><Button variant="premium">Jelajahi Produk</Button></Link>
           </div>
         ) : (
