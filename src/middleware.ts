@@ -7,7 +7,17 @@ export async function middleware(req: NextRequest) {
   const isAdminRoute = pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
   const isSellerRoute = pathname.startsWith("/seller") || pathname.startsWith("/api/seller");
 
+  // Endpoint ini khusus untuk customer MENGAJUKAN upgrade jadi seller — dia
+  // justru dipakai SEBELUM user punya role seller, jadi tidak boleh ikut
+  // aturan "harus sudah seller" di bawah. Validasi role-nya ditangani sendiri
+  // oleh route handler (src/app/api/seller/upgrade-request/route.ts).
+  const isUpgradeRequestRoute = pathname.startsWith("/api/seller/upgrade-request");
+
   if (!isAdminRoute && !isSellerRoute) {
+    return NextResponse.next();
+  }
+
+  if (isUpgradeRequestRoute) {
     return NextResponse.next();
   }
 
