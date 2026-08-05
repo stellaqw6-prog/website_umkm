@@ -10,7 +10,7 @@ export function FeaturedProducts({ products }: { products: ProductCardData[] }) 
   if (products.length === 0) return null;
 
   return (
-    <section className="py-20 bg-gray-50/50 dark:bg-gray-900/30">
+    <section className="py-20 bg-gray-50/50 dark:bg-stone-900/30">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -22,10 +22,10 @@ export function FeaturedProducts({ products }: { products: ProductCardData[] }) 
             <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">
               Produk
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2 dark:text-gray-100">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2 dark:text-stone-100">
               Produk Unggulan UMKM
             </h2>
-            <p className="text-gray-500 mt-2 dark:text-gray-400">
+            <p className="text-gray-500 mt-2 dark:text-stone-400">
               Koleksi produk terbaik pilihan pelanggan kami
             </p>
           </div>

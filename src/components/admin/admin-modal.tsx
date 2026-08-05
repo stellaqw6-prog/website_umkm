@@ -30,11 +30,11 @@ export function AdminModal({
             initial={{ opacity: 0, scale: 0.96, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 10 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto dark:bg-gray-900"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto dark:bg-stone-900"
           >
-            <div className="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl dark:bg-gray-900 dark:border-gray-800">
-              <h2 className="font-bold text-gray-900 dark:text-gray-100">{title}</h2>
-              <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-all dark:hover:bg-gray-800">
+            <div className="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl dark:bg-stone-900 dark:border-stone-800">
+              <h2 className="font-bold text-gray-900 dark:text-stone-100">{title}</h2>
+              <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-all dark:hover:bg-stone-800">
                 <X size={18} />
               </button>
             </div>

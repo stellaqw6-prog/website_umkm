@@ -17,7 +17,7 @@
   }
 
   .dark * {
-    scrollbar-color: #475569 transparent;
+    scrollbar-color: #78716c transparent;
   }
 
   *::-webkit-scrollbar {
@@ -34,7 +34,7 @@
   }
 
   .dark *::-webkit-scrollbar-thumb {
-    background-color: #475569;
+    background-color: #78716c;
   }
 
   html {

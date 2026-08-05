@@ -111,8 +111,8 @@ export function SellerProducts() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Produk Saya</h1>
-          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Kelola produk yang dijual di toko kamu</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Produk Saya</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-stone-400">Kelola produk yang dijual di toko kamu</p>
         </div>
         <Button variant="premium" onClick={openAdd}><Plus size={18} className="mr-2" /> Tambah Produk</Button>
       </motion.div>
@@ -120,25 +120,25 @@ export function SellerProducts() {
       <Card>
         <CardHeader className="pb-0">
           <div className="relative max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-stone-500" />
             <Input placeholder="Cari produk..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </CardHeader>
         <CardContent className="pt-4">
           {loading ? (
-            <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={28} /></div>
+            <div className="flex justify-center py-16 text-gray-400 dark:text-stone-500"><Loader2 className="animate-spin" size={28} /></div>
           ) : filtered.length === 0 ? (
-            <p className="text-center py-16 text-gray-400 text-sm dark:text-gray-500">Belum ada produk. Klik &quot;Tambah Produk&quot; untuk mulai jualan.</p>
+            <p className="text-center py-16 text-gray-400 text-sm dark:text-stone-500">Belum ada produk. Klik &quot;Tambah Produk&quot; untuk mulai jualan.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Produk</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Harga</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Stok</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Status</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Aksi</th>
+                  <tr className="border-b border-gray-100 dark:border-stone-800">
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Produk</th>
+                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Harga</th>
+                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Stok</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Status</th>
+                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -146,14 +146,14 @@ export function SellerProducts() {
                     <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center dark:bg-gray-800">
+                          <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center dark:bg-stone-800">
                             {p.images?.[0] ? <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" /> : <ImageIcon size={16} className="text-gray-300" />}
                           </div>
-                          <span className="font-medium text-gray-900 text-sm line-clamp-1 max-w-xs dark:text-gray-100">{p.name}</span>
+                          <span className="font-medium text-gray-900 text-sm line-clamp-1 max-w-xs dark:text-stone-100">{p.name}</span>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-sm text-right font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(Number(p.price))}</td>
-                      <td className="py-3 px-4 text-sm text-right text-gray-700 dark:text-gray-300">
+                      <td className="py-3 px-4 text-sm text-right font-semibold text-gray-900 dark:text-stone-100">{formatCurrency(Number(p.price))}</td>
+                      <td className="py-3 px-4 text-sm text-right text-gray-700 dark:text-stone-300">
                         <span className={p.stock <= 5 ? "text-red-600 font-semibold" : ""}>{p.stock}</span>
                       </td>
                       <td className="py-3 px-4 text-center">
@@ -162,14 +162,14 @@ export function SellerProducts() {
                           {p.freeShipping ? (
                             <span className="text-[10px] text-emerald-600 font-medium">Gratis Ongkir</span>
                           ) : p.shippingCost ? (
-                            <span className="text-[10px] text-gray-400 dark:text-gray-500">Ongkir {formatCurrency(Number(p.shippingCost))}</span>
+                            <span className="text-[10px] text-gray-400 dark:text-stone-500">Ongkir {formatCurrency(Number(p.shippingCost))}</span>
                           ) : null}
                         </div>
                       </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <button onClick={() => openEdit(p)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-all dark:hover:bg-gray-800 dark:text-gray-500"><Edit size={15} /></button>
-                          <button onClick={() => handleDelete(p)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 transition-all dark:hover:bg-gray-800 dark:text-gray-500"><Trash2 size={15} /></button>
+                          <button onClick={() => openEdit(p)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-all dark:hover:bg-stone-800 dark:text-stone-500"><Edit size={15} /></button>
+                          <button onClick={() => handleDelete(p)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 transition-all dark:hover:bg-stone-800 dark:text-stone-500"><Trash2 size={15} /></button>
                         </div>
                       </td>
                     </tr>
@@ -183,35 +183,35 @@ export function SellerProducts() {
 
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Edit Produk" : "Tambah Produk"}>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nama Produk</label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value, slug: editing ? form.slug : slugify(e.target.value) })} /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Slug (URL)</label><Input required value={form.slug} onChange={(e) => setForm({ ...form, slug: slugify(e.target.value) })} /></div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Deskripsi</label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nama Produk</label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value, slug: editing ? form.slug : slugify(e.target.value) })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Slug (URL)</label><Input required value={form.slug} onChange={(e) => setForm({ ...form, slug: slugify(e.target.value) })} /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Deskripsi</label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></div>
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Harga (Rp)</label><Input required type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} /></div>
-            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Harga Coret (opsional)</label><Input type="number" value={form.compareAtPrice} onChange={(e) => setForm({ ...form, compareAtPrice: e.target.value })} /></div>
+            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Harga (Rp)</label><Input required type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} /></div>
+            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Harga Coret (opsional)</label><Input type="number" value={form.compareAtPrice} onChange={(e) => setForm({ ...form, compareAtPrice: e.target.value })} /></div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Stok</label><Input required type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} /></div>
+            <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Stok</label><Input required type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} /></div>
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Kategori</label>
-              <select value={form.categoryId} onChange={(e) => setForm({ ...form, categoryId: e.target.value })} className="w-full h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-gray-700">
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Kategori</label>
+              <select value={form.categoryId} onChange={(e) => setForm({ ...form, categoryId: e.target.value })} className="w-full h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-stone-700">
                 <option value="">Tanpa kategori</option>
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
           </div>
-          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">URL Gambar</label><Input value={form.images} onChange={(e) => setForm({ ...form, images: e.target.value })} placeholder="https://..." /></div>
+          <div><label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">URL Gambar</label><Input value={form.images} onChange={(e) => setForm({ ...form, images: e.target.value })} placeholder="https://..." /></div>
           <div className="flex flex-wrap gap-4">
-            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"><input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="rounded" /> Aktif</label>
-            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"><input type="checkbox" checked={form.isBestSeller} onChange={(e) => setForm({ ...form, isBestSeller: e.target.checked })} className="rounded" /> Best Seller</label>
+            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-stone-300"><input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="rounded" /> Aktif</label>
+            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-stone-300"><input type="checkbox" checked={form.isBestSeller} onChange={(e) => setForm({ ...form, isBestSeller: e.target.checked })} className="rounded" /> Best Seller</label>
           </div>
-          <p className="text-xs text-gray-400 dark:text-gray-500">Catatan: status &quot;Unggulan&quot; (tampil di beranda) hanya bisa diatur oleh admin platform.</p>
+          <p className="text-xs text-gray-400 dark:text-stone-500">Catatan: status &quot;Unggulan&quot; (tampil di beranda) hanya bisa diatur oleh admin platform.</p>
 
-          <div className="border border-gray-100 rounded-xl p-3 space-y-3 bg-gray-50/50 dark:border-gray-800">
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-100 rounded-xl p-3 space-y-3 bg-gray-50/50 dark:border-stone-800">
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-stone-300">
               <Truck size={15} className="text-emerald-600" /> Ongkir Produk Ini
             </label>
-            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-stone-300">
               <input
                 type="checkbox"
                 checked={form.freeShipping}
@@ -221,7 +221,7 @@ export function SellerProducts() {
               Gratis ongkir untuk produk ini
             </label>
             <div>
-              <label className="text-xs font-medium text-gray-500 mb-1 block dark:text-gray-400">Biaya Ongkir Khusus (opsional)</label>
+              <label className="text-xs font-medium text-gray-500 mb-1 block dark:text-stone-400">Biaya Ongkir Khusus (opsional)</label>
               <Input
                 type="number"
                 value={form.shippingCost}
@@ -229,7 +229,7 @@ export function SellerProducts() {
                 placeholder="Kosongkan = pakai ongkir default toko"
                 disabled={form.freeShipping}
               />
-              <p className="text-[11px] text-gray-400 mt-1 dark:text-gray-500">Kosongkan untuk ikut ongkir toko (diatur di menu Profil Toko).</p>
+              <p className="text-[11px] text-gray-400 mt-1 dark:text-stone-500">Kosongkan untuk ikut ongkir toko (diatur di menu Profil Toko).</p>
             </div>
           </div>
 

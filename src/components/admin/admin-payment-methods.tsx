@@ -151,8 +151,8 @@ export function AdminPaymentMethods() {
         className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Metode Pembayaran</h1>
-          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Metode Pembayaran</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-stone-400">
             Atur nomor e-wallet, QR code, dan rekening bank yang tampil saat pelanggan checkout
           </p>
         </div>
@@ -162,18 +162,18 @@ export function AdminPaymentMethods() {
       </motion.div>
 
       {loading ? (
-        <div className="flex justify-center py-24 text-gray-400 dark:text-gray-500">
+        <div className="flex justify-center py-24 text-gray-400 dark:text-stone-500">
           <Loader2 className="animate-spin" size={32} />
         </div>
       ) : (
         <>
           {/* E-Wallet */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 dark:text-gray-400">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 dark:text-stone-400">
               <Wallet size={15} /> E-Wallet
             </h3>
             {ewallets.length === 0 ? (
-              <Card><CardContent className="py-10 text-center text-sm text-gray-400 dark:text-gray-500">Belum ada metode e-wallet.</CardContent></Card>
+              <Card><CardContent className="py-10 text-center text-sm text-gray-400 dark:text-stone-500">Belum ada metode e-wallet.</CardContent></Card>
             ) : (
               <div className="grid md:grid-cols-2 gap-4">
                 {ewallets.map((m, i) => (
@@ -185,11 +185,11 @@ export function AdminPaymentMethods() {
 
           {/* Bank */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 dark:text-gray-400">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 dark:text-stone-400">
               <Landmark size={15} /> Transfer Bank
             </h3>
             {banks.length === 0 ? (
-              <Card><CardContent className="py-10 text-center text-sm text-gray-400 dark:text-gray-500">Belum ada rekening bank.</CardContent></Card>
+              <Card><CardContent className="py-10 text-center text-sm text-gray-400 dark:text-stone-500">Belum ada rekening bank.</CardContent></Card>
             ) : (
               <div className="grid md:grid-cols-2 gap-4">
                 {banks.map((m, i) => (
@@ -201,11 +201,11 @@ export function AdminPaymentMethods() {
 
           {/* COD */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 dark:text-gray-400">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 dark:text-stone-400">
               <Truck size={15} /> Bayar di Tempat (COD)
             </h3>
             {cods.length === 0 ? (
-              <Card><CardContent className="py-10 text-center text-sm text-gray-400 dark:text-gray-500">Belum ada metode COD.</CardContent></Card>
+              <Card><CardContent className="py-10 text-center text-sm text-gray-400 dark:text-stone-500">Belum ada metode COD.</CardContent></Card>
             ) : (
               <div className="grid md:grid-cols-2 gap-4">
                 {cods.map((m, i) => (
@@ -221,13 +221,13 @@ export function AdminPaymentMethods() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nama</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nama</label>
               <Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="DANA, GoPay, Bank BCA, dll" />
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Tipe</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Tipe</label>
               <select
-                className="w-full h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-gray-700"
+                className="w-full h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-stone-700"
                 value={form.type}
                 onChange={(e) => setForm({ ...form, type: e.target.value as "ewallet" | "bank" | "cod" })}
               >
@@ -239,43 +239,43 @@ export function AdminPaymentMethods() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Provider (kode)</label>
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Provider (kode)</label>
             <Input required value={form.provider} onChange={(e) => setForm({ ...form, provider: e.target.value.toLowerCase() })} placeholder="dana / gopay / ovo / bca" />
-            <p className="text-xs text-gray-400 mt-1 dark:text-gray-500">Kode singkat, huruf kecil, tanpa spasi.</p>
+            <p className="text-xs text-gray-400 mt-1 dark:text-stone-500">Kode singkat, huruf kecil, tanpa spasi.</p>
           </div>
 
           {form.type === "cod" ? (
-            <p className="text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2 dark:bg-gray-800/60 dark:text-gray-400">
+            <p className="text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2 dark:bg-stone-800/60 dark:text-stone-400">
               Metode COD tidak butuh nomor rekening/e-wallet — pelanggan cukup bayar tunai ke kurir saat pesanan tiba.
             </p>
           ) : (
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">
+                  <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">
                     {form.type === "bank" ? "Nomor Rekening" : "Nomor HP"}
                   </label>
                   <Input required value={form.accountNumber} onChange={(e) => setForm({ ...form, accountNumber: e.target.value })} placeholder={form.type === "bank" ? "0392258076" : "082326153257"} />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Atas Nama</label>
+                  <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Atas Nama</label>
                   <Input required value={form.accountName} onChange={(e) => setForm({ ...form, accountName: e.target.value })} placeholder="Nama pemilik akun" />
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block flex items-center gap-1 dark:text-gray-300"><QrCode size={14} /> URL Gambar QR (opsional)</label>
+                <label className="text-sm font-medium text-gray-700 mb-1.5 block flex items-center gap-1 dark:text-stone-300"><QrCode size={14} /> URL Gambar QR (opsional)</label>
                 <Input value={form.qrImage} onChange={(e) => setForm({ ...form, qrImage: e.target.value })} placeholder="https://... (link gambar QR code, contoh untuk QRIS)" />
               </div>
             </>
           )}
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Instruksi Tambahan (opsional)</label>
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Instruksi Tambahan (opsional)</label>
             <Textarea rows={2} value={form.instructions} onChange={(e) => setForm({ ...form, instructions: e.target.value })} placeholder="Contoh: Scan QR atau kirim ke nomor di atas, lalu kirim bukti bayar ke WhatsApp admin" />
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-stone-300">
             <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="rounded" />
             Tampilkan di halaman checkout
           </label>
@@ -311,12 +311,12 @@ function PaymentMethodCard({
         <CardContent className="p-5">
           <div className="flex items-start justify-between gap-3 mb-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-lg flex-shrink-0 dark:bg-gray-800/60">
-                {providerIcons[m.provider] ?? <GripVertical size={18} className="text-gray-400 dark:text-gray-500" />}
+              <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-lg flex-shrink-0 dark:bg-stone-800/60">
+                {providerIcons[m.provider] ?? <GripVertical size={18} className="text-gray-400 dark:text-stone-500" />}
               </div>
               <div className="min-w-0">
-                <p className="font-semibold text-gray-900 truncate dark:text-gray-100">{m.name}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{m.accountName}</p>
+                <p className="font-semibold text-gray-900 truncate dark:text-stone-100">{m.name}</p>
+                <p className="text-xs text-gray-500 dark:text-stone-400">{m.accountName}</p>
               </div>
             </div>
             <Badge variant={m.isActive ? "success" : "secondary"} className="flex-shrink-0">
@@ -325,14 +325,14 @@ function PaymentMethodCard({
           </div>
 
           {m.type !== "cod" && (
-            <div className="bg-gray-50 rounded-xl px-3 py-2 mb-3 dark:bg-gray-800/60">
-              <p className="text-xs text-gray-500 dark:text-gray-400">{m.type === "bank" ? "No. Rekening" : "No. HP"}</p>
-              <p className="font-mono font-semibold text-gray-900 dark:text-gray-100">{m.accountNumber}</p>
+            <div className="bg-gray-50 rounded-xl px-3 py-2 mb-3 dark:bg-stone-800/60">
+              <p className="text-xs text-gray-500 dark:text-stone-400">{m.type === "bank" ? "No. Rekening" : "No. HP"}</p>
+              <p className="font-mono font-semibold text-gray-900 dark:text-stone-100">{m.accountNumber}</p>
             </div>
           )}
           {m.type === "cod" && m.instructions && (
-            <div className="bg-gray-50 rounded-xl px-3 py-2 mb-3 dark:bg-gray-800/60">
-              <p className="text-xs text-gray-500 leading-relaxed dark:text-gray-400">{m.instructions}</p>
+            <div className="bg-gray-50 rounded-xl px-3 py-2 mb-3 dark:bg-stone-800/60">
+              <p className="text-xs text-gray-500 leading-relaxed dark:text-stone-400">{m.instructions}</p>
             </div>
           )}
 
@@ -343,13 +343,13 @@ function PaymentMethodCard({
           )}
 
           <div className="flex items-center gap-1">
-            <button onClick={() => onEdit(m)} className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400">
+            <button onClick={() => onEdit(m)} className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-stone-800 dark:text-stone-400">
               <Edit size={13} /> Edit
             </button>
-            <button onClick={() => onToggle(m)} className="text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400">
+            <button onClick={() => onToggle(m)} className="text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-stone-800 dark:text-stone-400">
               {m.isActive ? "Nonaktifkan" : "Aktifkan"}
             </button>
-            <button onClick={() => onDelete(m)} className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400">
+            <button onClick={() => onDelete(m)} className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 px-3 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-stone-800 dark:text-stone-400">
               <Trash2 size={13} /> Hapus
             </button>
           </div>

@@ -58,15 +58,15 @@ export function ContactPage() {
         <div className="container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Kontak</span>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mt-2 dark:text-gray-100">Hubungi Kami</h1>
-            <p className="text-gray-500 mt-3 max-w-lg mx-auto dark:text-gray-400">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mt-2 dark:text-stone-100">Hubungi Kami</h1>
+            <p className="text-gray-500 mt-3 max-w-lg mx-auto dark:text-stone-400">
               Ada pertanyaan? Kami siap membantu. Isi form di bawah atau hubungi langsung.
             </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="py-16 bg-white dark:bg-gray-900">
+      <section className="py-16 bg-white dark:bg-stone-900">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Contact Info */}
@@ -83,14 +83,14 @@ export function ContactPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group dark:hover:bg-gray-800"
+                  className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group dark:hover:bg-stone-800"
                 >
                   <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-100 transition-colors">
                     <item.icon size={20} className="text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{item.label}</p>
-                    <p className="font-semibold text-gray-900 dark:text-gray-100">{item.value}</p>
+                    <p className="text-sm text-gray-500 dark:text-stone-400">{item.label}</p>
+                    <p className="font-semibold text-gray-900 dark:text-stone-100">{item.value}</p>
                   </div>
                 </motion.a>
               ))}
@@ -113,13 +113,13 @@ export function ContactPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="lg:col-span-2 bg-gray-50 rounded-2xl p-6 md:p-8 dark:bg-gray-900"
+              className="lg:col-span-2 bg-gray-50 rounded-2xl p-6 md:p-8 dark:bg-stone-900"
             >
-              <h2 className="text-xl font-bold text-gray-900 mb-6 dark:text-gray-100">Kirim Pesan</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6 dark:text-stone-100">Kirim Pesan</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Nama Lengkap *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Nama Lengkap *</label>
                     <Input
                       placeholder="Nama Anda"
                       value={form.name}
@@ -128,7 +128,7 @@ export function ContactPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Email *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Email *</label>
                     <Input
                       type="email"
                       placeholder="email@example.com"
@@ -140,7 +140,7 @@ export function ContactPage() {
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Nomor Telepon</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Nomor Telepon</label>
                     <Input
                       placeholder="08xxxxxxxxxx"
                       value={form.phone}
@@ -148,7 +148,7 @@ export function ContactPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Subjek *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Subjek *</label>
                     <Input
                       placeholder="Subjek pesan"
                       value={form.subject}
@@ -158,7 +158,7 @@ export function ContactPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Pesan *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Pesan *</label>
                   <Textarea
                     placeholder="Tulis pesan Anda..."
                     value={form.message}

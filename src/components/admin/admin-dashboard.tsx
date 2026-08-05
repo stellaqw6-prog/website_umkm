@@ -49,14 +49,14 @@ export function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-24 text-gray-400 dark:text-gray-500">
+      <div className="flex justify-center py-24 text-gray-400 dark:text-stone-500">
         <Loader2 className="animate-spin" size={32} />
       </div>
     );
   }
 
   if (!stats) {
-    return <p className="text-center py-24 text-gray-400 text-sm dark:text-gray-500">Gagal memuat statistik dashboard.</p>;
+    return <p className="text-center py-24 text-gray-400 text-sm dark:text-stone-500">Gagal memuat statistik dashboard.</p>;
   }
 
   const maxRevenue = Math.max(...stats.monthlyRevenue.map((m) => m.revenue), 1);
@@ -99,8 +99,8 @@ export function AdminDashboard() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
-        <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Ringkasan bisnis Anda berdasarkan data pesanan asli</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Dashboard</h1>
+        <p className="text-gray-500 text-sm mt-1 dark:text-stone-400">Ringkasan bisnis Anda berdasarkan data pesanan asli</p>
       </motion.div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -119,8 +119,8 @@ export function AdminDashboard() {
                     </div>
                   )}
                 </div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stat.value}</div>
-                <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">{stat.label}</p>
+                <div className="text-2xl font-bold text-gray-900 dark:text-stone-100">{stat.value}</div>
+                <p className="text-xs text-gray-500 mt-1 dark:text-stone-400">{stat.label}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -138,7 +138,7 @@ export function AdminDashboard() {
             </CardHeader>
             <CardContent>
               {stats.totalOrders === 0 ? (
-                <div className="h-64 flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500">
+                <div className="h-64 flex flex-col items-center justify-center text-center text-gray-400 dark:text-stone-500">
                   <TrendingUp size={32} className="mb-2 opacity-40" />
                   <p className="text-sm">Belum ada data penjualan.</p>
                   <p className="text-xs">Grafik akan terisi begitu ada pesanan masuk.</p>
@@ -152,12 +152,12 @@ export function AdminDashboard() {
                           className="w-full bg-blue-100 hover:bg-blue-200 rounded-t-md transition-all relative group"
                           style={{ height: `${Math.max((m.revenue / maxRevenue) * 100, m.revenue > 0 ? 4 : 1)}%` }}
                         >
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-medium text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap dark:text-gray-400">
+                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-medium text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap dark:text-stone-400">
                             {formatCurrency(m.revenue)}
                           </span>
                         </div>
                       </div>
-                      <span className="text-xs text-gray-400 dark:text-gray-500">{m.month}</span>
+                      <span className="text-xs text-gray-400 dark:text-stone-500">{m.month}</span>
                     </div>
                   ))}
                 </div>
@@ -173,23 +173,23 @@ export function AdminDashboard() {
             </CardHeader>
             <CardContent className="space-y-3">
               {stats.recentOrders.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-10 text-center text-gray-400 dark:text-gray-500">
+                <div className="flex flex-col items-center justify-center py-10 text-center text-gray-400 dark:text-stone-500">
                   <Inbox size={28} className="mb-2 opacity-40" />
                   <p className="text-sm">Belum ada pesanan masuk.</p>
                 </div>
               ) : (
                 stats.recentOrders.map((order) => (
-                  <div key={order.orderNumber} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors dark:hover:bg-gray-800">
+                  <div key={order.orderNumber} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors dark:hover:bg-stone-800">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-gray-900 font-mono dark:text-gray-100">{order.orderNumber}</span>
+                        <span className="text-sm font-semibold text-gray-900 font-mono dark:text-stone-100">{order.orderNumber}</span>
                         <Badge variant={statusVariant[order.status] ?? "secondary"} className="text-[10px]">
                           {statusLabel[order.status] ?? order.status}
                         </Badge>
                       </div>
-                      <p className="text-xs text-gray-500 truncate dark:text-gray-400">{order.customer} · {order.product}</p>
+                      <p className="text-xs text-gray-500 truncate dark:text-stone-400">{order.customer} · {order.product}</p>
                     </div>
-                    <span className="text-sm font-semibold text-gray-900 whitespace-nowrap ml-2 dark:text-gray-100">{formatCurrency(order.amount)}</span>
+                    <span className="text-sm font-semibold text-gray-900 whitespace-nowrap ml-2 dark:text-stone-100">{formatCurrency(order.amount)}</span>
                   </div>
                 ))
               )}

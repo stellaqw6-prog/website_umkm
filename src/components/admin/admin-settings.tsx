@@ -82,7 +82,7 @@ export function AdminSettings() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-24 text-gray-400 dark:text-gray-500">
+      <div className="flex justify-center py-24 text-gray-400 dark:text-stone-500">
         <Loader2 className="animate-spin" size={32} />
       </div>
     );
@@ -92,8 +92,8 @@ export function AdminSettings() {
     <div className="space-y-6 max-w-3xl">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Pengaturan</h1>
-          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Konfigurasi website dan bisnis Anda — perubahan langsung tampil di website publik</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Pengaturan</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-stone-400">Konfigurasi website dan bisnis Anda — perubahan langsung tampil di website publik</p>
         </div>
         <Button variant="premium" onClick={handleSave} disabled={saving}>
           {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={18} className="mr-2" />} Simpan
@@ -108,25 +108,25 @@ export function AdminSettings() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Nama Website</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Nama Website</label>
             <Input value={settings.siteName} onChange={(e) => setSettings({ ...settings, siteName: e.target.value })} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Deskripsi</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Deskripsi</label>
             <Textarea value={settings.siteDescription ?? ""} onChange={(e) => setSettings({ ...settings, siteDescription: e.target.value })} />
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1 dark:text-gray-300"><Mail size={14} /> Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1 dark:text-stone-300"><Mail size={14} /> Email</label>
               <Input type="email" value={settings.email ?? ""} onChange={(e) => setSettings({ ...settings, email: e.target.value })} placeholder="info@tokokamu.id" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1 dark:text-gray-300"><Phone size={14} /> Telepon</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1 dark:text-stone-300"><Phone size={14} /> Telepon</label>
               <Input value={settings.phone ?? ""} onChange={(e) => setSettings({ ...settings, phone: e.target.value })} placeholder="+62 812-3456-7890" />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1 dark:text-gray-300"><MapPin size={14} /> Alamat</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1 dark:text-stone-300"><MapPin size={14} /> Alamat</label>
             <Textarea value={settings.address ?? ""} onChange={(e) => setSettings({ ...settings, address: e.target.value })} rows={2} />
           </div>
         </CardContent>
@@ -141,27 +141,27 @@ export function AdminSettings() {
         <CardContent className="space-y-4">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Nomor WhatsApp</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Nomor WhatsApp</label>
               <Input value={settings.whatsapp ?? ""} onChange={(e) => setSettings({ ...settings, whatsapp: e.target.value })} placeholder="6281234567890 (tanpa +/spasi/strip)" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Facebook</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Facebook</label>
               <Input value={settings.facebook ?? ""} onChange={(e) => setSettings({ ...settings, facebook: e.target.value })} placeholder="https://facebook.com/tokokamu" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Instagram</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Instagram</label>
               <Input value={settings.instagram ?? ""} onChange={(e) => setSettings({ ...settings, instagram: e.target.value })} placeholder="https://instagram.com/tokokamu" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">TikTok</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">TikTok</label>
               <Input value={settings.tiktok ?? ""} onChange={(e) => setSettings({ ...settings, tiktok: e.target.value })} placeholder="https://tiktok.com/@tokokamu" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">YouTube</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">YouTube</label>
               <Input value={settings.youtube ?? ""} onChange={(e) => setSettings({ ...settings, youtube: e.target.value })} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Twitter / X</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Twitter / X</label>
               <Input value={settings.twitter ?? ""} onChange={(e) => setSettings({ ...settings, twitter: e.target.value })} />
             </div>
           </div>
@@ -176,11 +176,11 @@ export function AdminSettings() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">URL Logo</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">URL Logo</label>
             <Input value={settings.logo ?? ""} onChange={(e) => setSettings({ ...settings, logo: e.target.value })} placeholder="https://... (link gambar logo)" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Warna Utama</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Warna Utama</label>
             <div className="flex items-center gap-3">
               <input
                 type="color"
@@ -201,7 +201,7 @@ export function AdminSettings() {
           <CardDescription>Biaya yang harus dibayar pelanggan untuk upgrade jadi seller (buka toko sendiri)</CardDescription>
         </CardHeader>
         <CardContent>
-          <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Biaya Upgrade Seller (Rp)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Biaya Upgrade Seller (Rp)</label>
           <Input type="number" value={settings.sellerUpgradeFee} onChange={(e) => setSettings({ ...settings, sellerUpgradeFee: e.target.value })} className="max-w-xs" />
         </CardContent>
       </Card>
@@ -215,7 +215,7 @@ export function AdminSettings() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-stone-300">
             <input
               type="checkbox"
               checked={settings.shippingEnabled}
@@ -225,7 +225,7 @@ export function AdminSettings() {
             Aktifkan biaya ongkir default platform
           </label>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Biaya Ongkir Default (Rp)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Biaya Ongkir Default (Rp)</label>
             <Input
               type="number"
               value={settings.defaultShippingCost}
@@ -234,7 +234,7 @@ export function AdminSettings() {
               disabled={!settings.shippingEnabled}
             />
             {!settings.shippingEnabled && (
-              <p className="text-xs text-gray-400 mt-1 dark:text-gray-500">Nonaktif — semua produk yang ikut aturan default otomatis gratis ongkir.</p>
+              <p className="text-xs text-gray-400 mt-1 dark:text-stone-500">Nonaktif — semua produk yang ikut aturan default otomatis gratis ongkir.</p>
             )}
           </div>
         </CardContent>

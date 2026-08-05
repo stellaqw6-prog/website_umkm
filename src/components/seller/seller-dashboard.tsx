@@ -39,9 +39,9 @@ export function SellerDashboard() {
   }, []);
 
   if (loading) {
-    return <div className="flex justify-center py-24 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={32} /></div>;
+    return <div className="flex justify-center py-24 text-gray-400 dark:text-stone-500"><Loader2 className="animate-spin" size={32} /></div>;
   }
-  if (!stats) return <p className="text-center py-24 text-gray-400 text-sm dark:text-gray-500">Gagal memuat data.</p>;
+  if (!stats) return <p className="text-center py-24 text-gray-400 text-sm dark:text-stone-500">Gagal memuat data.</p>;
 
   const statCards = [
     { label: "Total Pendapatan", value: formatCurrency(stats.totalRevenue), icon: DollarSign, bg: "bg-green-50", color: "text-green-600" },
@@ -53,8 +53,8 @@ export function SellerDashboard() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard Toko</h1>
-        <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Ringkasan performa toko kamu</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Dashboard Toko</h1>
+        <p className="text-gray-500 text-sm mt-1 dark:text-stone-400">Ringkasan performa toko kamu</p>
       </motion.div>
 
       {stats.pendingOrders > 0 && (
@@ -80,8 +80,8 @@ export function SellerDashboard() {
                 <div className={`w-10 h-10 ${stat.bg} rounded-xl flex items-center justify-center mb-3`}>
                   <stat.icon className={stat.color} size={20} />
                 </div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stat.value}</div>
-                <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">{stat.label}</p>
+                <div className="text-2xl font-bold text-gray-900 dark:text-stone-100">{stat.value}</div>
+                <p className="text-xs text-gray-500 mt-1 dark:text-stone-400">{stat.label}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -92,18 +92,18 @@ export function SellerDashboard() {
         <CardHeader><CardTitle>Pesanan Terbaru</CardTitle></CardHeader>
         <CardContent className="space-y-3">
           {stats.recentOrders.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-gray-400 dark:text-gray-500"><Inbox size={28} className="mb-2 opacity-40" /><p className="text-sm">Belum ada pesanan masuk.</p></div>
+            <div className="flex flex-col items-center justify-center py-10 text-gray-400 dark:text-stone-500"><Inbox size={28} className="mb-2 opacity-40" /><p className="text-sm">Belum ada pesanan masuk.</p></div>
           ) : (
             stats.recentOrders.map((order) => (
-              <div key={order.orderNumber} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors dark:hover:bg-gray-800">
+              <div key={order.orderNumber} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors dark:hover:bg-stone-800">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-900 font-mono dark:text-gray-100">{order.orderNumber}</span>
+                    <span className="text-sm font-semibold text-gray-900 font-mono dark:text-stone-100">{order.orderNumber}</span>
                     <Badge variant={statusVariant[order.status] ?? "secondary"} className="text-[10px]">{statusLabel[order.status] ?? order.status}</Badge>
                   </div>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">{new Date(order.createdAt).toLocaleDateString("id-ID")}</p>
+                  <p className="text-xs text-gray-400 dark:text-stone-500">{new Date(order.createdAt).toLocaleDateString("id-ID")}</p>
                 </div>
-                <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(Number(order.grandTotal))}</span>
+                <span className="text-sm font-semibold text-gray-900 dark:text-stone-100">{formatCurrency(Number(order.grandTotal))}</span>
               </div>
             ))
           )}

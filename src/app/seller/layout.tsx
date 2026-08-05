@@ -14,7 +14,7 @@ export const metadata = {
 export default function SellerLayout({ children }: { children: ReactNode }) {
   return (
     <DashboardSidebarProvider>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 dark:bg-stone-950">
         <SellerSidebar />
         <div className="lg:pl-64">
           <AdminHeader />

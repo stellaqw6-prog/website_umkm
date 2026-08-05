@@ -124,8 +124,8 @@ export function JadiSellerPage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center text-center px-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Login Diperlukan</h2>
-          <p className="text-gray-500 mb-6 dark:text-gray-400">Silakan login untuk mengajukan jadi seller.</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-stone-100">Login Diperlukan</h2>
+          <p className="text-gray-500 mb-6 dark:text-stone-400">Silakan login untuk mengajukan jadi seller.</p>
           <Link href="/login?redirect=/jadi-seller"><Button variant="premium">Login Sekarang</Button></Link>
         </div>
       </div>
@@ -137,8 +137,8 @@ export function JadiSellerPage() {
       <div className="min-h-[60vh] flex items-center justify-center text-center px-4">
         <div>
           <Store size={48} className="mx-auto text-blue-500 mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Kamu Sudah Punya Akses Toko</h2>
-          <p className="text-gray-500 mb-6 dark:text-gray-400">Akun kamu sudah berstatus {user.role === "seller" ? "seller" : "staf"}.</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-stone-100">Kamu Sudah Punya Akses Toko</h2>
+          <p className="text-gray-500 mb-6 dark:text-stone-400">Akun kamu sudah berstatus {user.role === "seller" ? "seller" : "staf"}.</p>
           {user.role === "seller" && <Link href="/seller/dashboard"><Button variant="premium">Ke Dashboard Seller</Button></Link>}
         </div>
       </div>
@@ -150,9 +150,9 @@ export function JadiSellerPage() {
       <div className="min-h-[60vh] flex items-center justify-center text-center px-4">
         <div className="max-w-md">
           <Clock size={48} className="mx-auto text-yellow-500 mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Menunggu Verifikasi</h2>
-          <p className="text-gray-500 dark:text-gray-400">
-            Permintaan untuk toko <span className="font-semibold text-gray-700 dark:text-gray-300">&ldquo;{existingRequest.storeName}&rdquo;</span> sedang diperiksa developer. Kamu akan otomatis jadi seller begitu disetujui.
+          <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-stone-100">Menunggu Verifikasi</h2>
+          <p className="text-gray-500 dark:text-stone-400">
+            Permintaan untuk toko <span className="font-semibold text-gray-700 dark:text-stone-300">&ldquo;{existingRequest.storeName}&rdquo;</span> sedang diperiksa developer. Kamu akan otomatis jadi seller begitu disetujui.
           </p>
         </div>
       </div>
@@ -160,14 +160,14 @@ export function JadiSellerPage() {
   }
 
   return (
-    <section className="py-12 bg-gray-50 min-h-screen dark:bg-gray-800">
+    <section className="py-12 bg-gray-50 min-h-screen dark:bg-stone-800">
       <div className="container mx-auto px-4 max-w-lg">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
             <Store size={28} className="text-blue-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Buka Toko Sendiri</h1>
-          <p className="text-gray-500 mt-2 dark:text-gray-400">Punya UMKM sendiri? Daftar jadi seller dan mulai jualan di platform ini.</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Buka Toko Sendiri</h1>
+          <p className="text-gray-500 mt-2 dark:text-stone-400">Punya UMKM sendiri? Daftar jadi seller dan mulai jualan di platform ini.</p>
         </motion.div>
 
         {existingRequest?.status === "rejected" && (
@@ -181,7 +181,7 @@ export function JadiSellerPage() {
           </div>
         )}
 
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 dark:bg-gray-900 dark:border-gray-800">
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 dark:bg-stone-900 dark:border-stone-800">
           <div className="bg-blue-50 rounded-xl p-4 mb-6 text-center">
             <p className="text-xs text-blue-600 mb-1">Biaya Upgrade Sekali Bayar</p>
             <p className="text-2xl font-extrabold text-blue-700">{fee !== null ? formatCurrency(fee) : "..."}</p>
@@ -189,16 +189,16 @@ export function JadiSellerPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nama Toko</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nama Toko</label>
               <Input required minLength={3} value={storeName} onChange={(e) => setStoreName(e.target.value)} placeholder="Contoh: Batik Sari Ibu" />
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nomor HP/WhatsApp</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nomor HP/WhatsApp</label>
               <Input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0812xxxxxxx" />
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Pilih Metode Pembayaran</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Pilih Metode Pembayaran</label>
               <div className="grid grid-cols-2 gap-2">
                 {methods.map((m) => (
                   <button
@@ -206,7 +206,7 @@ export function JadiSellerPage() {
                     key={m.id}
                     onClick={() => setSelectedMethod(m)}
                     className={`p-2.5 rounded-xl border text-sm font-medium transition-all ${
-                      selectedMethod?.id === m.id ? "border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400" : "border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600"
+                      selectedMethod?.id === m.id ? "border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400" : "border-gray-200 text-gray-600 hover:border-gray-300 dark:border-stone-700 dark:text-stone-400 dark:hover:border-stone-600"
                     }`}
                   >
                     {m.name}
@@ -216,20 +216,20 @@ export function JadiSellerPage() {
             </div>
 
             {selectedMethod && (
-              <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between dark:bg-gray-800">
+              <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between dark:bg-stone-800">
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{selectedMethod.type === "bank" ? "No. Rekening" : "No. HP"}</p>
-                  <p className="font-mono font-semibold text-gray-900 dark:text-gray-100">{selectedMethod.accountNumber}</p>
-                  <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">a.n. {selectedMethod.accountName}</p>
+                  <p className="text-xs text-gray-500 dark:text-stone-400">{selectedMethod.type === "bank" ? "No. Rekening" : "No. HP"}</p>
+                  <p className="font-mono font-semibold text-gray-900 dark:text-stone-100">{selectedMethod.accountNumber}</p>
+                  <p className="text-xs text-gray-500 mt-1 dark:text-stone-400">a.n. {selectedMethod.accountName}</p>
                 </div>
                 <button type="button" onClick={() => copyNumber(selectedMethod.accountNumber)} className="p-2 rounded-lg hover:bg-gray-200 transition-colors">
-                  <Copy size={16} className="text-gray-500 dark:text-gray-400" />
+                  <Copy size={16} className="text-gray-500 dark:text-stone-400" />
                 </button>
               </div>
             )}
 
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Upload Bukti Transfer</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Upload Bukti Transfer</label>
               <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-blue-200 hover:border-blue-400 hover:bg-blue-50/50 rounded-xl py-6 cursor-pointer transition-colors">
                 {previewUrl ? (
                   <img src={previewUrl} alt="preview" className="w-16 h-16 object-cover rounded-lg" />
@@ -244,7 +244,7 @@ export function JadiSellerPage() {
             <Button type="submit" variant="premium" size="lg" className="w-full" disabled={submitting}>
               {submitting ? <Loader2 className="animate-spin" size={18} /> : "Kirim Permintaan"}
             </Button>
-            <p className="text-xs text-gray-400 text-center flex items-center justify-center gap-1 dark:text-gray-500">
+            <p className="text-xs text-gray-400 text-center flex items-center justify-center gap-1 dark:text-stone-500">
               <Tag size={11} /> Permintaan akan diverifikasi developer dalam 1-2 hari kerja
             </p>
           </form>

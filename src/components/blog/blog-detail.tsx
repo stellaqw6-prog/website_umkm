@@ -19,16 +19,16 @@ export function BlogDetail({ post }: { post: Post }) {
   const readTime = Math.max(1, Math.round(post.content.length / 1000));
 
   return (
-    <article className="bg-white dark:bg-gray-900">
+    <article className="bg-white dark:bg-stone-900">
       <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors mb-6 dark:text-gray-400">
+        <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors mb-6 dark:text-stone-400">
           <ArrowLeft size={15} /> Kembali ke Blog
         </Link>
 
         {post.category && <Badge className="mb-4">{post.category}</Badge>}
-        <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight dark:text-gray-100">{post.title}</h1>
+        <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight dark:text-stone-100">{post.title}</h1>
 
-        <div className="flex items-center gap-4 text-sm text-gray-400 mb-8 dark:text-gray-500">
+        <div className="flex items-center gap-4 text-sm text-gray-400 mb-8 dark:text-stone-500">
           <span className="flex items-center gap-1.5"><Calendar size={14} /> {formatDate(post.publishedAt)}</span>
           <span className="flex items-center gap-1.5"><Clock size={14} /> {readTime} min baca</span>
         </div>
@@ -39,7 +39,7 @@ export function BlogDetail({ post }: { post: Post }) {
           </div>
         )}
 
-        <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line dark:text-gray-300">
+        <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line dark:text-stone-300">
           {post.content}
         </div>
       </div>

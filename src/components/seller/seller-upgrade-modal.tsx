@@ -164,17 +164,17 @@ export function SellerUpgradeModal() {
             initial={{ opacity: 0, scale: 0.95, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 12 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto dark:bg-gray-900"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto dark:bg-stone-900"
           >
             {/* Header popup */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl z-10 dark:bg-gray-900 dark:border-gray-800">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl z-10 dark:bg-stone-900 dark:border-stone-800">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white">
                   <Sparkles size={16} />
                 </div>
-                <h2 className="font-bold text-gray-900 dark:text-gray-100">Upgrade Role Premium</h2>
+                <h2 className="font-bold text-gray-900 dark:text-stone-100">Upgrade Role Premium</h2>
               </div>
-              <button onClick={closeSellerUpgrade} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-all dark:hover:bg-gray-800 dark:text-gray-500">
+              <button onClick={closeSellerUpgrade} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-all dark:hover:bg-stone-800 dark:text-stone-500">
                 <X size={18} />
               </button>
             </div>
@@ -187,8 +187,8 @@ export function SellerUpgradeModal() {
               ) : !user ? (
                 <div className="text-center py-6">
                   <Store size={40} className="mx-auto text-blue-500 mb-3" />
-                  <h3 className="font-bold text-gray-900 mb-1 dark:text-gray-100">Login Diperlukan</h3>
-                  <p className="text-sm text-gray-500 mb-5 dark:text-gray-400">Silakan login terlebih dahulu untuk mengajukan upgrade role premium.</p>
+                  <h3 className="font-bold text-gray-900 mb-1 dark:text-stone-100">Login Diperlukan</h3>
+                  <p className="text-sm text-gray-500 mb-5 dark:text-stone-400">Silakan login terlebih dahulu untuk mengajukan upgrade role premium.</p>
                   <Link href="/login?redirect=/" onClick={closeSellerUpgrade}>
                     <Button variant="premium">Login Sekarang</Button>
                   </Link>
@@ -196,8 +196,8 @@ export function SellerUpgradeModal() {
               ) : isSellerAlready ? (
                 <div className="text-center py-6">
                   <Store size={40} className="mx-auto text-blue-500 mb-3" />
-                  <h3 className="font-bold text-gray-900 mb-1 dark:text-gray-100">Kamu Sudah Punya Akses Toko</h3>
-                  <p className="text-sm text-gray-500 mb-5 dark:text-gray-400">Akun kamu sudah berstatus {user.role === "seller" ? "seller" : "staf"}.</p>
+                  <h3 className="font-bold text-gray-900 mb-1 dark:text-stone-100">Kamu Sudah Punya Akses Toko</h3>
+                  <p className="text-sm text-gray-500 mb-5 dark:text-stone-400">Akun kamu sudah berstatus {user.role === "seller" ? "seller" : "staf"}.</p>
                   {user.role === "seller" && (
                     <Link href="/seller/dashboard" onClick={closeSellerUpgrade}>
                       <Button variant="premium">Ke Dashboard Seller</Button>
@@ -207,14 +207,14 @@ export function SellerUpgradeModal() {
               ) : existingRequest && existingRequest.status === "pending" ? (
                 <div className="text-center py-6">
                   <Clock size={40} className="mx-auto text-yellow-500 mb-3" />
-                  <h3 className="font-bold text-gray-900 mb-1 dark:text-gray-100">Menunggu Verifikasi</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Permintaan untuk toko <span className="font-semibold text-gray-700 dark:text-gray-300">&ldquo;{existingRequest.storeName}&rdquo;</span> sedang diperiksa developer. Kamu akan otomatis jadi seller begitu disetujui.
+                  <h3 className="font-bold text-gray-900 mb-1 dark:text-stone-100">Menunggu Verifikasi</h3>
+                  <p className="text-sm text-gray-500 dark:text-stone-400">
+                    Permintaan untuk toko <span className="font-semibold text-gray-700 dark:text-stone-300">&ldquo;{existingRequest.storeName}&rdquo;</span> sedang diperiksa developer. Kamu akan otomatis jadi seller begitu disetujui.
                   </p>
                 </div>
               ) : (
                 <>
-                  <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">Punya UMKM sendiri? Upgrade akunmu jadi seller dan mulai jualan di platform ini.</p>
+                  <p className="text-sm text-gray-500 mb-4 dark:text-stone-400">Punya UMKM sendiri? Upgrade akunmu jadi seller dan mulai jualan di platform ini.</p>
 
                   {existingRequest?.status === "rejected" && (
                     <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4 flex gap-3">
@@ -234,16 +234,16 @@ export function SellerUpgradeModal() {
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nama Toko</label>
+                      <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nama Toko</label>
                       <Input required minLength={3} value={storeName} onChange={(e) => setStoreName(e.target.value)} placeholder="Contoh: Batik Sari Ibu" />
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nomor HP/WhatsApp</label>
+                      <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nomor HP/WhatsApp</label>
                       <Input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0812xxxxxxx" />
                     </div>
 
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Pilih Metode Pembayaran</label>
+                      <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Pilih Metode Pembayaran</label>
                       <div className="grid grid-cols-2 gap-2">
                         {methods.map((m) => (
                           <button
@@ -251,7 +251,7 @@ export function SellerUpgradeModal() {
                             key={m.id}
                             onClick={() => setSelectedMethod(m)}
                             className={`p-2.5 rounded-xl border text-sm font-medium transition-all ${
-                              selectedMethod?.id === m.id ? "border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400" : "border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600"
+                              selectedMethod?.id === m.id ? "border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400" : "border-gray-200 text-gray-600 hover:border-gray-300 dark:border-stone-700 dark:text-stone-400 dark:hover:border-stone-600"
                             }`}
                           >
                             {m.name}
@@ -261,20 +261,20 @@ export function SellerUpgradeModal() {
                     </div>
 
                     {selectedMethod && (
-                      <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between dark:bg-gray-800">
+                      <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between dark:bg-stone-800">
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{selectedMethod.type === "bank" ? "No. Rekening" : "No. HP"}</p>
-                          <p className="font-mono font-semibold text-gray-900 dark:text-gray-100">{selectedMethod.accountNumber}</p>
-                          <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">a.n. {selectedMethod.accountName}</p>
+                          <p className="text-xs text-gray-500 dark:text-stone-400">{selectedMethod.type === "bank" ? "No. Rekening" : "No. HP"}</p>
+                          <p className="font-mono font-semibold text-gray-900 dark:text-stone-100">{selectedMethod.accountNumber}</p>
+                          <p className="text-xs text-gray-500 mt-1 dark:text-stone-400">a.n. {selectedMethod.accountName}</p>
                         </div>
                         <button type="button" onClick={() => copyNumber(selectedMethod.accountNumber)} className="p-2 rounded-lg hover:bg-gray-200 transition-colors">
-                          <Copy size={16} className="text-gray-500 dark:text-gray-400" />
+                          <Copy size={16} className="text-gray-500 dark:text-stone-400" />
                         </button>
                       </div>
                     )}
 
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Upload Bukti Transfer</label>
+                      <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Upload Bukti Transfer</label>
                       <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-blue-200 hover:border-blue-400 hover:bg-blue-50/50 rounded-xl py-6 cursor-pointer transition-colors">
                         {previewUrl ? (
                           <img src={previewUrl} alt="preview" className="w-16 h-16 object-cover rounded-lg" />
@@ -289,7 +289,7 @@ export function SellerUpgradeModal() {
                     <Button type="submit" variant="premium" size="lg" className="w-full" disabled={submitting}>
                       {submitting ? <Loader2 className="animate-spin" size={18} /> : "Kirim Permintaan"}
                     </Button>
-                    <p className="text-xs text-gray-400 text-center flex items-center justify-center gap-1 dark:text-gray-500">
+                    <p className="text-xs text-gray-400 text-center flex items-center justify-center gap-1 dark:text-stone-500">
                       <Tag size={11} /> Permintaan akan diverifikasi developer dalam 1-2 hari kerja
                     </p>
                   </form>

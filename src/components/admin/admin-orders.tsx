@@ -91,21 +91,21 @@ export function AdminOrders() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Pesanan</h1>
-        <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Kelola dan update status pesanan pelanggan</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Pesanan</h1>
+        <p className="text-gray-500 text-sm mt-1 dark:text-stone-400">Kelola dan update status pesanan pelanggan</p>
       </motion.div>
 
       <Card>
         <CardHeader className="pb-0">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-stone-500" />
               <Input placeholder="Cari nomor pesanan atau nama pelanggan..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-gray-700"
+              className="h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-stone-700"
             >
               <option value="">Semua Status</option>
               {statusOptions.map((s) => <option key={s} value={s}>{statusLabel[s]}</option>)}
@@ -113,47 +113,47 @@ export function AdminOrders() {
           </div>
         </CardHeader>
         <CardContent className="pt-4">
-          {loading ? <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500"><Loader2 className="animate-spin" size={28} /></div>
-          : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm dark:text-gray-500">Belum ada pesanan.</p>
+          {loading ? <div className="flex justify-center py-16 text-gray-400 dark:text-stone-500"><Loader2 className="animate-spin" size={28} /></div>
+          : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm dark:text-stone-500">Belum ada pesanan.</p>
           : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">No. Pesanan</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Toko</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Pelanggan</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Total</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Status</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Pembayaran</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Bukti</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Tanggal</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">Aksi</th>
+                  <tr className="border-b border-gray-100 dark:border-stone-800">
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">No. Pesanan</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Toko</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Pelanggan</th>
+                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Total</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Status</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Pembayaran</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Bukti</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Tanggal</th>
+                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase dark:text-stone-400">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((o) => (
                     <tr key={o.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                      <td className="py-3 px-4 font-mono text-sm font-medium text-gray-900 dark:text-gray-100">{o.orderNumber}</td>
-                      <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
-                        {o.storeName ? <Badge variant="secondary" className="text-[10px]">{o.storeName}</Badge> : <span className="text-gray-400 text-xs dark:text-gray-500">Platform</span>}
+                      <td className="py-3 px-4 font-mono text-sm font-medium text-gray-900 dark:text-stone-100">{o.orderNumber}</td>
+                      <td className="py-3 px-4 text-sm text-gray-700 dark:text-stone-300">
+                        {o.storeName ? <Badge variant="secondary" className="text-[10px]">{o.storeName}</Badge> : <span className="text-gray-400 text-xs dark:text-stone-500">Platform</span>}
                       </td>
-                      <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{o.customerName ?? "-"}</td>
-                      <td className="py-3 px-4 text-sm text-right font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(Number(o.grandTotal))}</td>
+                      <td className="py-3 px-4 text-sm text-gray-700 dark:text-stone-300">{o.customerName ?? "-"}</td>
+                      <td className="py-3 px-4 text-sm text-right font-semibold text-gray-900 dark:text-stone-100">{formatCurrency(Number(o.grandTotal))}</td>
                       <td className="py-3 px-4 text-center"><Badge variant={statusVariant[o.status] ?? "secondary"} className="text-[10px]">{statusLabel[o.status] ?? o.status}</Badge></td>
                       <td className="py-3 px-4 text-center"><Badge variant={o.paymentStatus === "paid" ? "success" : "secondary"} className="text-[10px]">{paymentLabel[o.paymentStatus] ?? o.paymentStatus}</Badge></td>
                       <td className="py-3 px-4 text-center">
                         {o.paymentProofUrl ? (
                           <a href={o.paymentProofUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                            <img src={o.paymentProofUrl} alt="Bukti transfer" className="w-8 h-8 object-cover rounded-lg mx-auto border border-gray-200 hover:opacity-80 transition-opacity dark:border-gray-700" />
+                            <img src={o.paymentProofUrl} alt="Bukti transfer" className="w-8 h-8 object-cover rounded-lg mx-auto border border-gray-200 hover:opacity-80 transition-opacity dark:border-stone-700" />
                           </a>
                         ) : (
                           <span className="text-gray-300 text-xs">—</span>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-sm text-gray-500 dark:text-gray-400">{new Date(o.createdAt).toLocaleDateString("id-ID")}</td>
+                      <td className="py-3 px-4 text-sm text-gray-500 dark:text-stone-400">{new Date(o.createdAt).toLocaleDateString("id-ID")}</td>
                       <td className="py-3 px-4 text-right">
-                        <button onClick={() => openDetail(o)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-all dark:hover:bg-gray-800 dark:text-gray-500"><Eye size={15} /></button>
+                        <button onClick={() => openDetail(o)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-all dark:hover:bg-stone-800 dark:text-stone-500"><Eye size={15} /></button>
                       </td>
                     </tr>
                   ))}
@@ -168,9 +168,9 @@ export function AdminOrders() {
         <div className="space-y-4">
           {editing?.paymentProofUrl && (
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Bukti Transfer</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Bukti Transfer</label>
               <a href={editing.paymentProofUrl} target="_blank" rel="noopener noreferrer" className="block relative group">
-                <img src={editing.paymentProofUrl} alt="Bukti transfer" className="w-full max-h-64 object-contain rounded-xl border border-gray-200 bg-gray-50 dark:bg-gray-800/60 dark:border-gray-700" />
+                <img src={editing.paymentProofUrl} alt="Bukti transfer" className="w-full max-h-64 object-contain rounded-xl border border-gray-200 bg-gray-50 dark:bg-stone-800/60 dark:border-stone-700" />
                 <span className="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded-xl transition-all flex items-center justify-center">
                   <ExternalLink size={20} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                 </span>
@@ -178,19 +178,19 @@ export function AdminOrders() {
             </div>
           )}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Status Pesanan</label>
-            <select value={formStatus} onChange={(e) => setFormStatus(e.target.value)} className="w-full h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-gray-700">
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Status Pesanan</label>
+            <select value={formStatus} onChange={(e) => setFormStatus(e.target.value)} className="w-full h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-stone-700">
               {statusOptions.map((s) => <option key={s} value={s}>{statusLabel[s]}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Status Pembayaran</label>
-            <select value={formPayment} onChange={(e) => setFormPayment(e.target.value)} className="w-full h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-gray-700">
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Status Pembayaran</label>
+            <select value={formPayment} onChange={(e) => setFormPayment(e.target.value)} className="w-full h-10 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:border-stone-700">
               {paymentOptions.map((p) => <option key={p} value={p}>{paymentLabel[p]}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nomor Resi (opsional)</label>
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nomor Resi (opsional)</label>
             <Input value={formTracking} onChange={(e) => setFormTracking(e.target.value)} placeholder="Isi jika sudah dikirim" />
           </div>
           <div className="flex gap-2 pt-2">

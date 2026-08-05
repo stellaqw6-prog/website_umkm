@@ -114,8 +114,8 @@ export function AdminCategories() {
         className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Kategori</h1>
-          <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Kelola kategori produk UMKM Anda</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Kategori</h1>
+          <p className="text-gray-500 text-sm mt-1 dark:text-stone-400">Kelola kategori produk UMKM Anda</p>
         </div>
         <Button variant="premium" onClick={openAdd}>
           <Plus size={18} className="mr-2" /> Tambah Kategori
@@ -125,17 +125,17 @@ export function AdminCategories() {
       <Card>
         <CardHeader className="pb-0">
           <div className="relative max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-stone-500" />
             <Input placeholder="Cari kategori..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </CardHeader>
         <CardContent className="pt-4">
           {loading ? (
-            <div className="flex justify-center py-16 text-gray-400 dark:text-gray-500">
+            <div className="flex justify-center py-16 text-gray-400 dark:text-stone-500">
               <Loader2 className="animate-spin" size={28} />
             </div>
           ) : filtered.length === 0 ? (
-            <p className="text-center py-16 text-gray-400 text-sm dark:text-gray-500">Belum ada kategori. Klik &quot;Tambah Kategori&quot; untuk membuat.</p>
+            <p className="text-center py-16 text-gray-400 text-sm dark:text-stone-500">Belum ada kategori. Klik &quot;Tambah Kategori&quot; untuk membuat.</p>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map((cat, i) => (
@@ -144,7 +144,7 @@ export function AdminCategories() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-all dark:border-gray-800"
+                  className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-all dark:border-stone-800"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center">
@@ -154,18 +154,18 @@ export function AdminCategories() {
                       {cat.isActive ? "Aktif" : "Nonaktif"}
                     </Badge>
                   </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">{cat.name}</h3>
-                  <p className="text-xs text-gray-400 mb-3 dark:text-gray-500">/{cat.slug}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-stone-100">{cat.name}</h3>
+                  <p className="text-xs text-gray-400 mb-3 dark:text-stone-500">/{cat.slug}</p>
                   <div className="flex items-center gap-1 pt-3 border-t border-gray-50">
                     <button
                       onClick={() => openEdit(cat)}
-                      className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400"
+                      className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-blue-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-stone-800 dark:text-stone-400"
                     >
                       <Edit size={13} /> Edit
                     </button>
                     <button
                       onClick={() => handleDelete(cat)}
-                      className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-gray-800 dark:text-gray-400"
+                      className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:text-red-600 py-1.5 rounded-lg hover:bg-gray-50 transition-all dark:hover:bg-stone-800 dark:text-stone-400"
                     >
                       <Trash2 size={13} /> Hapus
                     </button>
@@ -180,7 +180,7 @@ export function AdminCategories() {
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Edit Kategori" : "Tambah Kategori"}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Nama Kategori</label>
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nama Kategori</label>
             <Input
               required
               value={form.name}
@@ -189,14 +189,14 @@ export function AdminCategories() {
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Slug (URL)</label>
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Slug (URL)</label>
             <Input required value={form.slug} onChange={(e) => setForm({ ...form, slug: slugify(e.target.value) })} placeholder="fashion" />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Deskripsi</label>
+            <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Deskripsi</label>
             <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} />
           </div>
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-stone-300">
             <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="rounded" />
             Aktifkan kategori ini
           </label>

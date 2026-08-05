@@ -15,11 +15,11 @@ export function AdminHeader() {
   const isDeveloper = user?.role === "superadmin";
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white/80 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between gap-2 px-3 md:px-6 dark:bg-gray-900/80 dark:border-gray-800">
+    <header className="sticky top-0 z-30 h-16 bg-white/80 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between gap-2 px-3 md:px-6 dark:bg-stone-900/80 dark:border-stone-800">
       {/* Hamburger — cuma tampil di mobile/tablet, buat buka-tutup sidebar */}
       <button
         onClick={toggleMobile}
-        className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-all lg:hidden dark:text-gray-400 dark:hover:bg-gray-800 flex-shrink-0"
+        className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-all lg:hidden dark:text-stone-400 dark:hover:bg-stone-800 flex-shrink-0"
         aria-label="Buka menu"
       >
         <Menu size={20} />
@@ -28,17 +28,17 @@ export function AdminHeader() {
       {/* Search */}
       <div className="flex-1 max-w-md min-w-0">
         <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-stone-500" />
           <Input
             placeholder="Cari produk, pesanan, pelanggan..."
-            className="pl-9 h-9 text-sm bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+            className="pl-9 h-9 text-sm bg-gray-50 border-gray-200 dark:bg-stone-800 dark:border-stone-700"
           />
         </div>
       </div>
 
       {/* Actions */}
       <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
-        <button className="relative p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-all dark:text-gray-400 dark:hover:bg-gray-800">
+        <button className="relative p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-all dark:text-stone-400 dark:hover:bg-stone-800">
           <Bell size={18} />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500" />
         </button>
@@ -50,7 +50,7 @@ export function AdminHeader() {
         >
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-2 p-2 rounded-xl text-gray-700 hover:bg-gray-100 transition-all dark:text-gray-300 dark:hover:bg-gray-800"
+            className="flex items-center gap-2 p-2 rounded-xl text-gray-700 hover:bg-gray-100 transition-all dark:text-stone-300 dark:hover:bg-stone-800"
           >
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
               {displayName.charAt(0)}
@@ -73,9 +73,9 @@ export function AdminHeader() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 8 }}
-                className="absolute top-full right-0 mt-1 w-44 bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 py-2 z-50 dark:bg-gray-900 dark:border-gray-800 dark:shadow-black/40"
+                className="absolute top-full right-0 mt-1 w-44 bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 py-2 z-50 dark:bg-stone-900 dark:border-stone-800 dark:shadow-black/40"
               >
-                <div className="px-4 py-1.5 text-xs text-gray-400 md:hidden dark:text-gray-500">
+                <div className="px-4 py-1.5 text-xs text-gray-400 md:hidden dark:text-stone-500">
                   {displayName} · {isDeveloper ? "Developer" : "Admin"}
                 </div>
                 <button

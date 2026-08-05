@@ -39,9 +39,9 @@ export function ForgotPasswordForm() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 dark:bg-gray-900"
+      className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 dark:bg-stone-900"
     >
-      <Link href="/login" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors mb-6 dark:text-gray-400">
+      <Link href="/login" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors mb-6 dark:text-stone-400">
         <ArrowLeft size={15} /> Kembali ke Login
       </Link>
 
@@ -50,21 +50,21 @@ export function ForgotPasswordForm() {
           <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <CheckCircle2 size={28} className="text-green-600" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Cek Email Kamu</h1>
-          <p className="text-gray-500 text-sm dark:text-gray-400">
-            Jika email <span className="font-medium text-gray-700 dark:text-gray-300">{email}</span> terdaftar, kami sudah kirim link untuk reset password. Cek inbox atau folder spam.
+          <h1 className="text-xl font-bold text-gray-900 mb-2 dark:text-stone-100">Cek Email Kamu</h1>
+          <p className="text-gray-500 text-sm dark:text-stone-400">
+            Jika email <span className="font-medium text-gray-700 dark:text-stone-300">{email}</span> terdaftar, kami sudah kirim link untuk reset password. Cek inbox atau folder spam.
           </p>
         </div>
       ) : (
         <>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2 dark:text-gray-100">Lupa Password?</h1>
-          <p className="text-gray-500 text-sm mb-6 dark:text-gray-400">Masukkan email akun kamu, kami akan kirimkan link untuk membuat password baru.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2 dark:text-stone-100">Lupa Password?</h1>
+          <p className="text-gray-500 text-sm mb-6 dark:text-stone-400">Masukkan email akun kamu, kami akan kirimkan link untuk membuat password baru.</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-gray-300">Email</label>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Email</label>
               <div className="relative">
-                <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+                <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-stone-500" />
                 <Input type="email" required placeholder="nama@email.com" className="pl-11" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
