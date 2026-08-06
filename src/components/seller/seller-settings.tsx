@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Save, Store, Loader2, Truck } from "lucide-react";
+import { Save, Store, Loader2, Truck, Wallet, Upload, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -146,11 +146,171 @@ export function SellerSettings() {
         </CardContent>
       </Card>
 
+      <StorePaymentMethodsCard />
+
       <div className="flex justify-end">
         <Button variant="premium" onClick={handleSave} disabled={saving}>
           {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={18} className="mr-2" />} Simpan Profil
         </Button>
       </div>
     </div>
+  );
+}
+
+interface DanaState {
+  isActive: boolean;
+  accountNumber: string;
+  accountName: string;
+}
+interface QrisState {
+  isActive: boolean;
+  qrImage: string;
+}
+
+function StorePaymentMethodsCard() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [uploadingQr, setUploadingQr] = useState(false);
+  const [dana, setDana] = useState<DanaState>({ isActive: false, accountNumber: "", accountName: "" });
+  const [qris, setQris] = useState<QrisState>({ isActive: false, qrImage: "" });
+
+  useEffect(() => {
+    fetch("/api/seller/payment-methods")
+      .then((res) => res.json())
+      .then((data) => {
+        setDana({
+          isActive: !!data.dana?.isActive,
+          accountNumber: data.dana?.accountNumber ?? "",
+          accountName: data.dana?.accountName ?? "",
+        });
+        setQris({
+          isActive: !!data.qris?.isActive,
+          qrImage: data.qris?.qrImage ?? "",
+        });
+      })
+      .catch(() => toast.error("Gagal memuat metode pembayaran toko"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleQrUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Ukuran file maksimal 5MB");
+      return;
+    }
+    setUploadingQr(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/seller/payment-methods/qr-upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error ?? "Gagal upload gambar QR");
+        return;
+      }
+      setQris((prev) => ({ ...prev, qrImage: data.url }));
+      toast.success("Gambar QR berhasil diupload");
+    } catch {
+      toast.error("Tidak bisa terhubung ke server");
+    } finally {
+      setUploadingQr(false);
+    }
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/seller/payment-methods", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dana, qris }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error ?? "Gagal menyimpan");
+        return;
+      }
+      toast.success("Metode pembayaran toko berhasil disimpan!");
+    } catch {
+      toast.error("Tidak bisa terhubung ke server");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2"><Wallet size={20} className="text-emerald-600" /> Metode Pembayaran Toko</CardTitle>
+        <CardDescription>
+          Ini rekening pembayaran milik toko kamu sendiri — beda dengan metode pembayaran platform. Pembeli akan transfer/scan QR langsung ke sini saat checkout produk dari toko kamu. Cuma tersedia DANA & QRIS.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {loading ? (
+          <div className="flex justify-center py-8 text-gray-400 dark:text-stone-500"><Loader2 className="animate-spin" size={24} /></div>
+        ) : (
+          <>
+            {/* DANA */}
+            <div className="border border-gray-100 rounded-xl p-4 space-y-3 dark:border-stone-800">
+              <label className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-gray-800 dark:text-stone-200">DANA</span>
+                <span className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={dana.isActive}
+                    onChange={(e) => setDana({ ...dana, isActive: e.target.checked })}
+                    className="rounded"
+                  />
+                </span>
+              </label>
+              {dana.isActive && (
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-medium text-gray-500 mb-1 block dark:text-stone-400">Nomor HP DANA</label>
+                    <Input value={dana.accountNumber} onChange={(e) => setDana({ ...dana, accountNumber: e.target.value })} placeholder="0812xxxxxxx" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-gray-500 mb-1 block dark:text-stone-400">Nama Pemilik Akun</label>
+                    <Input value={dana.accountName} onChange={(e) => setDana({ ...dana, accountName: e.target.value })} placeholder="Nama sesuai DANA" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* QRIS */}
+            <div className="border border-gray-100 rounded-xl p-4 space-y-3 dark:border-stone-800">
+              <label className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-gray-800 dark:text-stone-200 flex items-center gap-1.5"><QrCode size={15} /> QRIS</span>
+                <input type="checkbox" checked={qris.isActive} onChange={(e) => setQris({ ...qris, isActive: e.target.checked })} className="rounded" />
+              </label>
+              {qris.isActive && (
+                <div>
+                  <label className="text-xs font-medium text-gray-500 mb-1 block dark:text-stone-400">Gambar QR Code</label>
+                  <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50/50 dark:border-emerald-900 dark:hover:bg-emerald-950/20 rounded-xl py-6 cursor-pointer transition-colors">
+                    {qris.qrImage ? (
+                      <img src={qris.qrImage} alt="QR preview" className="w-24 h-24 object-contain rounded-lg bg-white" />
+                    ) : uploadingQr ? (
+                      <Loader2 className="animate-spin text-emerald-500" size={22} />
+                    ) : (
+                      <Upload size={22} className="text-emerald-400" />
+                    )}
+                    <span className="text-xs font-medium text-emerald-600">{qris.qrImage ? "Klik untuk ganti gambar" : "Klik untuk upload gambar QRIS"}</span>
+                    <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleQrUpload} disabled={uploadingQr} />
+                  </label>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end">
+              <Button variant="premium" onClick={handleSave} disabled={saving || uploadingQr}>
+                {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={16} className="mr-2" />} Simpan Metode Pembayaran
+              </Button>
+            </div>
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 }

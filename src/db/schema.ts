@@ -39,6 +39,9 @@ export const promotionTypeEnum = pgEnum("promotion_type", [
   "free_shipping",
 ]);
 export const paymentMethodTypeEnum = pgEnum("payment_method_type", ["ewallet", "bank", "cod"]);
+// Provider yang boleh dipakai seller untuk metode pembayaran tokonya sendiri — SENGAJA cuma 2,
+// beda dengan milik platform/Developer (paymentMethods) yang bisa macam-macam (bank, e-wallet, COD, dst).
+export const storePaymentProviderEnum = pgEnum("store_payment_provider", ["dana", "qris"]);
 
 // ==================== USERS ====================
 export const users = pgTable(
@@ -448,6 +451,30 @@ export const stores = pgTable(
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => [index("stores_seller_idx").on(table.sellerId), index("stores_slug_idx").on(table.slug)]
+);
+
+// ==================== STORE PAYMENT METHODS (milik masing-masing toko seller) ====================
+// Beda dengan `paymentMethods` (milik platform/Developer, bebas macam-macam jenis & jumlahnya).
+// Di sini SENGAJA dibatasi: satu toko maksimal 1 baris DANA + 1 baris QRIS saja (lihat unique index).
+export const storePaymentMethods = pgTable(
+  "store_payment_methods",
+  {
+    id: serial("id").primaryKey(),
+    storeId: integer("store_id")
+      .notNull()
+      .references(() => stores.id, { onDelete: "cascade" }),
+    provider: storePaymentProviderEnum("provider").notNull(),
+    accountNumber: varchar("account_number", { length: 100 }), // nomor HP DANA (kosong untuk QRIS)
+    accountName: varchar("account_name", { length: 255 }), // nama pemilik akun DANA (kosong untuk QRIS)
+    qrImage: text("qr_image"), // URL gambar QR code (khusus provider QRIS)
+    isActive: boolean("is_active").default(true).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("store_payment_methods_store_provider_idx").on(table.storeId, table.provider),
+    index("store_payment_methods_store_idx").on(table.storeId),
+  ]
 );
 
 // ==================== SELLER UPGRADE REQUESTS ====================

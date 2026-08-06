@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { and, eq, ne } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { orders } from "@/db/schema";
 import { verifySessionToken, SESSION_COOKIE } from "@/lib/auth";
@@ -63,15 +63,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ ord
       .where(eq(orders.id, order.id))
       .returning();
 
-    // Kalau order ini lahir dari checkout gabungan (beli dari beberapa seller sekaligus),
-    // otomatis terapkan bukti transfer yang sama ke semua order "saudara" di checkout itu juga —
-    // karena secara nyata cuma ada 1x transfer untuk total keseluruhan.
-    if (order.checkoutGroupId) {
-      await db
-        .update(orders)
-        .set({ paymentProofUrl: result.url, paymentProofUploadedAt: new Date(), updatedAt: new Date() })
-        .where(and(eq(orders.checkoutGroupId, order.checkoutGroupId), eq(orders.userId, session.userId), ne(orders.id, order.id)));
-    }
+    // Catatan: dulu bukti transfer otomatis disalin ke semua order "saudara" dalam satu checkout
+    // gabungan, karena diasumsikan cuma ada 1x transfer untuk semuanya. Sekarang TIDAK LAGI —
+    // karena tiap toko/seller punya rekening pembayaran sendiri-sendiri, jadi kalau checkout-nya
+    // gabungan dari beberapa toko, pembelinya perlu transfer & upload bukti terpisah per toko.
 
     return NextResponse.json({ order: updated });
   } catch (err) {

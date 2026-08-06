@@ -68,7 +68,7 @@ export function CheckoutSuccessPage() {
             <div className="bg-blue-50 rounded-xl p-4 mb-6 flex gap-3">
               <Package size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
               <p className="text-xs text-blue-700">
-                Upload bukti transfer di salah satu pesanan di atas — otomatis berlaku untuk semua pesanan lain dalam checkout ini juga.
+                Karena tiap toko punya rekening pembayaran sendiri, lakukan transfer & upload bukti secara terpisah di masing-masing pesanan di atas.
               </p>
             </div>
           </>

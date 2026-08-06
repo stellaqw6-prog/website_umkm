@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { desc, eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
-import { orders, orderItems, products, productVariants, promotions, users, stores } from "@/db/schema";
+import { orders, orderItems, products, productVariants, promotions, users, stores, storePaymentMethods, paymentMethods } from "@/db/schema";
 import { verifySessionToken, SESSION_COOKIE } from "@/lib/auth";
 import { generateOrderNumber } from "@/lib/order-utils";
 import { sendOrderConfirmationEmail } from "@/lib/email";
@@ -20,7 +20,10 @@ const orderSchema = z.object({
     )
     .min(1, "Keranjang kosong"),
   shippingAddress: z.string().min(10, "Alamat pengiriman minimal 10 karakter"),
-  paymentMethod: z.string().min(1, "Pilih metode pembayaran"),
+  // Metode pembayaran PER TOKO — key-nya "platform" untuk produk milik platform, atau ID seller (angka, string)
+  // untuk produk milik seller tertentu. Karena tiap toko/seller sekarang punya rekening pembayaran sendiri-sendiri,
+  // satu checkout gabungan dari beberapa toko bisa punya metode pembayaran berbeda-beda per tokonya.
+  paymentMethods: z.record(z.string(), z.string().min(1)),
   notes: z.string().optional(),
   promoCode: z.string().optional(),
 });
@@ -44,7 +47,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Data tidak valid" }, { status: 400 });
     }
 
-    const { items, shippingAddress, paymentMethod, notes, promoCode } = parsed.data;
+    const { items, shippingAddress, paymentMethods: selectedPaymentMethods, notes, promoCode } = parsed.data;
 
     // Ambil data produk terbaru dari database (harga & stok tidak boleh dipercaya dari client)
     const productIds = items.map((i) => i.productId);
@@ -92,6 +95,51 @@ export async function POST(req: NextRequest) {
       groups.set(key, group);
     }
 
+    // Ambil data toko + metode pembayaran toko untuk semua seller yang produknya ada di keranjang
+    const sellerIds = [...groups.values()].map((g) => g.sellerId).filter((id): id is number => id !== null);
+    const storeRows = sellerIds.length > 0 ? await db.select().from(stores).where(inArray(stores.sellerId, sellerIds)) : [];
+    const storeMap = new Map(storeRows.map((s) => [s.sellerId, s]));
+    const storeIds = storeRows.map((s) => s.id);
+    const storePaymentRows =
+      storeIds.length > 0
+        ? await db
+            .select()
+            .from(storePaymentMethods)
+            .where(inArray(storePaymentMethods.storeId, storeIds))
+        : [];
+    const hasPlatformGroup = groups.has("platform");
+    const platformPaymentRows = hasPlatformGroup ? await db.select().from(paymentMethods).where(eq(paymentMethods.isActive, true)) : [];
+
+    // Validasi metode pembayaran per grup — jangan percaya begitu saja nama yang dikirim dari client.
+    // Tiap toko/seller cuma boleh dibayar pakai metode yang MEMANG aktif dia set sendiri (DANA/QRIS),
+    // dan produk platform cuma boleh pakai metode pembayaran resmi milik platform.
+    for (const [key, group] of groups.entries()) {
+      const chosenName = selectedPaymentMethods[key];
+      if (!chosenName) {
+        return NextResponse.json({ error: "Pilih metode pembayaran untuk semua toko di keranjang" }, { status: 400 });
+      }
+
+      if (group.sellerId === null) {
+        const valid = platformPaymentRows.some((m) => m.name === chosenName);
+        if (!valid) {
+          return NextResponse.json({ error: `Metode pembayaran "${chosenName}" tidak tersedia` }, { status: 400 });
+        }
+      } else {
+        const store = storeMap.get(group.sellerId);
+        const validMethods = store
+          ? storePaymentRows.filter((m) => m.storeId === store.id && m.isActive)
+          : [];
+        const providerLabel: Record<string, string> = { dana: "DANA", qris: "QRIS" };
+        const valid = validMethods.some((m) => providerLabel[m.provider] === chosenName);
+        if (!valid) {
+          return NextResponse.json(
+            { error: `Toko ini belum mengaktifkan metode pembayaran "${chosenName}". Silakan pilih metode lain.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
     let promo: typeof promotions.$inferSelect | null = null;
     if (promoCode) {
       const [found] = await db.select().from(promotions).where(eq(promotions.code, promoCode.toUpperCase())).limit(1);
@@ -111,12 +159,8 @@ export async function POST(req: NextRequest) {
     const [orderUser] = await db.select().from(users).where(eq(users.id, session.userId)).limit(1);
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
 
-    // Ambil data toko untuk semua seller yang produknya ada di keranjang, dipakai buat hitung ongkir per toko
-    const sellerIds = [...groups.values()].map((g) => g.sellerId).filter((id): id is number => id !== null);
-    const storeRows = sellerIds.length > 0 ? await db.select().from(stores).where(inArray(stores.sellerId, sellerIds)) : [];
-    const storeMap = new Map(storeRows.map((s) => [s.sellerId, s]));
-
-    for (const group of groups.values()) {
+    for (const [key, group] of groups.entries()) {
+      const paymentMethod = selectedPaymentMethods[key];
       const subtotal = group.items.reduce((sum, item) => sum + getEffectivePrice(item) * item.quantity, 0);
 
       let discountAmount = 0;
