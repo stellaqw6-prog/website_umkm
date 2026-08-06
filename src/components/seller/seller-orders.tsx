@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Eye, Loader2, ExternalLink } from "lucide-react";
+import { Search, Eye, Loader2, ExternalLink, MapPin, Phone, Mail, Package, StickyNote, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,23 @@ interface OrderRow {
   customerEmail: string | null;
 }
 
+interface OrderDetail extends OrderRow {
+  shippingAddress: string;
+  customerPhone: string | null;
+  trackingNumber: string | null;
+  notes: string | null;
+}
+
+interface OrderItemRow {
+  id: number;
+  productName: string;
+  productImage: string | null;
+  variantName: string | null;
+  price: string;
+  quantity: number;
+  subtotal: string;
+}
+
 const statusOptions = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"] as const;
 const statusLabel: Record<string, string> = {
   pending: "Menunggu Konfirmasi", confirmed: "Dikonfirmasi", processing: "Diproses",
@@ -38,7 +55,9 @@ export function SellerOrders() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState<OrderRow | null>(null);
+  const [editing, setEditing] = useState<OrderDetail | null>(null);
+  const [items, setItems] = useState<OrderItemRow[]>([]);
+  const [detailLoading, setDetailLoading] = useState(false);
   const [formStatus, setFormStatus] = useState("");
   const [formTracking, setFormTracking] = useState("");
   const [saving, setSaving] = useState(false);
@@ -48,11 +67,35 @@ export function SellerOrders() {
   };
   useEffect(load, []);
 
-  const openDetail = (o: OrderRow) => {
-    setEditing(o);
+  const handleCopyAddress = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Alamat disalin");
+  };
+
+  const openDetail = async (o: OrderRow) => {
     setFormStatus(o.status);
     setFormTracking("");
+    setEditing(null);
+    setItems([]);
     setModalOpen(true);
+    setDetailLoading(true);
+    try {
+      const res = await fetch(`/api/seller/orders/${o.id}`);
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error ?? "Gagal memuat detail pesanan");
+        setModalOpen(false);
+        return;
+      }
+      setEditing(data.order);
+      setItems(data.items ?? []);
+      setFormStatus(data.order.status);
+    } catch {
+      toast.error("Tidak bisa terhubung ke server");
+      setModalOpen(false);
+    } finally {
+      setDetailLoading(false);
+    }
   };
 
   const handleSave = async () => {
@@ -125,13 +168,56 @@ export function SellerOrders() {
       </Card>
 
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={`Pesanan ${editing?.orderNumber ?? ""}`}>
+        {detailLoading || !editing ? (
+          <div className="flex justify-center py-12 text-gray-400"><Loader2 className="animate-spin" size={26} /></div>
+        ) : (
         <div className="space-y-4">
-          {editing?.paymentStatus !== "paid" && (
+          {editing.paymentStatus !== "paid" && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-xs text-yellow-700">
               Pembayaran pesanan ini masih diverifikasi oleh admin/developer. Kamu tetap bisa mulai siapkan produknya.
             </div>
           )}
-          {editing?.paymentProofUrl && (
+
+          {/* Alamat pengiriman & kontak pelanggan */}
+          <div className="rounded-xl border border-gray-200 p-3 space-y-2.5 dark:border-stone-700">
+            <div className="flex items-start justify-between gap-2">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase flex items-center gap-1.5 dark:text-stone-400"><MapPin size={13} /> Alamat Pengiriman</h4>
+              <button type="button" onClick={() => handleCopyAddress(editing.shippingAddress)} className="text-[11px] text-blue-600 hover:underline flex items-center gap-1 flex-shrink-0"><Copy size={11} /> Salin</button>
+            </div>
+            <p className="text-sm text-gray-800 whitespace-pre-line leading-relaxed dark:text-stone-200">{editing.shippingAddress}</p>
+            <div className="pt-2 border-t border-gray-100 dark:border-stone-800 space-y-1">
+              {editing.customerEmail && <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-stone-400"><Mail size={12} /> {editing.customerEmail}</div>}
+              {editing.customerPhone && <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-stone-400"><Phone size={12} /> {editing.customerPhone}</div>}
+            </div>
+          </div>
+
+          {/* Daftar produk */}
+          {items.length > 0 && (
+            <div>
+              <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-1.5 dark:text-stone-400"><Package size={13} /> Produk Dipesan</h4>
+              <div className="space-y-2">
+                {items.map((it) => (
+                  <div key={it.id} className="flex gap-2.5 text-sm items-center">
+                    <img src={it.productImage ?? ""} alt={it.productName} className="w-10 h-10 object-cover rounded-lg bg-gray-100 flex-shrink-0 dark:bg-stone-800" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 line-clamp-1 dark:text-stone-100">{it.productName}</p>
+                      {it.variantName && <p className="text-gray-400 text-xs dark:text-stone-500">Varian: {it.variantName}</p>}
+                      <p className="text-gray-500 text-xs dark:text-stone-400">{it.quantity} x {formatCurrency(Number(it.price))}</p>
+                    </div>
+                    <span className="font-semibold text-gray-900 text-xs whitespace-nowrap dark:text-stone-100">{formatCurrency(Number(it.subtotal))}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {editing.notes && (
+            <div className="rounded-xl bg-amber-50 border border-amber-100 p-3 text-xs text-amber-800 flex items-start gap-1.5">
+              <StickyNote size={13} className="flex-shrink-0 mt-0.5" /> {editing.notes}
+            </div>
+          )}
+
+          {editing.paymentProofUrl && (
             <div>
               <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Bukti Transfer</label>
               <a href={editing.paymentProofUrl} target="_blank" rel="noopener noreferrer" className="block relative group">
@@ -150,13 +236,14 @@ export function SellerOrders() {
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Nomor Resi (opsional)</label>
-            <Input value={formTracking} onChange={(e) => setFormTracking(e.target.value)} placeholder="Isi jika sudah dikirim" />
+            <Input value={formTracking} onChange={(e) => setFormTracking(e.target.value)} placeholder={editing.trackingNumber || "Isi jika sudah dikirim"} />
           </div>
           <div className="flex gap-2 pt-2">
             <Button type="button" variant="outline" className="flex-1" onClick={() => setModalOpen(false)}>Batal</Button>
             <Button type="button" variant="premium" className="flex-1" onClick={handleSave} disabled={saving}>{saving ? <Loader2 className="animate-spin" size={16} /> : "Simpan"}</Button>
           </div>
         </div>
+        )}
       </AdminModal>
     </div>
   );
