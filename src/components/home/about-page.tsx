@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Heart, Target, Shield, Users, Sparkles, TrendingUp } from "lucide-react";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
+import type { PlatformStats } from "@/lib/data";
 
 const values = [
   { icon: Heart, title: "Peduli UMKM", desc: "Kami berkomitmen untuk mendukung pertumbuhan UMKM Indonesia melalui platform digital." },
@@ -10,7 +12,23 @@ const values = [
   { icon: Users, title: "Komunitas", desc: "Membangun ekosistem UMKM yang saling mendukung dan bertumbuh bersama." },
 ];
 
-export function AboutPage() {
+interface AboutPageProps {
+  stats: PlatformStats;
+  foundedYear?: number;
+}
+
+export function AboutPage({ stats, foundedYear = 2026 }: AboutPageProps) {
+  const satisfactionPct = stats.reviewCount > 0 ? Math.round((stats.avgRating / 5) * 100) : null;
+
+  const statItems = [
+    { value: foundedYear, label: "Berdiri Sejak", raw: true },
+    { value: stats.storeCount, label: "UMKM Aktif", suffix: "+" },
+    { value: stats.productCount, label: "Produk Aktif", suffix: "+" },
+    satisfactionPct !== null
+      ? { value: satisfactionPct, label: `Kepuasan (${stats.reviewCount.toLocaleString("id-ID")} ulasan)`, suffix: "%" }
+      : { value: 0, label: "Kepuasan", display: "Baru" },
+  ];
+
   return (
     <>
       {/* Hero */}
@@ -52,19 +70,25 @@ export function AboutPage() {
       <section className="py-16 bg-white dark:bg-stone-900">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { value: "2024", label: "Berdiri Sejak" },
-              { value: "5,000+", label: "UMKM Aktif" },
-              { value: "34", label: "Provinsi" },
-              { value: "98%", label: "Kepuasan" },
-            ].map((stat, i) => (
+            {statItems.map((stat, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="text-3xl md:text-4xl font-extrabold text-blue-600 dark:text-blue-400">{stat.value}</div>
+                <div className="text-3xl md:text-4xl font-extrabold text-blue-600 dark:text-blue-400">
+                  {stat.raw ? (
+                    stat.value
+                  ) : "display" in stat && stat.display ? (
+                    stat.display
+                  ) : (
+                    <>
+                      <AnimatedCounter value={stat.value} />
+                      {stat.value > 0 && "suffix" in stat && stat.suffix}
+                    </>
+                  )}
+                </div>
                 <div className="text-gray-500 text-sm mt-1 dark:text-stone-400">{stat.label}</div>
               </motion.div>
             ))}
