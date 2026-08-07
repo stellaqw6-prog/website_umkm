@@ -73,8 +73,8 @@ export function StatsSection({ stats }: StatsSectionProps) {
             transition={{ delay: items.length * 0.1 }}
             className="text-center"
           >
-            <div className="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Star className="text-yellow-600" size={24} />
+            <div className="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center mx-auto mb-4 dark:bg-yellow-950/40">
+              <Star className="text-yellow-600 dark:text-yellow-400" size={24} />
             </div>
             <div className="text-3xl md:text-4xl font-extrabold text-white mb-1">
               {stats.reviewCount > 0 ? (

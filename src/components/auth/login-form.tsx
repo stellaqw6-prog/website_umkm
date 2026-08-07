@@ -103,7 +103,7 @@ export function LoginForm() {
 
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+              <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-stone-600 dark:bg-stone-800" />
               <span className="text-gray-600 dark:text-stone-400">Ingat saya</span>
             </label>
             <Link href="/lupa-password" className="text-blue-600 hover:underline font-medium">

@@ -346,6 +346,14 @@ export const siteSettings = pgTable("site_settings", {
   // Ongkir default platform — dipakai untuk produk yang tidak punya pengaturan ongkir toko/produk sendiri.
   shippingEnabled: boolean("shipping_enabled").default(true).notNull(),
   defaultShippingCost: decimal("default_shipping_cost", { precision: 12, scale: 2 }).default("15000").notNull(),
+  // Konten Hero Section beranda — bisa diatur lewat Dashboard Developer > Pengaturan > Hero Beranda
+  heroBadgeText: varchar("hero_badge_text", { length: 255 }).default("#BanggaBuatanIndonesia 🇮🇩").notNull(),
+  heroTitleLine1: varchar("hero_title_line1", { length: 255 }).default("Dukung").notNull(),
+  heroTitleHighlight: varchar("hero_title_highlight", { length: 255 }).default("UMKM Lokal").notNull(),
+  heroTitleLine2: varchar("hero_title_line2", { length: 255 }).default("Indonesia Berkualitas").notNull(),
+  heroDescription: text("hero_description").default("Temukan produk-produk terbaik dari pengusaha lokal Indonesia. Kualitas premium dengan harga terjangkau, langsung dari tangan kreatif UMKM."),
+  heroButtonText: varchar("hero_button_text", { length: 100 }).default("Jelajahi Produk").notNull(),
+  heroButtonUrl: varchar("hero_button_url", { length: 255 }).default("/produk").notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 

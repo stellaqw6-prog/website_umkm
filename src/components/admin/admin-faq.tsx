@@ -88,11 +88,11 @@ export function AdminFaq() {
           : filtered.length === 0 ? <p className="text-center py-16 text-gray-400 text-sm dark:text-stone-500">Belum ada FAQ.</p>
           : filtered.map((faq, i) => (
             <motion.div key={faq.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }} className="border border-gray-100 rounded-xl overflow-hidden dark:border-stone-800">
-              <button onClick={() => setOpenId(openId === faq.id ? null : faq.id)} className="w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50/50 transition-colors">
+              <button onClick={() => setOpenId(openId === faq.id ? null : faq.id)} className="w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50/50 dark:hover:bg-stone-800/40 transition-colors">
                 {faq.category && <Badge variant="secondary" className="text-[10px] flex-shrink-0">{faq.category}</Badge>}
                 <span className="flex-1 text-sm font-medium text-gray-900 dark:text-stone-100">{faq.question}</span>
                 {!faq.isActive && <Badge variant="secondary" className="text-[10px]">Nonaktif</Badge>}
-                <ChevronDown size={16} className={cn("text-gray-400 transition-transform flex-shrink-0", openId === faq.id && "rotate-180")} />
+                <ChevronDown size={16} className={cn("text-gray-400 dark:text-stone-500 transition-transform flex-shrink-0", openId === faq.id && "rotate-180")} />
               </button>
               {openId === faq.id && (
                 <div className="px-4 pb-4 pl-4">

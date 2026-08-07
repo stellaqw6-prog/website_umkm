@@ -147,8 +147,8 @@ export function AdminCategories() {
                   className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-all dark:border-stone-800"
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center">
-                      <Package size={20} className="text-blue-600" />
+                    <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center dark:bg-blue-950/30">
+                      <Package size={20} className="text-blue-600 dark:text-blue-400" />
                     </div>
                     <Badge variant={cat.isActive ? "success" : "secondary"} className="text-[10px]">
                       {cat.isActive ? "Aktif" : "Nonaktif"}

@@ -18,7 +18,7 @@ export interface AddressFormValue {
 }
 
 const selectClass =
-  "w-full h-10 rounded-lg border border-gray-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-400";
+  "w-full h-10 rounded-lg border border-gray-200 px-3 text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-400 dark:bg-stone-900 dark:text-stone-100 dark:border-stone-700 dark:disabled:bg-stone-800 dark:disabled:text-stone-500";
 
 export function AddressForm({
   onChange,

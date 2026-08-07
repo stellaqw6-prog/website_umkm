@@ -122,7 +122,7 @@ export function AdminSellerRequests() {
                         <Button size="sm" variant="premium" onClick={() => handleApprove(req)} disabled={processingId === req.id}>
                           {processingId === req.id ? <Loader2 className="animate-spin" size={14} /> : <><Check size={14} className="mr-1" /> Setujui</>}
                         </Button>
-                        <Button size="sm" variant="outline" className="text-red-600 hover:bg-red-50" onClick={() => setRejectModal(req)}>
+                        <Button size="sm" variant="outline" className="text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30" onClick={() => setRejectModal(req)}>
                           <X size={14} className="mr-1" /> Tolak
                         </Button>
                         {req.paymentProofUrl && (

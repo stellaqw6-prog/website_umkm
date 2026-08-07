@@ -43,6 +43,13 @@ const settingsSchema = z.object({
     .union([z.string(), z.number()])
     .transform((v) => String(v))
     .optional(),
+  heroBadgeText: z.string().min(1, "Badge hero wajib diisi").optional(),
+  heroTitleLine1: z.string().min(1, "Baris judul pertama wajib diisi").optional(),
+  heroTitleHighlight: z.string().min(1, "Kata sorotan wajib diisi").optional(),
+  heroTitleLine2: z.string().min(1, "Baris judul kedua wajib diisi").optional(),
+  heroDescription: nullableString,
+  heroButtonText: z.string().min(1, "Teks tombol wajib diisi").optional(),
+  heroButtonUrl: z.string().min(1, "Link tombol wajib diisi").optional(),
 });
 
 export async function GET(req: NextRequest) {

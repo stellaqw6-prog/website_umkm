@@ -5,7 +5,25 @@ import { ArrowRight, Star, Shield, Truck, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export function HeroSection() {
+export interface HeroSectionProps {
+  badgeText?: string;
+  titleLine1?: string;
+  titleHighlight?: string;
+  titleLine2?: string;
+  description?: string;
+  buttonText?: string;
+  buttonUrl?: string;
+}
+
+export function HeroSection({
+  badgeText = "#BanggaBuatanIndonesia 🇮🇩",
+  titleLine1 = "Dukung",
+  titleHighlight = "UMKM Lokal",
+  titleLine2 = "Indonesia Berkualitas",
+  description = "Temukan produk-produk terbaik dari pengusaha lokal Indonesia. Kualitas premium dengan harga terjangkau, langsung dari tangan kreatif UMKM.",
+  buttonText = "Jelajahi Produk",
+  buttonUrl = "/produk",
+}: HeroSectionProps) {
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-stone-950 dark:via-stone-950 dark:to-blue-950/40">
       {/* Background decorations */}
@@ -50,7 +68,7 @@ export function HeroSection() {
             >
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold mb-6 dark:bg-blue-950/50 dark:text-blue-300">
                 <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-                #BanggaBuatanIndonesia 🇮🇩
+                {badgeText}
               </span>
             </motion.div>
 
@@ -60,10 +78,10 @@ export function HeroSection() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.05] text-gray-900 mb-6 dark:text-stone-100"
             >
-              Dukung{" "}
-              <span className="text-gradient">UMKM Lokal</span>
+              {titleLine1}{" "}
+              <span className="text-gradient">{titleHighlight}</span>
               <br />
-              Indonesia Berkualitas
+              {titleLine2}
             </motion.h1>
 
             <motion.p
@@ -72,8 +90,7 @@ export function HeroSection() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-lg text-gray-500 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed dark:text-stone-400"
             >
-              Temukan produk-produk terbaik dari pengusaha lokal Indonesia. 
-              Kualitas premium dengan harga terjangkau, langsung dari tangan kreatif UMKM.
+              {description}
             </motion.p>
 
             <motion.div
@@ -82,9 +99,9 @@ export function HeroSection() {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
             >
-              <Link href="/produk">
+              <Link href={buttonUrl}>
                 <Button variant="premium" size="xl" className="group">
-                  Jelajahi Produk
+                  {buttonText}
                   <ArrowRight
                     size={20}
                     className="ml-2 group-hover:translate-x-1 transition-transform"

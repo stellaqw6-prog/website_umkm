@@ -131,7 +131,7 @@ export function RegisterForm() {
           </div>
 
           <label className="flex items-start gap-2 cursor-pointer text-sm">
-            <input type="checkbox" className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" required />
+            <input type="checkbox" className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-stone-600 dark:bg-stone-800" required />
             <span className="text-gray-600 dark:text-stone-400">
               Saya setuju dengan{" "}
               <Link href="/syarat-ketentuan" className="text-blue-600 hover:underline">Syarat & Ketentuan</Link>{" "}

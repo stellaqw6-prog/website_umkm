@@ -14,14 +14,14 @@ export function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50 overflow-hidden">
+      <section className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50 overflow-hidden dark:from-stone-950 dark:via-stone-950 dark:to-blue-950/40">
         <div className="absolute inset-0 bg-grid opacity-50" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold mb-6"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold mb-6 dark:bg-blue-950/30 dark:text-blue-400"
             >
               <Sparkles size={16} />
               Tentang Kami
@@ -64,7 +64,7 @@ export function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="text-3xl md:text-4xl font-extrabold text-blue-600">{stat.value}</div>
+                <div className="text-3xl md:text-4xl font-extrabold text-blue-600 dark:text-blue-400">{stat.value}</div>
                 <div className="text-gray-500 text-sm mt-1 dark:text-stone-400">{stat.label}</div>
               </motion.div>
             ))}
@@ -73,7 +73,7 @@ export function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="py-20 bg-gray-50/50">
+      <section className="py-20 bg-gray-50/50 dark:bg-stone-900/40">
         <div className="container mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -93,8 +93,8 @@ export function AboutPage() {
                 transition={{ delay: i * 0.1 }}
                 className="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-all dark:bg-stone-900"
               >
-                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <v.icon className="text-blue-600" size={24} />
+                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 dark:bg-blue-950/30">
+                  <v.icon className="text-blue-600 dark:text-blue-400" size={24} />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2 dark:text-stone-100">{v.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed dark:text-stone-400">{v.desc}</p>

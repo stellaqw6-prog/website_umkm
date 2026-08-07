@@ -54,10 +54,10 @@ export function ContactPage() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-16">
+      <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-16 dark:from-stone-950 dark:via-stone-950 dark:to-blue-950/40">
         <div className="container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Kontak</span>
+            <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm uppercase tracking-wider">Kontak</span>
             <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mt-2 dark:text-stone-100">Hubungi Kami</h1>
             <p className="text-gray-500 mt-3 max-w-lg mx-auto dark:text-stone-400">
               Ada pertanyaan? Kami siap membantu. Isi form di bawah atau hubungi langsung.
@@ -85,8 +85,8 @@ export function ContactPage() {
                   transition={{ delay: i * 0.1 }}
                   className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group dark:hover:bg-stone-800"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-100 transition-colors">
-                    <item.icon size={20} className="text-blue-600" />
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-100 transition-colors dark:bg-blue-950/30 dark:group-hover:bg-blue-950/50">
+                    <item.icon size={20} className="text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-stone-400">{item.label}</p>
@@ -96,12 +96,12 @@ export function ContactPage() {
               ))}
 
               {settings?.whatsapp && (
-                <div className="p-4 bg-green-50 rounded-2xl">
-                  <div className="flex items-center gap-2 text-green-700 font-semibold mb-1">
+                <div className="p-4 bg-green-50 rounded-2xl dark:bg-green-950/20">
+                  <div className="flex items-center gap-2 text-green-700 dark:text-green-400 font-semibold mb-1">
                     <MessageCircle size={18} />
                     Chat WhatsApp
                   </div>
-                  <p className="text-sm text-green-600 mb-3">Respon lebih cepat via WhatsApp</p>
+                  <p className="text-sm text-green-600 dark:text-green-400/80 mb-3">Respon lebih cepat via WhatsApp</p>
                   <a href={`https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer">
                     <Button className="bg-green-600 hover:bg-green-700 w-full">Chat Sekarang</Button>
                   </a>

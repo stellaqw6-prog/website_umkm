@@ -47,8 +47,8 @@ export function ForgotPasswordForm() {
 
       {sent ? (
         <div className="text-center py-4">
-          <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 size={28} className="text-green-600" />
+          <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4 dark:bg-green-950/30">
+            <CheckCircle2 size={28} className="text-green-600 dark:text-green-400" />
           </div>
           <h1 className="text-xl font-bold text-gray-900 mb-2 dark:text-stone-100">Cek Email Kamu</h1>
           <p className="text-gray-500 text-sm dark:text-stone-400">

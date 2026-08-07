@@ -149,7 +149,7 @@ export function AdminDashboard() {
                     <div key={m.month} className="flex-1 flex flex-col items-center gap-2">
                       <div className="w-full flex items-end justify-center" style={{ height: "220px" }}>
                         <div
-                          className="w-full bg-blue-100 hover:bg-blue-200 rounded-t-md transition-all relative group"
+                          className="w-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 rounded-t-md transition-all relative group"
                           style={{ height: `${Math.max((m.revenue / maxRevenue) * 100, m.revenue > 0 ? 4 : 1)}%` }}
                         >
                           <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-medium text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap dark:text-stone-400">

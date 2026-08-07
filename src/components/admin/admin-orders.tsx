@@ -181,7 +181,7 @@ export function AdminOrders() {
                 </thead>
                 <tbody>
                   {filtered.map((o) => (
-                    <tr key={o.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                    <tr key={o.id} className="border-b border-gray-50 hover:bg-gray-50/50 dark:border-stone-800/60 dark:hover:bg-stone-800/40 transition-colors">
                       <td className="py-3 px-4 font-mono text-sm font-medium text-gray-900 dark:text-stone-100">{o.orderNumber}</td>
                       <td className="py-3 px-4 text-sm text-gray-700 dark:text-stone-300">
                         {o.storeName ? <Badge variant="secondary" className="text-[10px]">{o.storeName}</Badge> : <span className="text-gray-400 text-xs dark:text-stone-500">Platform</span>}
@@ -214,7 +214,7 @@ export function AdminOrders() {
 
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={`Pesanan ${editing?.orderNumber ?? ""}`}>
         {detailLoading || !editing ? (
-          <div className="flex justify-center py-12 text-gray-400"><Loader2 className="animate-spin" size={26} /></div>
+          <div className="flex justify-center py-12 text-gray-400 dark:text-stone-500"><Loader2 className="animate-spin" size={26} /></div>
         ) : (
         <div className="space-y-4">
           {/* Alamat pengiriman & kontak pelanggan */}
@@ -251,7 +251,7 @@ export function AdminOrders() {
           )}
 
           {editing.notes && (
-            <div className="rounded-xl bg-amber-50 border border-amber-100 p-3 text-xs text-amber-800 flex items-start gap-1.5">
+            <div className="rounded-xl bg-amber-50 border border-amber-100 p-3 text-xs text-amber-800 flex items-start gap-1.5 dark:bg-amber-950/20 dark:border-amber-900/40 dark:text-amber-400">
               <StickyNote size={13} className="flex-shrink-0 mt-0.5" /> {editing.notes}
             </div>
           )}

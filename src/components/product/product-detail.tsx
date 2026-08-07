@@ -172,8 +172,8 @@ export function ProductDetail({
             </div>
 
             <div className="flex items-center gap-1.5 mb-6 text-sm">
-              <Truck size={15} className={product.shippingCost === 0 ? "text-green-600" : "text-gray-400"} />
-              <span className={product.shippingCost === 0 ? "text-green-600 font-semibold" : "text-gray-500"}>
+              <Truck size={15} className={product.shippingCost === 0 ? "text-green-600 dark:text-green-400" : "text-gray-400 dark:text-stone-500"} />
+              <span className={product.shippingCost === 0 ? "text-green-600 dark:text-green-400 font-semibold" : "text-gray-500 dark:text-stone-400"}>
                 Ongkir {product.shippingCost === 0 ? "GRATIS" : formatCurrency(product.shippingCost)}
               </span>
             </div>

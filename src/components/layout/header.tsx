@@ -287,7 +287,7 @@ export function Header() {
                 <div className="relative">
                   <Search
                     size={18}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-stone-500"
                   />
                   <input
                     type="text"

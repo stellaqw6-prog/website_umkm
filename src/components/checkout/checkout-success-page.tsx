@@ -31,8 +31,8 @@ export function CheckoutSuccessPage() {
     <section className="py-12 bg-gray-50 min-h-screen dark:bg-stone-900">
       <div className="container mx-auto px-4 max-w-lg">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 size={32} className="text-green-600" />
+          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4 dark:bg-green-950/30">
+            <CheckCircle2 size={32} className="text-green-600 dark:text-green-400" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Pesanan Berhasil Dibuat!</h1>
           <p className="text-gray-500 mt-1 dark:text-stone-400">
@@ -44,7 +44,7 @@ export function CheckoutSuccessPage() {
           <>
             <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-4 text-center dark:bg-stone-900 dark:border-stone-800">
               <p className="text-xs text-gray-500 dark:text-stone-400">Total Keseluruhan</p>
-              <p className="text-2xl font-extrabold text-blue-600">{formatCurrency(total)}</p>
+              <p className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{formatCurrency(total)}</p>
               <p className="text-xs text-gray-400 mt-1 dark:text-stone-500">Cukup transfer/bayar 1 kali untuk total ini</p>
             </div>
 
@@ -52,22 +52,22 @@ export function CheckoutSuccessPage() {
               {orders.map((order, i) => (
                 <motion.div key={order.orderNumber} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
                   <Link href={`/pesanan/${order.orderNumber}`} className="flex items-center gap-3 bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all dark:bg-stone-900 dark:border-stone-800">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                      <Store size={18} className="text-blue-600" />
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 dark:bg-blue-950/30">
+                      <Store size={18} className="text-blue-600 dark:text-blue-400" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-mono font-semibold text-gray-900 text-sm dark:text-stone-100">{order.orderNumber}</p>
                       <p className="text-xs text-gray-400 dark:text-stone-500">{formatCurrency(Number(order.grandTotal))}</p>
                     </div>
-                    <ArrowRight size={16} className="text-gray-300" />
+                    <ArrowRight size={16} className="text-gray-300 dark:text-stone-600" />
                   </Link>
                 </motion.div>
               ))}
             </div>
 
-            <div className="bg-blue-50 rounded-xl p-4 mb-6 flex gap-3">
-              <Package size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-blue-700">
+            <div className="bg-blue-50 rounded-xl p-4 mb-6 flex gap-3 dark:bg-blue-950/20">
+              <Package size={20} className="text-blue-600 flex-shrink-0 mt-0.5 dark:text-blue-400" />
+              <p className="text-xs text-blue-700 dark:text-blue-400">
                 Karena tiap toko punya rekening pembayaran sendiri, lakukan transfer & upload bukti secara terpisah di masing-masing pesanan di atas.
               </p>
             </div>

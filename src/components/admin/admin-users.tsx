@@ -87,7 +87,7 @@ export function AdminUsers() {
                 </thead>
                 <tbody>
                   {filtered.map((u) => (
-                    <tr key={u.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                    <tr key={u.id} className="border-b border-gray-50 hover:bg-gray-50/50 dark:border-stone-800/60 dark:hover:bg-stone-800/40 transition-colors">
                       <td className="py-3 px-4">
                         <p className="font-medium text-gray-900 text-sm dark:text-stone-100">{u.name}</p>
                         <p className="text-xs text-gray-500 dark:text-stone-400">{u.email}</p>

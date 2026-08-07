@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Save, Globe, Mail, Phone, MapPin, ImageIcon, Loader2, Truck } from "lucide-react";
+import { Save, Globe, Mail, Phone, MapPin, ImageIcon, Loader2, Truck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,6 +26,13 @@ interface Settings {
   sellerUpgradeFee: string;
   shippingEnabled: boolean;
   defaultShippingCost: string;
+  heroBadgeText: string;
+  heroTitleLine1: string;
+  heroTitleHighlight: string;
+  heroTitleLine2: string;
+  heroDescription: string | null;
+  heroButtonText: string;
+  heroButtonUrl: string;
 }
 
 const emptySettings: Settings = {
@@ -35,6 +42,13 @@ const emptySettings: Settings = {
   sellerUpgradeFee: "35000",
   shippingEnabled: true,
   defaultShippingCost: "15000",
+  heroBadgeText: "#BanggaBuatanIndonesia 🇮🇩",
+  heroTitleLine1: "Dukung",
+  heroTitleHighlight: "UMKM Lokal",
+  heroTitleLine2: "Indonesia Berkualitas",
+  heroDescription: "Temukan produk-produk terbaik dari pengusaha lokal Indonesia. Kualitas premium dengan harga terjangkau, langsung dari tangan kreatif UMKM.",
+  heroButtonText: "Jelajahi Produk",
+  heroButtonUrl: "/produk",
 };
 
 export function AdminSettings() {
@@ -128,6 +142,63 @@ export function AdminSettings() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1 dark:text-stone-300"><MapPin size={14} /> Alamat</label>
             <Textarea value={settings.address ?? ""} onChange={(e) => setSettings({ ...settings, address: e.target.value })} rows={2} />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Hero Beranda */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><Sparkles size={20} className="text-blue-600 dark:text-blue-400" /> Hero Beranda</CardTitle>
+          <CardDescription>Teks besar paling atas di halaman utama — badge, judul, deskripsi, dan tombol utama</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Teks Badge</label>
+            <Input value={settings.heroBadgeText} onChange={(e) => setSettings({ ...settings, heroBadgeText: e.target.value })} placeholder="#BanggaBuatanIndonesia 🇮🇩" />
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Judul — Baris 1</label>
+              <Input value={settings.heroTitleLine1} onChange={(e) => setSettings({ ...settings, heroTitleLine1: e.target.value })} placeholder="Dukung" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Judul — Kata Sorotan</label>
+              <Input value={settings.heroTitleHighlight} onChange={(e) => setSettings({ ...settings, heroTitleHighlight: e.target.value })} placeholder="UMKM Lokal" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Judul — Baris 2</label>
+              <Input value={settings.heroTitleLine2} onChange={(e) => setSettings({ ...settings, heroTitleLine2: e.target.value })} placeholder="Indonesia Berkualitas" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Deskripsi</label>
+            <Textarea value={settings.heroDescription ?? ""} onChange={(e) => setSettings({ ...settings, heroDescription: e.target.value })} rows={3} />
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Teks Tombol</label>
+              <Input value={settings.heroButtonText} onChange={(e) => setSettings({ ...settings, heroButtonText: e.target.value })} placeholder="Jelajahi Produk" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-stone-300">Link Tombol</label>
+              <Input value={settings.heroButtonUrl} onChange={(e) => setSettings({ ...settings, heroButtonUrl: e.target.value })} placeholder="/produk" />
+            </div>
+          </div>
+
+          {/* Preview */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-stone-300">Pratinjau</label>
+            <div className="rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-50 via-white to-blue-50 p-6 dark:border-stone-800 dark:from-stone-950 dark:via-stone-950 dark:to-blue-950/40">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold mb-3 dark:bg-blue-950/50 dark:text-blue-300">
+                {settings.heroBadgeText || "..."}
+              </span>
+              <h3 className="text-xl sm:text-2xl font-extrabold leading-tight text-gray-900 mb-2 dark:text-stone-100">
+                {settings.heroTitleLine1}{" "}<span className="text-gradient">{settings.heroTitleHighlight}</span><br />{settings.heroTitleLine2}
+              </h3>
+              <p className="text-sm text-gray-500 mb-4 dark:text-stone-400">{settings.heroDescription}</p>
+              <span className="inline-flex items-center rounded-xl bg-blue-600 text-white text-sm font-semibold px-4 py-2">{settings.heroButtonText || "..."}</span>
+            </div>
           </div>
         </CardContent>
       </Card>

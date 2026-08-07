@@ -96,8 +96,8 @@ export function MyOrdersPage() {
                   href={`/pesanan/${order.orderNumber}`}
                   className="flex items-center gap-4 bg-white rounded-2xl border border-gray-100 p-4 hover:shadow-md transition-all dark:bg-stone-900 dark:border-stone-800"
                 >
-                  <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <Package size={20} className="text-blue-600" />
+                  <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 dark:bg-blue-950/30">
+                    <Package size={20} className="text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono font-semibold text-gray-900 text-sm dark:text-stone-100">{order.orderNumber}</p>

@@ -58,17 +58,17 @@ export function SellerDashboard() {
       </motion.div>
 
       {stats.pendingOrders > 0 && (
-        <Link href="/seller/orders" className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4 hover:bg-yellow-100/70 transition-colors">
-          <AlertTriangle size={20} className="text-yellow-600 flex-shrink-0" />
-          <p className="text-sm text-yellow-800 flex-1">{stats.pendingOrders} pesanan menunggu diproses</p>
-          <ArrowRight size={16} className="text-yellow-600" />
+        <Link href="/seller/orders" className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4 hover:bg-yellow-100/70 transition-colors dark:bg-yellow-950/20 dark:border-yellow-900/40 dark:hover:bg-yellow-950/30">
+          <AlertTriangle size={20} className="text-yellow-600 flex-shrink-0 dark:text-yellow-400" />
+          <p className="text-sm text-yellow-800 flex-1 dark:text-yellow-400">{stats.pendingOrders} pesanan menunggu diproses</p>
+          <ArrowRight size={16} className="text-yellow-600 dark:text-yellow-400" />
         </Link>
       )}
       {stats.lowStockProducts > 0 && (
-        <Link href="/seller/products" className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4 hover:bg-red-100/70 transition-colors">
-          <AlertTriangle size={20} className="text-red-600 flex-shrink-0" />
-          <p className="text-sm text-red-800 flex-1">{stats.lowStockProducts} produk stoknya menipis (≤5)</p>
-          <ArrowRight size={16} className="text-red-600" />
+        <Link href="/seller/products" className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4 hover:bg-red-100/70 transition-colors dark:bg-red-950/20 dark:border-red-900/40 dark:hover:bg-red-950/30">
+          <AlertTriangle size={20} className="text-red-600 flex-shrink-0 dark:text-red-400" />
+          <p className="text-sm text-red-800 flex-1 dark:text-red-400">{stats.lowStockProducts} produk stoknya menipis (≤5)</p>
+          <ArrowRight size={16} className="text-red-600 dark:text-red-400" />
         </Link>
       )}
 

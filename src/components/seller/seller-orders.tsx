@@ -149,7 +149,7 @@ export function SellerOrders() {
                 </thead>
                 <tbody>
                   {filtered.map((o) => (
-                    <tr key={o.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                    <tr key={o.id} className="border-b border-gray-50 hover:bg-gray-50/50 dark:border-stone-800/60 dark:hover:bg-stone-800/40 transition-colors">
                       <td className="py-3 px-4 font-mono text-sm font-medium text-gray-900 dark:text-stone-100">{o.orderNumber}</td>
                       <td className="py-3 px-4 text-sm text-gray-700 dark:text-stone-300">{o.customerName ?? "-"}</td>
                       <td className="py-3 px-4 text-sm text-right font-semibold text-gray-900 dark:text-stone-100">{formatCurrency(Number(o.grandTotal))}</td>
@@ -169,11 +169,11 @@ export function SellerOrders() {
 
       <AdminModal open={modalOpen} onClose={() => setModalOpen(false)} title={`Pesanan ${editing?.orderNumber ?? ""}`}>
         {detailLoading || !editing ? (
-          <div className="flex justify-center py-12 text-gray-400"><Loader2 className="animate-spin" size={26} /></div>
+          <div className="flex justify-center py-12 text-gray-400 dark:text-stone-500"><Loader2 className="animate-spin" size={26} /></div>
         ) : (
         <div className="space-y-4">
           {editing.paymentStatus !== "paid" && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-xs text-yellow-700">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-xs text-yellow-700 dark:bg-yellow-950/20 dark:border-yellow-900/40 dark:text-yellow-400">
               Pembayaran pesanan ini masih diverifikasi oleh admin/developer. Kamu tetap bisa mulai siapkan produknya.
             </div>
           )}
@@ -212,7 +212,7 @@ export function SellerOrders() {
           )}
 
           {editing.notes && (
-            <div className="rounded-xl bg-amber-50 border border-amber-100 p-3 text-xs text-amber-800 flex items-start gap-1.5">
+            <div className="rounded-xl bg-amber-50 border border-amber-100 p-3 text-xs text-amber-800 flex items-start gap-1.5 dark:bg-amber-950/20 dark:border-amber-900/40 dark:text-amber-400">
               <StickyNote size={13} className="flex-shrink-0 mt-0.5" /> {editing.notes}
             </div>
           )}

@@ -163,28 +163,28 @@ export function JadiSellerPage() {
     <section className="py-12 bg-gray-50 min-h-screen dark:bg-stone-800">
       <div className="container mx-auto px-4 max-w-lg">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
-            <Store size={28} className="text-blue-600" />
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4 dark:bg-blue-950/30">
+            <Store size={28} className="text-blue-600 dark:text-blue-400" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Buka Toko Sendiri</h1>
           <p className="text-gray-500 mt-2 dark:text-stone-400">Punya UMKM sendiri? Daftar jadi seller dan mulai jualan di platform ini.</p>
         </motion.div>
 
         {existingRequest?.status === "rejected" && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex gap-3">
-            <XCircle size={20} className="text-red-500 flex-shrink-0 mt-0.5" />
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex gap-3 dark:bg-red-950/20 dark:border-red-900/40">
+            <XCircle size={20} className="text-red-500 flex-shrink-0 mt-0.5 dark:text-red-400" />
             <div>
-              <p className="text-sm font-semibold text-red-700">Permintaan sebelumnya ditolak</p>
-              {existingRequest.rejectionReason && <p className="text-xs text-red-600 mt-1">{existingRequest.rejectionReason}</p>}
-              <p className="text-xs text-red-500 mt-1">Kamu bisa ajukan ulang di bawah ini.</p>
+              <p className="text-sm font-semibold text-red-700 dark:text-red-400">Permintaan sebelumnya ditolak</p>
+              {existingRequest.rejectionReason && <p className="text-xs text-red-600 mt-1 dark:text-red-400/80">{existingRequest.rejectionReason}</p>}
+              <p className="text-xs text-red-500 mt-1 dark:text-red-400/80">Kamu bisa ajukan ulang di bawah ini.</p>
             </div>
           </div>
         )}
 
         <div className="bg-white rounded-2xl border border-gray-100 p-6 dark:bg-stone-900 dark:border-stone-800">
-          <div className="bg-blue-50 rounded-xl p-4 mb-6 text-center">
-            <p className="text-xs text-blue-600 mb-1">Biaya Upgrade Sekali Bayar</p>
-            <p className="text-2xl font-extrabold text-blue-700">{fee !== null ? formatCurrency(fee) : "..."}</p>
+          <div className="bg-blue-50 rounded-xl p-4 mb-6 text-center dark:bg-blue-950/20">
+            <p className="text-xs text-blue-600 mb-1 dark:text-blue-400">Biaya Upgrade Sekali Bayar</p>
+            <p className="text-2xl font-extrabold text-blue-700 dark:text-blue-400">{fee !== null ? formatCurrency(fee) : "..."}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -230,13 +230,13 @@ export function JadiSellerPage() {
 
             <div>
               <label className="text-sm font-medium text-gray-700 mb-1.5 block dark:text-stone-300">Upload Bukti Transfer</label>
-              <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-blue-200 hover:border-blue-400 hover:bg-blue-50/50 rounded-xl py-6 cursor-pointer transition-colors">
+              <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-blue-200 hover:border-blue-400 hover:bg-blue-50/50 rounded-xl py-6 cursor-pointer transition-colors dark:border-blue-900/50 dark:hover:border-blue-700 dark:hover:bg-blue-950/20">
                 {previewUrl ? (
                   <img src={previewUrl} alt="preview" className="w-16 h-16 object-cover rounded-lg" />
                 ) : (
-                  <Upload size={22} className="text-blue-400" />
+                  <Upload size={22} className="text-blue-400 dark:text-blue-500" />
                 )}
-                <span className="text-xs font-medium text-blue-600">{file ? file.name : "Klik untuk pilih foto bukti transfer"}</span>
+                <span className="text-xs font-medium text-blue-600 dark:text-blue-400">{file ? file.name : "Klik untuk pilih foto bukti transfer"}</span>
                 <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFileChange} required />
               </label>
             </div>

@@ -49,9 +49,9 @@ export function PromoGrid({ promotions }: { promotions: Promo[] }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.05 }}
-          className="text-left bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 rounded-2xl p-6 hover:shadow-lg transition-all relative overflow-hidden group"
+          className="text-left bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 rounded-2xl p-6 hover:shadow-lg transition-all relative overflow-hidden group dark:from-red-950/20 dark:to-orange-950/10 dark:border-red-900/40"
         >
-          <div className="absolute top-0 right-0 w-24 h-24 bg-red-100/50 rounded-full -translate-y-8 translate-x-8" />
+          <div className="absolute top-0 right-0 w-24 h-24 bg-red-100/50 rounded-full -translate-y-8 translate-x-8 dark:bg-red-900/20" />
           <div className="relative">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center flex-shrink-0">
@@ -64,7 +64,7 @@ export function PromoGrid({ promotions }: { promotions: Promo[] }) {
             {promo.minPurchase && (
               <p className="text-xs text-gray-500 mb-3 dark:text-stone-400">Min. belanja Rp{Number(promo.minPurchase).toLocaleString("id-ID")}</p>
             )}
-            <div className="flex items-center justify-between pt-3 border-t border-red-100">
+            <div className="flex items-center justify-between pt-3 border-t border-red-100 dark:border-red-900/40">
               <span className="font-mono font-bold text-gray-900 flex items-center gap-1.5 dark:text-stone-100">
                 <Tag size={13} /> {promo.code}
               </span>

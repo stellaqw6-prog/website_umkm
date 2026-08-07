@@ -172,8 +172,8 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
     <section className="py-10 bg-gray-50 min-h-screen dark:bg-stone-900">
       <div className="container mx-auto px-4 max-w-2xl">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 size={32} className="text-green-600" />
+          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4 dark:bg-green-950/30">
+            <CheckCircle2 size={32} className="text-green-600 dark:text-green-400" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Pesanan Berhasil Dibuat!</h1>
           <p className="text-gray-500 mt-1 dark:text-stone-400">Nomor pesanan: <span className="font-mono font-semibold text-gray-900 dark:text-stone-100">{order.orderNumber}</span></p>
@@ -209,7 +209,7 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
             <div className="flex justify-between"><span className="text-gray-500 dark:text-stone-400">Ongkir</span><span>{Number(order.shippingCost) === 0 ? "GRATIS" : formatCurrency(Number(order.shippingCost))}</span></div>
             {Number(order.discountAmount) > 0 && <div className="flex justify-between text-green-600"><span>Diskon</span><span>-{formatCurrency(Number(order.discountAmount))}</span></div>}
             <hr />
-            <div className="flex justify-between text-base"><span className="font-bold">Total</span><span className="font-bold text-blue-600">{formatCurrency(Number(order.grandTotal))}</span></div>
+            <div className="flex justify-between text-base"><span className="font-bold">Total</span><span className="font-bold text-blue-600 dark:text-blue-400">{formatCurrency(Number(order.grandTotal))}</span></div>
           </div>
 
           <hr />
@@ -220,7 +220,7 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
           </div>
 
           {order.trackingNumber && (
-            <div className="bg-blue-50 rounded-xl p-3 text-sm">
+            <div className="bg-blue-50 rounded-xl p-3 text-sm dark:bg-blue-950/20">
               <span className="text-gray-500 dark:text-stone-400">No. Resi: </span><span className="font-mono font-semibold text-gray-900 dark:text-stone-100">{order.trackingNumber}</span>
             </div>
           )}
@@ -228,13 +228,13 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
 
         {/* Instruksi pembayaran, tampil selama status belum "paid" (kecuali COD) */}
         {order.paymentStatus === "unpaid" && paymentMethod && paymentMethod.type !== "cod" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-2xl border border-blue-100 p-6 mt-4 dark:bg-stone-900">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-2xl border border-blue-100 p-6 mt-4 dark:bg-stone-900 dark:border-blue-900/40">
             <h3 className="text-sm font-bold text-gray-900 mb-1 dark:text-stone-100">Selesaikan Pembayaran</h3>
             <p className="text-xs text-gray-500 mb-4 dark:text-stone-400">
               Bayar sejumlah <span className="font-semibold text-gray-900 dark:text-stone-100">{formatCurrency(Number(order.grandTotal))}</span> via {paymentMethod.name} sebelum pesanan diproses.
             </p>
 
-            <div className="rounded-xl border border-blue-100 bg-blue-50/40 p-4">
+            <div className="rounded-xl border border-blue-100 bg-blue-50/40 p-4 dark:border-blue-900/40 dark:bg-blue-950/20">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs text-gray-500 dark:text-stone-400">
@@ -245,7 +245,7 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
                 </div>
                 <button
                   onClick={() => handleCopy(paymentMethod.accountNumber)}
-                  className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-3 py-1.5 rounded-lg border border-blue-200 flex-shrink-0 dark:bg-stone-900"
+                  className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-3 py-1.5 rounded-lg border border-blue-200 flex-shrink-0 dark:bg-stone-900 dark:border-blue-900/40 dark:text-blue-400"
                 >
                   <Copy size={13} /> Salin
                 </button>
@@ -274,7 +274,7 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
                     <img src={order.paymentProofUrl} alt="Bukti transfer" className="w-20 h-20 object-cover rounded-xl border border-gray-200 dark:border-stone-700" />
                     <div className="flex-1">
                       <p className="text-xs text-gray-500 mb-2 dark:text-stone-400">Bukti transfer sudah diunggah. Admin akan segera memverifikasi pembayaranmu.</p>
-                      <label className="text-xs font-medium text-blue-600 hover:underline cursor-pointer">
+                      <label className="text-xs font-medium text-blue-600 hover:underline cursor-pointer dark:text-blue-400">
                         Ganti Bukti Transfer
                         <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFileSelect} disabled={uploading} />
                       </label>
@@ -293,13 +293,13 @@ export function OrderDetailPage({ orderNumber }: { orderNumber: string }) {
                     {uploading ? (
                       <>
                         {previewUrl && <img src={previewUrl} alt="preview" className="w-16 h-16 object-cover rounded-lg mb-1" />}
-                        <Loader2 className="animate-spin text-blue-600" size={22} />
+                        <Loader2 className="animate-spin text-blue-600 dark:text-blue-400" size={22} />
                         <span className="text-xs text-gray-500 dark:text-stone-400">Mengunggah...</span>
                       </>
                     ) : (
                       <>
                         <ImageIcon size={24} className="text-blue-400" />
-                        <span className="text-xs font-medium text-blue-600">Klik untuk pilih foto bukti transfer</span>
+                        <span className="text-xs font-medium text-blue-600 dark:text-blue-400">Klik untuk pilih foto bukti transfer</span>
                         <span className="text-[11px] text-gray-400 dark:text-stone-500">JPG, PNG, atau WEBP — maks 5MB</span>
                       </>
                     )}

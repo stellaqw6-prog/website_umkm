@@ -77,7 +77,7 @@ export function AdminCustomers() {
                 </thead>
                 <tbody>
                   {filtered.map((customer) => (
-                    <tr key={customer.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                    <tr key={customer.id} className="border-b border-gray-50 hover:bg-gray-50/50 dark:border-stone-800/60 dark:hover:bg-stone-800/40 transition-colors">
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">

@@ -71,7 +71,7 @@ export function ProductsPage() {
   return (
     <>
       {/* Page Header */}
-      <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-16">
+      <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-16 dark:from-stone-950 dark:via-stone-950 dark:to-blue-950/40">
         <div className="container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Katalog</span>

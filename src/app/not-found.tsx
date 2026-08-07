@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50 px-4 dark:from-stone-950 dark:via-stone-950 dark:to-blue-950/40">
       <div className="text-center max-w-md">
-        <div className="w-24 h-24 rounded-3xl bg-blue-50 flex items-center justify-center mx-auto mb-6">
-          <PackageSearch size={44} className="text-blue-600" />
+        <div className="w-24 h-24 rounded-3xl bg-blue-50 flex items-center justify-center mx-auto mb-6 dark:bg-blue-950/30">
+          <PackageSearch size={44} className="text-blue-600 dark:text-blue-400" />
         </div>
         <h1 className="text-6xl font-extrabold text-gray-900 mb-2 dark:text-stone-100">404</h1>
         <h2 className="text-xl font-bold text-gray-900 mb-3 dark:text-stone-100">Halaman Tidak Ditemukan</h2>
